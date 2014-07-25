@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>README.md</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <link rel="stylesheet" media="all" href="doc-style.css" />
+  <script src="doc-filelist.js"></script>
+  <script>
+    var relativeDir = "", thisFile = "home/alex/a3/node-monitor-sensor/README.md", defaultSidebar = true;
+  </script>
+  <script src="doc-script.js"></script>
+  <script src="fileSearch.js"></script>
+  <script src="goToLine.js"></script>
+  <link rel="stylesheet" href="fileSearch.css" />
+  <link rel="stylesheet" href="goToLine.css" />
+</head>
+<body>
+  <div id="sidebar_wrapper">
+    <div id="sidebar_switch">
+      <span class="tree">Files</span>
+      <span class="headings">Headings</span>
+    </div>
+    <div id="tree"></div>
+    <div id="headings">
+      <div class="heading h1">
+        <a href="#package%3A%20alinex-monitor-sensor">Package: alinex-monitor-sensor</a>
+      </div>
+      <div class="heading h2">
+        <a href="#install">Install</a>
+      </div>
+      <div class="heading h2">
+        <a href="#usage">Usage</a>
+      </div>
+      <div class="heading h3">
+        <a href="#sensor%20run">Sensor run</a>
+      </div>
+      <div class="heading h2">
+        <a href="#api">API</a>
+      </div>
+      <div class="heading h3">
+        <a href="#sensor%20classes">Sensor classes</a>
+      </div>
+      <div class="heading h4">
+        <a href="#methods">Methods</a>
+      </div>
+      <div class="heading h4">
+        <a href="#events">Events</a>
+      </div>
+      <div class="heading h4">
+        <a href="#static%20properties">Static properties</a>
+      </div>
+      <div class="heading h4">
+        <a href="#properties">Properties</a>
+      </div>
+      <div class="heading h2">
+        <a href="#license">License</a>
+      </div>
+    </div>
+  </div>
+  <div id="sidebar-toggle"></div>
+  <div id="container"><a id="fork" href="https://github.com/alinex/node-monitor-sensor" title="Fork me on GitHub"></a><div class="docs markdown">
+<div class="pilwrap" id="package%3A%20alinex-monitor-sensor">
+  <h1>
+    <a href="#package%3A%20alinex-monitor-sensor" name="package%3A%20alinex-monitor-sensor" class="pilcrow">&#182;</a>
+    Package: alinex-monitor-sensor
+  </h1>
+</div>
+
+
+<p><a href="https://travis-ci.org/alinex/node-monitor-sensor"><img src="https://travis-ci.org/alinex/node-monitor-sensor.svg?branch=master" alt="Build Status" title="" /></a>
+<a href="https://coveralls.io/r/alinex/node-monitor-sensor?branch=master"><img src="https://coveralls.io/repos/alinex/node-monitor-sensor/badge.png?branch=master" alt="Coverage Status" title="" /></a>
+<a href="https://gemnasium.com/alinex/node-monitor-sensor"><img src="https://gemnasium.com/alinex/node-monitor-sensor.png" alt="Dependency Status" title="" /></a></p>
+
+<p>This module is part of the <a href="http://alinex.github.io/node-monitor">Monitoring</a>
+modules and applications but can be used as standalone module in other projects,
+too.</p>
+
+<ul>
+<li>it has multiple sensors</li>
+<li>runs completely asynchronous</li>
+<li>analyses the process</li>
+<li>collects all the data</li>
+<li>supports verbose mode and debugging</li>
+</ul>
+
+<p>It is one of the modules of the <a href="http://alinex.github.io/node-alinex">Alinex Universe</a>
+following the code standards defined there.</p>
+
+
+<div class="pilwrap" id="install">
+  <h2>
+    <a href="#install" name="install" class="pilcrow">&#182;</a>
+    Install
+  </h2>
+</div>
+
+
+<p>The easiest way is to let npm add the module directly:</p>
+
+
+<div class="highlight"><pre><code><span class="o">&gt;</span> <span class="nx">npm</span> <span class="nx">install</span> <span class="nx">alinex</span><span class="o">-</span><span class="nx">monitor</span><span class="o">-</span><span class="nx">sensor</span> <span class="o">--</span><span class="nx">save</span>
+</code></pre></div>
+
+
+
+<p><a href="https://nodei.co/npm/alinex-monitor-sensor/"><img src="https://nodei.co/npm/alinex-monitor-sensor.png?downloads=true&amp;stars=true" alt="NPM" title="" /></a></p>
+
+
+<div class="pilwrap" id="usage">
+  <h2>
+    <a href="#usage" name="usage" class="pilcrow">&#182;</a>
+    Usage
+  </h2>
+</div>
+
+
+<p>To use one of the sensors you have to load the sensors collection:</p>
+
+
+<div class="highlight"><pre><code><span class="kd">var</span> <span class="nx">sensor</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;alinex-monitor-sensor&#39;</span><span class="p">);</span>
+</code></pre></div>
+
+
+
+<p>Or you may only load one specific sensor class:</p>
+
+
+<div class="highlight"><pre><code><span class="kd">var</span> <span class="nx">Ping</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;alinex-monitor-sensor/lib/ping&#39;</span><span class="p">);</span>
+</code></pre></div>
+
+
+
+<p>In the further documentation i will show usage with the sensor collection.</p>
+
+
+<div class="pilwrap" id="sensor%20run">
+  <h3>
+    <a href="#sensor%20run" name="sensor%20run" class="pilcrow">&#182;</a>
+    Sensor run
+  </h3>
+</div>
+
+
+<p>To use any sensor you have to instantiate and configure it:</p>
+
+
+<div class="highlight"><pre><code><span class="kd">var</span> <span class="nx">ping</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">sensor</span><span class="p">.</span><span class="nx">Ping</span><span class="p">({</span>
+  <span class="nx">ip</span><span class="o">:</span> <span class="s1">&#39;193.99.144.80&#39;</span>
+<span class="p">});</span>
+</code></pre></div>
+
+
+
+<p>You may also give a <a href="http://alinex.github.io/node-config">alinex-config</a> object
+here.</p>
+
+<p>Now you can start it using a callback method:</p>
+
+
+<div class="highlight"><pre><code><span class="nx">ping</span><span class="p">.</span><span class="nx">run</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
+  <span class="c1">// do something with result in ping object</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">ping</span><span class="p">);</span>
+<span class="p">});</span>
+</code></pre></div>
+
+
+
+<p>Or alternatively you may use an event based call:</p>
+
+
+<div class="highlight"><pre><code><span class="nx">ping</span><span class="p">.</span><span class="nx">run</span><span class="p">();</span>
+<span class="nx">ping</span><span class="p">.</span><span class="nx">on</span> <span class="s1">&#39;end&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+  <span class="c1">// do something with result in ping object</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">ping</span><span class="p">);</span>
+<span class="p">});</span>
+</code></pre></div>
+
+
+
+<p>The <code>ping</code> object looks like:</p>
+
+
+<div class="highlight"><pre><code><span class="p">{</span> <span class="nx">config</span><span class="o">:</span> <span class="p">{</span> <span class="nx">verbose</span><span class="o">:</span> <span class="kc">false</span><span class="p">,</span> <span class="nx">timeout</span><span class="o">:</span> <span class="mi">1</span><span class="p">,</span> <span class="nx">ip</span><span class="o">:</span> <span class="s1">&#39;137.168.111.222&#39;</span> <span class="p">},</span>
+  <span class="nx">result</span><span class="o">:</span>
+  <span class="p">{</span> <span class="nx">date</span><span class="o">:</span> <span class="nx">Tue</span> <span class="nx">Jul</span> <span class="mi">22</span> <span class="mi">2014</span> <span class="mi">14</span><span class="o">:</span><span class="mi">08</span><span class="o">:</span><span class="mi">34</span> <span class="nx">GMT</span><span class="o">+</span><span class="mi">0200</span> <span class="p">(</span><span class="nx">CEST</span><span class="p">),</span>
+    <span class="nx">status</span><span class="o">:</span> <span class="s1">&#39;fail&#39;</span><span class="p">,</span>
+    <span class="nx">data</span><span class="o">:</span> <span class="s1">&#39;1 packets transmitted, 0 received, 100% packet loss, time 0ms&#39;</span><span class="p">,</span>
+    <span class="nx">message</span><span class="o">:</span> <span class="s1">&#39;Ping exited with code 1&#39;</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+
+
+
+
+<div class="pilwrap" id="api">
+  <h2>
+    <a href="#api" name="api" class="pilcrow">&#182;</a>
+    API
+  </h2>
+</div>
+
+
+
+<div class="pilwrap" id="sensor%20classes">
+  <h3>
+    <a href="#sensor%20classes" name="sensor%20classes" class="pilcrow">&#182;</a>
+    Sensor classes
+  </h3>
+</div>
+
+
+<ul>
+<li><a href="src/ping.coffee.html">Ping</a> - network ping test</li>
+<li><a href="src/socket.coffee.html">Socket</a> - test port connectivity</li>
+<li><a href="src/http.coffee.html">Http</a> - try requesting an url</li>
+</ul>
+
+
+<div class="pilwrap" id="methods">
+  <h4>
+    <a href="#methods" name="methods" class="pilcrow">&#182;</a>
+    Methods
+  </h4>
+</div>
+
+
+<ul>
+<li><code>run(cb)</code> - start a new analyzation with optional callback</li>
+</ul>
+
+
+<div class="pilwrap" id="events">
+  <h4>
+    <a href="#events" name="events" class="pilcrow">&#182;</a>
+    Events
+  </h4>
+</div>
+
+
+<ul>
+<li><code>error</code> - then the sensor could not work properly</li>
+<li><code>start</code> - sensor has started</li>
+<li><code>end</code> - sensor ended analysis</li>
+<li><code>ok</code> - no problems found</li>
+<li><code>warn</code> - warning means high load or critical state</li>
+<li><code>fail</code> - not working correctly</li>
+</ul>
+
+
+<div class="pilwrap" id="static%20properties">
+  <h4>
+    <a href="#static%20properties" name="static%20properties" class="pilcrow">&#182;</a>
+    Static properties
+  </h4>
+</div>
+
+
+<ul>
+<li><code>meta</code> - some meta data for this test type
+<ul><li><code>name</code> - title of the test</li>
+<li><code>description</code> - short description what will be checked</li>
+<li><code>category</code> - to group similiar tests together</li>
+<li><code>level</code> - gives a hint if it is a low level or higher level test</li></ul></li>
+<li><code>values</code> - meta information for the measurement values</li>
+<li><code>config</code> - the default configuration
+(each entry starting with underscore gives the help text for that value)</li>
+</ul>
+
+
+<div class="pilwrap" id="properties">
+  <h4>
+    <a href="#properties" name="properties" class="pilcrow">&#182;</a>
+    Properties
+  </h4>
+</div>
+
+
+<ul>
+<li><code>config</code> - configuration (given combined with defaults)</li>
+<li><code>result</code> - the results:
+<ul><li><code>date</code> - start date of last or current run</li>
+<li><code>status</code> - status of the last or current run</li>
+<li><code>value</code> - map of measured values</li>
+<li><code>data</code> - complete data from the last or current run</li>
+<li><code>message</code> - error message of the last or current run</li></ul></li>
+</ul>
+
+
+<div class="pilwrap" id="license">
+  <h2>
+    <a href="#license" name="license" class="pilcrow">&#182;</a>
+    License
+  </h2>
+</div>
+
+
+<p>Copyright 2014 Alexander Schilling</p>
+
+<p>Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at</p>
+
+<blockquote>
+  <p><a href="http://www.apache.org/licenses/LICENSE-2.0">http://www.apache.org/licenses/LICENSE-2.0</a></p>
+</blockquote>
+
+<p>Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.</p></div>
+  </div>
+</body>
+</html>

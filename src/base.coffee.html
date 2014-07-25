@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>base.coffee</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <link rel="stylesheet" media="all" href="../doc-style.css" />
+  <script src="../doc-filelist.js"></script>
+  <script>
+    var relativeDir = "../", thisFile = "home/alex/a3/node-monitor-sensor/src/base.coffee", defaultSidebar = true;
+  </script>
+  <script src="../doc-script.js"></script>
+  <script src="../fileSearch.js"></script>
+  <script src="../goToLine.js"></script>
+  <link rel="stylesheet" href="../fileSearch.css" />
+  <link rel="stylesheet" href="../goToLine.css" />
+</head>
+<body>
+  <div id="sidebar_wrapper">
+    <div id="sidebar_switch">
+      <span class="tree">Files</span>
+      <span class="headings">Headings</span>
+    </div>
+    <div id="tree"></div>
+    <div id="headings">
+      <div class="heading h1">
+        <a href="#ping%20test%20class">Ping test class</a>
+      </div>
+      <div class="heading h2">
+        <a href="#node%20modules">Node Modules</a>
+      </div>
+      <div class="heading h2">
+        <a href="#sensor%20class">Sensor class</a>
+      </div>
+      <div class="heading h3">
+        <a href="#default%20configuration">Default Configuration</a>
+      </div>
+      <div class="heading h3">
+        <a href="#create%20instance">Create instance</a>
+      </div>
+      <div class="heading h2">
+        <a href="#export%20class">Export class</a>
+      </div>
+    </div>
+  </div>
+  <div id="sidebar-toggle"></div>
+  <div id="container"><a id="fork" href="https://github.com/alinex/node-monitor-sensor" title="Fork me on GitHub"></a><div class="background highlight"></div>
+<table cellpadding="0" cellspacing="0">
+  <tbody>
+      <tr>
+        <td class="docs">
+<div class="pilwrap" id="ping%20test%20class">
+  <h1>
+    <a href="#ping%20test%20class" name="ping%20test%20class" class="pilcrow">&#182;</a>
+    Ping test class
+  </h1>
+</div>
+
+        </td>
+        <td class="code highlight"><div class="highlight"><pre></pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap" id="node%20modules">
+  <h2>
+    <a href="#node%20modules" name="node%20modules" class="pilcrow">&#182;</a>
+    Node Modules
+  </h2>
+</div>
+
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-3" id="section-3">&#182;</a>
+</div>
+<p>include base modules</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+<span class="nv">EventEmitter = </span><span class="nx">require</span><span class="p">(</span><span class="s">&#39;events&#39;</span><span class="p">).</span><span class="nx">EventEmitter</span>
+<span class="nv">object = </span><span class="nx">require</span><span class="p">(</span><span class="s">&#39;alinex-util&#39;</span><span class="p">).</span><span class="nx">object</span>
+<span class="nv">colors = </span><span class="nx">require</span> <span class="s">&#39;colors&#39;</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap" id="sensor%20class">
+  <h2>
+    <a href="#sensor%20class" name="sensor%20class" class="pilcrow">&#182;</a>
+    Sensor class
+  </h2>
+</div>
+
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+<span class="k">class</span> <span class="nx">Sensor</span> <span class="k">extends</span> <span class="nx">EventEmitter</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap" id="default%20configuration">
+  <h3>
+    <a href="#default%20configuration" name="default%20configuration" class="pilcrow">&#182;</a>
+    Default Configuration
+  </h3>
+</div>
+
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+  <span class="vi">@config =</span>
+    <span class="nv">verbose: </span><span class="kc">false</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap" id="create%20instance">
+  <h3>
+    <a href="#create%20instance" name="create%20instance" class="pilcrow">&#182;</a>
+    Create instance
+  </h3>
+</div>
+
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+  <span class="nv">constructor: </span><span class="nf">(config) -&gt;</span>
+    <span class="vi">@config = </span><span class="nx">object</span><span class="p">.</span><span class="nx">extend</span> <span class="p">{},</span> <span class="nx">@constructor</span><span class="p">.</span><span class="nx">config</span><span class="p">,</span> <span class="nx">config</span>
+    <span class="k">unless</span> <span class="nx">config</span>
+      <span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span> <span class="s">&quot;Could not initialize sensor without configuration.&quot;</span>
+
+  <span class="nv">_start: </span><span class="nf">(title) -&gt;</span>
+    <span class="vi">@result =</span>
+      <span class="nv">date: </span><span class="k">new</span> <span class="nb">Date</span>
+      <span class="nv">status: </span><span class="s">&#39;running&#39;</span>
+    <span class="nx">@emit</span> <span class="s">&#39;start&#39;</span>
+    <span class="k">if</span> <span class="nx">@config</span><span class="p">.</span><span class="nx">verbose</span>
+      <span class="nx">console</span><span class="p">.</span><span class="nx">log</span> <span class="s">&quot;</span><span class="si">#{</span><span class="nx">title</span><span class="si">}</span><span class="s">...&quot;</span>
+
+  <span class="nv">_end: </span><span class="nf">(status, message) -&gt;</span>
+    <span class="vi">@result.status = </span><span class="nx">status</span>
+    <span class="vi">@result.message = </span><span class="nx">message</span> <span class="k">if</span> <span class="nx">message</span>
+    <span class="k">if</span> <span class="nx">@config</span><span class="p">.</span><span class="nx">verbose</span> <span class="o">and</span> <span class="nx">status</span> <span class="o">isnt</span> <span class="s">&#39;ok&#39;</span>
+      <span class="k">if</span> <span class="nx">status</span> <span class="o">is</span> <span class="s">&#39;fail&#39;</span> <span class="o">and</span> <span class="nx">message</span>
+        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span> <span class="s">&quot;</span><span class="si">#{</span><span class="nx">@constructor</span><span class="p">.</span><span class="nx">meta</span><span class="p">.</span><span class="nx">name</span><span class="si">}</span><span class="s"> </span><span class="si">#{</span><span class="nx">status</span><span class="si">}</span><span class="s">: </span><span class="si">#{</span><span class="nx">message</span><span class="si">}</span><span class="s">&quot;</span><span class="p">.</span><span class="nx">red</span>
+      <span class="k">else</span> <span class="k">if</span> <span class="nx">status</span> <span class="o">is</span> <span class="s">&#39;fail&#39;</span>
+        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span> <span class="s">&quot;</span><span class="si">#{</span><span class="nx">@constructor</span><span class="p">.</span><span class="nx">meta</span><span class="p">.</span><span class="nx">name</span><span class="si">}</span><span class="s"> </span><span class="si">#{</span><span class="nx">status</span><span class="si">}</span><span class="s">!&quot;</span><span class="p">.</span><span class="nx">red</span>
+      <span class="k">else</span>
+        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span> <span class="s">&quot;</span><span class="si">#{</span><span class="nx">@constructor</span><span class="p">.</span><span class="nx">meta</span><span class="p">.</span><span class="nx">name</span><span class="si">}</span><span class="s"> </span><span class="si">#{</span><span class="nx">status</span><span class="si">}</span><span class="s">!&quot;</span><span class="p">.</span><span class="nx">magenta</span>
+      <span class="nx">console</span><span class="p">.</span><span class="nx">log</span> <span class="nx">@result</span><span class="p">.</span><span class="nx">value</span>
+    <span class="nx">@emit</span> <span class="nx">status</span>
+    <span class="nx">@emit</span> <span class="s">&#39;end&#39;</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap" id="export%20class">
+  <h2>
+    <a href="#export%20class" name="export%20class" class="pilcrow">&#182;</a>
+    Export class
+  </h2>
+</div>
+
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+<span class="nv">module.exports = </span><span class="nx">Sensor</span>
+</pre></div>
+        </td>
+      </tr>
+  </tbody>
+</table>
+  </div>
+</body>
+</html>
