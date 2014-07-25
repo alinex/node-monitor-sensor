@@ -26,7 +26,6 @@ The easiest way is to let npm add the module directly:
 
     > npm install alinex-monitor-sensor --save
 
-
 [![NPM](https://nodei.co/npm/alinex-monitor-sensor.png?downloads=true&stars=true)](https://nodei.co/npm/alinex-monitor-sensor/)
 
 
