@@ -72,9 +72,9 @@ class SocketSensor extends Sensor
     @result.data = ''
 
     # configure request
-#    socket.setTimeout @config.timeout*1000
     option =
       url: @config.url
+    option.timeout = @config.timeout*1000 if @config.timeout?
     if @config.username? and @config.password?
       option.auth =
         username: @config.username
