@@ -87,9 +87,13 @@ class SocketSensor extends Sensor
       # request finished
       end = new Date().getTime()
 
-      # debugging output
-      for key, value of response?.headers
-        debug "#{key}: #{value}".grey
+      # collecting data
+      if response?
+        data += "HEADERS:\n"
+        for key, value of response.headers
+          data += "#{key}: #{value}\n"
+          debug "#{key}: #{value}".grey
+      data += "BODY:\n#{body}\n"
 
       # error checking
       if err
