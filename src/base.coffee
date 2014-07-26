@@ -11,9 +11,11 @@ colors = require 'colors'
 
 # Sensor class
 # -------------------------------------------------
+# This class contains all the basics for each sensor.
 class Sensor extends EventEmitter
 
   # ### Default Configuration
+  # This may be overwritten in sensor config or constructor parameter.
   @config =
     verbose: false
 
@@ -23,6 +25,7 @@ class Sensor extends EventEmitter
     unless config
       throw new Error "Could not initialize sensor without configuration."
 
+  # ### Protocol new start
   _start: (title) ->
     @result =
       date: new Date
@@ -31,6 +34,7 @@ class Sensor extends EventEmitter
     if @config.verbose
       console.log "#{title}..."
 
+  # ### Protocol end of sensor run
   _end: (status, message) ->
     @result.status = status
     @result.message = message if message

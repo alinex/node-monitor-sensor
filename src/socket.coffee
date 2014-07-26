@@ -94,12 +94,14 @@ class SocketSensor extends Sensor
       return cb new Error message if status is 'fail'
       cb()
 
+    # Timeout occurred
     socket.on 'timeout', =>
       message = "server not responding, timeout occurred"
       debug message.red
       @_end 'fail', message
       cb new Error message
 
+    # Error management
     socket.on 'error', (err) =>
       debug err.toString().red
       @_end 'fail', err

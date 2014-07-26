@@ -57,3 +57,29 @@ describe "Http request sensor", ->
       expect(http.result.data).to.exist
       expect(http.result.message).to.exist
       done()
+
+  it "should check the body part", (done) ->
+    http = new HttpSensor
+      url: 'http://heise.de'
+      bodycheck: 'Newsticker'
+    http.run (err) ->
+      expect(err).to.not.exist
+      expect(http.result).to.exist
+      expect(http.result.date).to.exist
+      expect(http.result.status).to.equal 'ok'
+      expect(http.result.value.bodycheck).to.exist
+      expect(http.result.value.bodycheck).to.equal true
+      done()
+
+  it "should check the body part with RegExp", (done) ->
+    http = new HttpSensor
+      url: 'http://heise.de'
+      bodycheck: /heise Developer|iX Magazin/
+    http.run (err) ->
+      expect(err).to.not.exist
+      expect(http.result).to.exist
+      expect(http.result.date).to.exist
+      expect(http.result.status).to.equal 'ok'
+      expect(http.result.value.bodycheck).to.exist
+      expect(http.result.value.bodycheck).to.equal true
+      done()

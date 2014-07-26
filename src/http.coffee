@@ -38,6 +38,14 @@ class SocketSensor extends Sensor
     description: "time till connection could be established"
     type: 'int'
     unit: 'ms'
+  ,
+    name: 'statuscode'
+    description: "http status code"
+    type: 'values'
+  ,
+    name: 'bodycheck'
+    description: "success of check for content"
+    type: 'bool'
   ]
 
   # ### Default Configuration
@@ -48,7 +56,9 @@ class SocketSensor extends Sensor
     _timeout: "timeout in seconds"
     responsetime: 1000
     _responsetime: "maximum time in ms till server responded"
-
+    _username: "used for basic authentication"
+    _password: "used for basic authentication"
+    _bodycheck: "substring or regular expression"
   # ### Create instance
   constructor: (config) ->
     super object.extend {}, @constructor.config, config
@@ -58,16 +68,28 @@ class SocketSensor extends Sensor
   # ### Run the check
   run: (cb = ->) ->
 
-    # run the ping test
     @_start "HTTP Request to #{@config.url}"
     @result.data = ''
 
+    # configure request
+#    socket.setTimeout @config.timeout*1000
+    option =
+      url: @config.url
+    if @config.username? and @config.password?
+      option.auth =
+        username: @config.username
+        password: @config.password
+
+    # start the request
     debug "request #{@config.url}"
     start = new Date().getTime()
-#    socket.setTimeout @config.timeout*1000
-    request @config.url, (err, response, body) =>
+    request option, (err, response, body) =>
       # request finished
       end = new Date().getTime()
+
+      # debugging output
+      for key, value of response?.headers
+        debug "#{key}: #{value}".grey
 
       # error checking
       if err
@@ -79,6 +101,12 @@ class SocketSensor extends Sensor
       @result.value = value = {}
       value.success = 200 <= response.statusCode < 300
       value.responsetime = end-start
+      value.statuscode = response.statusCode
+      if @config.bodycheck?
+        if @config.bodycheck instanceof RegExp
+          value.bodycheck = (body.match @config.bodycheck)?
+        else
+          value.bodycheck = (~body.indexOf @config.bodycheck)?
       debug value
 
       # evaluate to check status
