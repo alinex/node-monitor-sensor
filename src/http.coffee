@@ -69,7 +69,7 @@ class SocketSensor extends Sensor
   run: (cb = ->) ->
 
     @_start "HTTP Request to #{@config.url}"
-    @result.data = ''
+    @result.data = data = ''
 
     # configure request
     option =
