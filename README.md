@@ -9,6 +9,9 @@ This module is part of the [Monitoring](http://alinex.github.io/node-monitor)
 modules and applications but can be used as standalone module in other projects,
 too.
 
+It is a collection of sensors which can check specific system data and analyze
+the state.
+
 - it has multiple sensors
 - runs completely asynchronous
 - analyses the process
