@@ -112,6 +112,8 @@ API
 - `values` - meta information for the measurement values
 - `config` - the default configuration
   (each entry starting with underscore gives the help text for that value)
+- `configCheck` - check function for the configuration values (alinex-config
+  style)
 
 #### Properties
 
