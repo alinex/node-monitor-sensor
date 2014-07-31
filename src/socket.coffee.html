@@ -312,12 +312,36 @@ results.</p>
       <span class="k">return</span> <span class="nx">cb</span> <span class="k">new</span> <span class="nb">Error</span> <span class="nx">message</span> <span class="k">if</span> <span class="nx">status</span> <span class="o">is</span> <span class="s">&#39;fail&#39;</span>
       <span class="nx">cb</span><span class="p">()</span>
 
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-14" id="section-14">&#182;</a>
+</div>
+<p>Timeout occurred</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
     <span class="nx">socket</span><span class="p">.</span><span class="nx">on</span> <span class="s">&#39;timeout&#39;</span><span class="p">,</span> <span class="o">=&gt;</span>
       <span class="nv">message = </span><span class="s">&quot;server not responding, timeout occurred&quot;</span>
       <span class="nx">debug</span> <span class="nx">message</span><span class="p">.</span><span class="nx">red</span>
       <span class="nx">@_end</span> <span class="s">&#39;fail&#39;</span><span class="p">,</span> <span class="nx">message</span>
       <span class="nx">cb</span> <span class="k">new</span> <span class="nb">Error</span> <span class="nx">message</span>
 
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-15" id="section-15">&#182;</a>
+</div>
+<p>Error management</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
     <span class="nx">socket</span><span class="p">.</span><span class="nx">on</span> <span class="s">&#39;error&#39;</span><span class="p">,</span> <span class="nf">(err) =&gt;</span>
       <span class="nx">debug</span> <span class="nx">err</span><span class="p">.</span><span class="nx">toString</span><span class="p">().</span><span class="nx">red</span>
       <span class="nx">@_end</span> <span class="s">&#39;fail&#39;</span><span class="p">,</span> <span class="nx">err</span>

@@ -37,6 +37,12 @@
       <div class="heading h3">
         <a href="#create%20instance">Create instance</a>
       </div>
+      <div class="heading h3">
+        <a href="#protocol%20new%20start">Protocol new start</a>
+      </div>
+      <div class="heading h3">
+        <a href="#protocol%20end%20of%20sensor%20run">Protocol end of sensor run</a>
+      </div>
       <div class="heading h2">
         <a href="#export%20class">Export class</a>
       </div>
@@ -100,6 +106,8 @@
   </h2>
 </div>
 
+
+<p>This class contains all the basics for each sensor.</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
 <span class="k">class</span> <span class="nx">Sensor</span> <span class="k">extends</span> <span class="nx">EventEmitter</span>
@@ -117,6 +125,8 @@
   </h3>
 </div>
 
+
+<p>This may be overwritten in sensor config or constructor parameter.</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
   <span class="vi">@config =</span>
@@ -142,6 +152,21 @@
     <span class="k">unless</span> <span class="nx">config</span>
       <span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span> <span class="s">&quot;Could not initialize sensor without configuration.&quot;</span>
 
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap" id="protocol%20new%20start">
+  <h3>
+    <a href="#protocol%20new%20start" name="protocol%20new%20start" class="pilcrow">&#182;</a>
+    Protocol new start
+  </h3>
+</div>
+
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
   <span class="nv">_start: </span><span class="nf">(title) -&gt;</span>
     <span class="vi">@result =</span>
       <span class="nv">date: </span><span class="k">new</span> <span class="nb">Date</span>
@@ -150,6 +175,21 @@
     <span class="k">if</span> <span class="nx">@config</span><span class="p">.</span><span class="nx">verbose</span>
       <span class="nx">console</span><span class="p">.</span><span class="nx">log</span> <span class="s">&quot;</span><span class="si">#{</span><span class="nx">title</span><span class="si">}</span><span class="s">...&quot;</span>
 
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap" id="protocol%20end%20of%20sensor%20run">
+  <h3>
+    <a href="#protocol%20end%20of%20sensor%20run" name="protocol%20end%20of%20sensor%20run" class="pilcrow">&#182;</a>
+    Protocol end of sensor run
+  </h3>
+</div>
+
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
   <span class="nv">_end: </span><span class="nf">(status, message) -&gt;</span>
     <span class="vi">@result.status = </span><span class="nx">status</span>
     <span class="vi">@result.message = </span><span class="nx">message</span> <span class="k">if</span> <span class="nx">message</span>
