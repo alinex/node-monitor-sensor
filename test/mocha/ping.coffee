@@ -75,6 +75,17 @@ describe "Ping sensor", ->
         expect(err).to.not.exist
         done()
 
+    it "should succeed with human readable values", (done) ->
+      PingSensor.check 'test',
+        host: '193.99.144.80'
+        count: 10
+        timeout: '5s'
+        responsetime: 500
+        responsemax: '1s'
+      , (err) ->
+        expect(err).to.not.exist
+        done()
+
     it "should succeed for simple configuration", (done) ->
       PingSensor.check 'test',
         host: '193.99.144.80'

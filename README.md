@@ -9,9 +9,6 @@ This module is part of the [Monitoring](http://alinex.github.io/node-monitor)
 modules and applications but can be used as standalone module in other projects,
 too.
 
-It is a collection of sensors which can check specific system data and analyze
-the state.
-
 - it has multiple sensors
 - runs completely asynchronous
 - analyses the process
@@ -115,7 +112,7 @@ API
 - `values` - meta information for the measurement values
 - `config` - the default configuration
   (each entry starting with underscore gives the help text for that value)
-- `configCheck` - check function for the configuration values (alinex-config
+- `check` - check function for the configuration values (alinex-config
   style)
 
 #### Properties

@@ -88,38 +88,39 @@ class PingSensor extends Sensor
 
   # ### Check method for configuration
   # This function may be used to be added to [alinex-config](https://alinex.github.io/node-config).
+  # It allows to use human readable settings.
   @check = (name, values, cb) ->
     # hostname or ip
     unless values.host?
       return cb new Error "Value 'host' missing in #{name} configuration."
     # ping count
     if values.count
-      values.count = parseInt values.count
-      unless number.isInteger(values.count) and values.count > 0
+      values.count = number.parseInt values.count
+      if isNaN(values.count) or values.count <= 0
         return cb new Error "Value 'count' have to be positive integer
         in #{name} configuration."
     # timeout in seconds
-    values.timeout = parseInt values.timeout if typeof values.timeout is 'string'
     if values.timeout
-      unless number.isInteger(values.timeout) and values.timeout > 0
+      values.timeout = number.parseSeconds values.timeout
+      if isNaN(values.timeout) or values.timeout <= 0
         return cb new Error "Value 'timeout' have to be positive integer
         in #{name} configuration."
       if values.timeout > 3600
         return cb new Error "More than 1 hour 'timeout' will be too long
         in #{name} configuration, better invoke it multiple times."
     # maximum response time in milliseconds
-    values.responsetime = parseInt values.responsetime if typeof values.responsetime is 'string'
     if values.responsetime
-      unless number.isInteger(values.responsetime) and 0 < values.responsetime
+      values.responsetime = number.parseMSeconds values.responsetime
+      if isNaN(values.responsetime) or values.responsetime <= 0
         return cb new Error "Value 'responsetime' have to be positive integer
         in #{name} configuration."
       if values.responsetime > 60000
         return cb new Error "More than 1 minute 'responsetime' will be too much
         in #{name} configuration."
     # maximum response time in milliseconds
-    values.responsemax = parseInt values.responsemax if typeof values.responsemax is 'string'
     if values.responsemax
-      unless number.isInteger(values.responsemax) and 0 < values.responsemax
+      values.responsemax = number.parseMSeconds values.responsemax
+      if isNaN(values.responsemax) or values.responsemax <= 0
         return cb new Error "Value 'responsemax' have to be positive integer
         in #{name} configuration."
       if values.responsemax > 60000
