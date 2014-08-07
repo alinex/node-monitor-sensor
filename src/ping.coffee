@@ -26,6 +26,7 @@ debug = require('debug')('monitor:sensor:ping')
 colors = require 'colors'
 EventEmitter = require('events').EventEmitter
 {object,number} = require 'alinex-util'
+validator = require 'alinex-validator'
 Sensor = require './base'
 # specific modules for this check
 os = require 'os'
@@ -90,6 +91,29 @@ class PingSensor extends Sensor
   # This function may be used to be added to [alinex-config](https://alinex.github.io/node-config).
   # It allows to use human readable settings.
   @check = (name, values, cb) ->
+    validator.check name, values,#
+      check: 'type.array'
+      mandatoryKeys: ['host']
+      entries:
+        host:
+          check: 'type.string'
+        count:
+          check: 'type.integer'
+          min: 1
+        timeout:
+          check: 'date.interval'
+          unit: 'ms'
+          min: 500
+        reponsetime:
+          check: 'date.interval'
+          unit: 'ms'
+          min: 0
+        responsemax:
+          check: 'date.interval'
+          unit: 'ms'
+          min: 0
+    , cb
+    ###
     # hostname or ip
     unless values.host?
       return cb new Error "Value 'host' missing in #{name} configuration."
@@ -127,7 +151,7 @@ class PingSensor extends Sensor
         return cb new Error "More than 1 minute 'responsemax' will be too much
         in #{name} configuration."
     cb()
-
+    ###
   # ### Create instance
   constructor: (config) ->
     super object.extend {}, @constructor.config, config

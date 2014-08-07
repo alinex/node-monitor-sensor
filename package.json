@@ -1,7 +1,7 @@
 {
   "name": "alinex-monitor-sensor",
   "version": "0.0.1",
-  "description": "",
+  "description": "Sensors to check services and systems for monitoring",
   "copyright": "Alexander Schilling 2014",
   "private": false,
   "keywords": [],
