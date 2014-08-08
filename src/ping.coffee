@@ -92,8 +92,9 @@ class PingSensor extends Sensor
   # It allows to use human readable settings.
   @check = (name, values, cb) ->
     validator.check name, values,#
-      check: 'type.array'
+      check: 'type.object'
       mandatoryKeys: ['host']
+      allowedKeys: ['count', 'timeout', 'responsetime', 'responsemax']
       entries:
         host:
           check: 'type.string'

@@ -23,6 +23,7 @@ describe "Http request sensor", ->
       done()
 
   it "should fail for non-existent webserver", (done) ->
+    @timeout 10000
     http = new HttpSensor
       url: 'http://nonexistentsubdomain.unknown.site'
     http.run (err) ->
