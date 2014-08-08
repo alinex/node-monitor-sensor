@@ -26,7 +26,6 @@ debug = require('debug')('monitor:sensor:ping')
 colors = require 'colors'
 EventEmitter = require('events').EventEmitter
 {object,number} = require 'alinex-util'
-validator = require 'alinex-validator'
 Sensor = require './base'
 # specific modules for this check
 os = require 'os'
@@ -44,115 +43,76 @@ class PingSensor extends Sensor
     round-trip time for the messages send."
     category: 'net'
     level: 1
-
-  # ### Value Definition
-  # This will define the values measured and their specifics, used to display
-  # results. Explanation in the code.
-  @values = [
-    name: 'success'
-    description: "true if packets were echoed back"
-    type: 'bool'
-  ,
-    name: 'responsetime'
-    description: "average round-trip time of packets"
-    type: 'int'
-    unit: 'ms'
-  ,
-    name: 'responsemin'
-    description: "minimum round-trip time of packets"
-    type: 'int'
-    unit: 'ms'
-  ,
-    name: 'responsemax'
-    description: "maximum round-trip time of packets"
-    type: 'int'
-    unit: 'ms'
-  ,
-    name: 'quality'
-    description: "quality of response (packets succeeded)"
-    type: 'percent'
-  ]
-
-  # ### Default Configuration
-  # The values starting with underscore are general help messages.
-  # Explanation in the code.
-  @config =
-    _host: "hostname or ip address to test"
-    count: 1
-    _count: "number of packets to send"
-    timeout: 1
-    _timeout: "timeout in seconds for response"
-    responsetime: 500
-    _responsetime: "maximum average round-trip time in ms (else warning state)"
-    responsemax: 1000
-    _responsemax: "maximum round-trip time in ms of any packet (else warning state)"
-
-  # ### Check method for configuration
-  # This function may be used to be added to [alinex-config](https://alinex.github.io/node-config).
-  # It allows to use human readable settings.
-  @check = (name, values, cb) ->
-    validator.check name, values,#
+    # Check for configuration settings [alinex-validator](http://alinex.githhub.io/node-validator)
+    # compatible:
+    config:
+      title: "Ping test"
       check: 'type.object'
       mandatoryKeys: ['host']
       allowedKeys: ['count', 'timeout', 'responsetime', 'responsemax']
       entries:
         host:
+          title: "Hostname or IP"
+          description: "the server hostname or ip address to be called for ping"
           check: 'type.string'
         count:
+          title: "Number of packets to send"
+          description: "the number of ping packets to send, each after the other"
           check: 'type.integer'
           min: 1
         timeout:
+          title: "Overall Timeout"
+          description: "the time in milliseconds the whole test may take"
           check: 'date.interval'
           unit: 'ms'
           min: 500
         reponsetime:
+          title: "Average ping time"
+          description: "the average time the pings may take to not be marked as warning"
           check: 'date.interval'
           unit: 'ms'
           min: 0
         responsemax:
+          title: "Maximum ping time"
+          description: "the maximum time any ping may take to not be marked as warning"
           check: 'date.interval'
           unit: 'ms'
           min: 0
-    , cb
-    ###
-    # hostname or ip
-    unless values.host?
-      return cb new Error "Value 'host' missing in #{name} configuration."
-    # ping count
-    if values.count
-      values.count = number.parseInt values.count
-      if isNaN(values.count) or values.count <= 0
-        return cb new Error "Value 'count' have to be positive integer
-        in #{name} configuration."
-    # timeout in seconds
-    if values.timeout
-      values.timeout = number.parseSeconds values.timeout
-      if isNaN(values.timeout) or values.timeout <= 0
-        return cb new Error "Value 'timeout' have to be positive integer
-        in #{name} configuration."
-      if values.timeout > 3600
-        return cb new Error "More than 1 hour 'timeout' will be too long
-        in #{name} configuration, better invoke it multiple times."
-    # maximum response time in milliseconds
-    if values.responsetime
-      values.responsetime = number.parseMSeconds values.responsetime
-      if isNaN(values.responsetime) or values.responsetime <= 0
-        return cb new Error "Value 'responsetime' have to be positive integer
-        in #{name} configuration."
-      if values.responsetime > 60000
-        return cb new Error "More than 1 minute 'responsetime' will be too much
-        in #{name} configuration."
-    # maximum response time in milliseconds
-    if values.responsemax
-      values.responsemax = number.parseMSeconds values.responsemax
-      if isNaN(values.responsemax) or values.responsemax <= 0
-        return cb new Error "Value 'responsemax' have to be positive integer
-        in #{name} configuration."
-      if values.responsemax > 60000
-        return cb new Error "More than 1 minute 'responsemax' will be too much
-        in #{name} configuration."
-    cb()
-    ###
+    # Definition of response values
+    values:
+      success:
+        title: 'Success'
+        description: "true if packets were echoed back"
+        type: 'bool'
+      responsetime:
+        title: 'Avg. Response Time'
+        description: "average round-trip time of packets"
+        type: 'int'
+        unit: 'ms'
+      responsemin:
+        title: 'Min. Respons Time'
+        description: "minimum round-trip time of packets"
+        type: 'int'
+        unit: 'ms'
+      responsemax:
+        title: 'Max. Response Time'
+        description: "maximum round-trip time of packets"
+        type: 'int'
+        unit: 'ms'
+      quality:
+        title: 'Quality'
+        description: "quality of response (packets succeeded)"
+        type: 'percent'
+
+  # ### Default Configuration
+  # The values starting with underscore are general help messages.
+  # Explanation in the code.
+  @config =
+    count: 1
+    timeout: 1
+    responsetime: 500
+    responsemax: 1000
+
   # ### Create instance
   constructor: (config) ->
     super object.extend {}, @constructor.config, config
@@ -167,13 +127,13 @@ class PingSensor extends Sensor
     ping = switch
       when p is 'linux'
         cmd: '/bin/ping'
-        args: ['-c', @config.count, '-W', @config.timeout]
+        args: ['-c', @config.count, '-W', Math.ceil @config.timeout/1000]
       when p.match /^win/
         cmd: 'C:/windows/system32/ping.exe'
-        args: ['-n', @config.count, '-w', @config.timeout*1000]
+        args: ['-n', @config.count, '-w', @config.timeout]
       when p is 'darwin'
         cmd: '/sbin/ping'
-        args: ['-c', @config.count, '-t', @config.timeout]
+        args: ['-c', @config.count, '-t', Math.ceil @config.timeout/1000]
       else
         throw new Error "Operating system #{p} is not supported in ping."
     ping.args.push @config.host

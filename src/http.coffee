@@ -25,40 +25,58 @@ class SocketSensor extends Sensor
     description: "Connect to an HTTP or HTTPS server and check the response."
     category: 'net'
     level: 2
-
-  # ### Value Definition
-  # This will define the values measured and their specifics, used to display
-  # results.
-  @values = [
-    name: 'success'
-    description: "true if server responded with correct http code"
-    type: 'bool'
-  ,
-    name: 'responsetime'
-    description: "time till connection could be established"
-    type: 'int'
-    unit: 'ms'
-  ,
-    name: 'statuscode'
-    description: "http status code"
-    type: 'values'
-  ,
-    name: 'bodycheck'
-    description: "success of check for content"
-    type: 'bool'
-  ]
+    # Check for configuration settings [alinex-validator](http://alinex.githhub.io/node-validator)
+    # compatible:
+    config:
+      title: "Webserver response check"
+      check: 'type.object'
+      mandatoryKeys: ['host']
+      allowedKeys: ['count', 'timeout', 'responsetime', 'responsemax']
+      entries:
+        url:
+          title: ""
+          description: "URL to request"
+        timeout:
+          title: ""
+          description: "timeout in seconds"
+        responsetime:
+          title: ""
+          description: "maximum time in ms till server responded"
+        username:
+          title: ""
+          description: "used for basic authentication"
+        password:
+          title: ""
+          description: "used for basic authentication"
+        bodycheck:
+          title: ""
+          description: "substring or regular expression"
+    # Definition of response values
+    values:
+      success:
+        title: ""
+        description: "true if server responded with correct http code"
+        type: 'bool'
+      responsetime:
+        title: ""
+        description: "time till connection could be established"
+        type: 'int'
+        unit: 'ms'
+      statuscode:
+        title: ""
+        description: "http status code"
+        type: 'values'
+      bodycheck:
+        title: ""
+        description: "success of check for content"
+        type: 'bool'
 
   # ### Default Configuration
   # The values starting with underscore are general help messages.
   @config =
-    _url: "URL to request"
     timeout: 2
-    _timeout: "timeout in seconds"
     responsetime: 1000
-    _responsetime: "maximum time in ms till server responded"
-    _username: "used for basic authentication"
-    _password: "used for basic authentication"
-    _bodycheck: "substring or regular expression"
+
   # ### Create instance
   constructor: (config) ->
     super object.extend {}, @constructor.config, config

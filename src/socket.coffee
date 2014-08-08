@@ -26,30 +26,52 @@ class SocketSensor extends Sensor
     behind a given port."
     category: 'net'
     level: 1
-
-  # ### Value Definition
-  # This will define the values measured and their specifics, used to display
-  # results.
-  @values = [
-    name: 'success'
-    description: "true if connection is possible"
-    type: 'bool'
-  ,
-    name: 'responsetime'
-    description: "time till connection could be established"
-    type: 'int'
-    unit: 'ms'
-  ]
+    # Check for configuration settings [alinex-validator](http://alinex.githhub.io/node-validator)
+    # compatible:
+    config:
+      title: "Socket connection test"
+      check: 'type.object'
+      mandatoryKeys: ['host', 'port']
+      allowedKeys: ['timeout', 'responsetime']
+      entries:
+        host:
+          title: ""
+          description: "hostname or ip address to test"
+          check: 'type.string'
+        port:
+          title: ""
+          description: "portnumber to connect to"
+          check: 'type.integer'
+          min: 1
+        timeout:
+          title: ""
+          description: "Timeut in seconds"
+          check: 'date.interval'
+          unit: 'ms'
+          min: 500
+        reponsetime:
+          title: ""
+          description: "maximum time in ms till connection is established"
+          check: 'date.interval'
+          unit: 'ms'
+          min: 0
+    # Definition of response values
+    values:
+      success:
+        title: ""
+        description: "true if connection is possible"
+        type: 'bool'
+      responsetime:
+        title: ""
+        description: "time till connection could be established"
+        type: 'int'
+        unit: 'ms'
 
   # ### Default Configuration
   # The values starting with underscore are general help messages.
   @config =
-    _host: "hostname or ip address to test"
-    _port: "portnumber to connect to"
     timeout: 2
-    _timeout: "timeout in seconds"
     responsetime: 1000
-    _responsetime: "maximum time in ms till connection is established"
 
   # ### Create instance
   constructor: (config) ->
