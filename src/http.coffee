@@ -30,27 +30,46 @@ class SocketSensor extends Sensor
     config:
       title: "Webserver response check"
       check: 'type.object'
-      mandatoryKeys: ['host']
-      allowedKeys: ['count', 'timeout', 'responsetime', 'responsemax']
+      mandatoryKeys: ['url']
+      allowedKeys: ['timeout', 'responsetime', 'username', 'password', 'bodycheck']
       entries:
         url:
-          title: ""
-          description: "URL to request"
+          title: "URL"
+          description: "the URL to request"
+          check: 'type.string'
         timeout:
-          title: ""
-          description: "timeout in seconds"
+          title: "Timeout"
+          description: "the timeout in milliseconds till the process is stopped
+            and be considered as failed"
+          check: 'date.interval'
+          unit: 'ms'
+          min: 500
         responsetime:
-          title: ""
-          description: "maximum time in ms till server responded"
+          title: "Response Time"
+          description: "the maximum time in milliseconds till the server
+            responded after that the state is set to warning"
+          check: 'date.interval'
+          unit: 'ms'
+          min: 0
         username:
-          title: ""
-          description: "used for basic authentication"
+          title: "Username"
+          description: "the name used for basic authentication"
+          check: 'type.string'
         password:
-          title: ""
-          description: "used for basic authentication"
+          title: "Password"
+          description: "the password used for basic authentication"
+          check: 'type.string'
         bodycheck:
-          title: ""
+          title: "Body check"
           description: "substring or regular expression"
+          check: 'type.any'
+          list: [
+            check: 'type.string'
+            minLength: 1
+          ,
+            check: 'type.object'
+            instanceOf: RegExp
+          ]
     # Definition of response values
     values:
       success:

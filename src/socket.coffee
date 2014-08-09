@@ -35,35 +35,37 @@ class SocketSensor extends Sensor
       allowedKeys: ['timeout', 'responsetime']
       entries:
         host:
-          title: ""
-          description: "hostname or ip address to test"
+          title: "Hostname or IP"
+          description: "the server hostname or ip address to establish connection to"
           check: 'type.string'
         port:
-          title: ""
-          description: "portnumber to connect to"
+          title: "Port"
+          description: "the port number used to connect to"
           check: 'type.integer'
           min: 1
         timeout:
-          title: ""
-          description: "Timeut in seconds"
+          title: "Timeout"
+          description: "the timeout in milliseconds till the process is stopped
+            and be considered as failed"
           check: 'date.interval'
           unit: 'ms'
           min: 500
         reponsetime:
-          title: ""
-          description: "maximum time in ms till connection is established"
+          title: "Response Time"
+          description: "the maximum time in milliseconds till the connection
+            can be established without setting the state to warning"
           check: 'date.interval'
           unit: 'ms'
           min: 0
     # Definition of response values
     values:
       success:
-        title: ""
-        description: "true if connection is possible"
+        title: "Successful"
+        description: "true if connecting is possible"
         type: 'bool'
       responsetime:
-        title: ""
-        description: "time till connection could be established"
+        title: "Response Time"
+        description: "time in milliseconds till connection could be established"
         type: 'int'
         unit: 'ms'
 

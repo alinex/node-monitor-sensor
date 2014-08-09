@@ -62,19 +62,22 @@ class PingSensor extends Sensor
           min: 1
         timeout:
           title: "Overall Timeout"
-          description: "the time in milliseconds the whole test may take"
+          description: "the time in milliseconds the whole test may take before
+            stopping and failing it"
           check: 'date.interval'
           unit: 'ms'
           min: 500
         reponsetime:
           title: "Average ping time"
-          description: "the average time the pings may take to not be marked as warning"
+          description: "the average time in milliseconds the pings may take to
+            not be marked as warning"
           check: 'date.interval'
           unit: 'ms'
           min: 0
         responsemax:
           title: "Maximum ping time"
-          description: "the maximum time any ping may take to not be marked as warning"
+          description: "the maximum time in milliseconds any ping may take to
+            not be marked as warning"
           check: 'date.interval'
           unit: 'ms'
           min: 0
