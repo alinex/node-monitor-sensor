@@ -7,7 +7,6 @@
 # include base modules
 EventEmitter = require('events').EventEmitter
 object = require('alinex-util').object
-validator = require 'alinex-validator'
 colors = require 'colors'
 
 # Sensor class
@@ -19,12 +18,6 @@ class Sensor extends EventEmitter
   # This may be overwritten in sensor config or constructor parameter.
   @config =
     verbose: false
-
-  # ### Check method for configuration
-  # This function may be used to be added to [alinex-config](http://alinex.github.io/node-config).
-  # It allows to use human readable settings but is not called automatically.
-  @check = (source, values, cb) ->
-    validator.check source, values, @meta.config, cb
 
   # ### Create instance
   constructor: (config) ->
