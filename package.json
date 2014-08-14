@@ -33,9 +33,10 @@
     "request": "2.x"
   },
   "devDependencies": {
+    "alinex-error": "0.x",
     "alinex-make": "0.2.x",
-    "chai": "1.x",
-    "alinex-error": "0.x"
+    "alinex-validator": "^0.1.1",
+    "chai": "1.x"
   },
   "optionalDependencies": {},
   "engines": {

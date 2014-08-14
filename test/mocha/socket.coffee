@@ -1,6 +1,7 @@
 chai = require 'chai'
 expect = chai.expect
 require('alinex-error').install()
+validator = require 'alinex-validator'
 
 SocketSensor = require '../../lib//socket'
 
@@ -44,7 +45,7 @@ describe "Socket connection sensor", ->
         host: '193.99.144.80'
         port: 1298
       socket.run (err) ->
-        expect(err).to.exist
+        expect(err).to.not.exist
         expect(socket.result).to.exist
         expect(socket.result.date).to.exist
         expect(socket.result.status).to.equal 'fail'
@@ -58,7 +59,7 @@ describe "Socket connection sensor", ->
         host: 'unknownsubdomain.nonexisting.host'
         port: 80
       socket.run (err) ->
-        expect(err).to.exist
+        expect(err).to.not.exist
         expect(socket.result).to.exist
         expect(socket.result.date).to.exist
         expect(socket.result.status).to.equal 'fail'
@@ -69,11 +70,11 @@ describe "Socket connection sensor", ->
   describe "check", ->
 
     it "should succeed for complete configuration", (done) ->
-      SocketSensor.check 'test',
+      validator.check 'test',
         host: '193.99.144.80'
         port: 80
         timeout: 5
         responsetime: 500
-      , (err) ->
+      , SocketSensor.meta.config, (err) ->
         expect(err).to.not.exist
         done()

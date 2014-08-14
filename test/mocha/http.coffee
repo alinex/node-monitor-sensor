@@ -1,6 +1,7 @@
 chai = require 'chai'
 expect = chai.expect
 require('alinex-error').install()
+validator = require 'alinex-validator'
 
 HttpSensor = require '../../lib/http'
 
@@ -53,7 +54,7 @@ describe "Http request sensor", ->
       http = new HttpSensor
         url: 'http://heise.de/page-which-does-not-exit-on-this-server'
       http.run (err) ->
-        expect(err).to.exist
+        expect(err).to.not.exist
         expect(http.result).to.exist
         expect(http.result.date).to.exist
         expect(http.result.status).to.equal 'fail'
@@ -89,14 +90,14 @@ describe "Http request sensor", ->
 
   describe "check", ->
 
-    it.only "should succeed for complete configuration", (done) ->
-      HttpSensor.check 'test',
+    it "should succeed for complete configuration", (done) ->
+      validator.check 'test',
         url: 'heise.de'
         timeout: 5000
         responsetime: 500
         username: 'alex'
         password: 'alex'
         bodycheck: 'Login'
-      , (err) ->
+      , HttpSensor.meta.config, (err) ->
         expect(err).to.not.exist
         done()

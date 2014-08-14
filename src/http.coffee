@@ -31,7 +31,7 @@ class SocketSensor extends Sensor
       title: "Webserver response check"
       check: 'type.object'
       mandatoryKeys: ['url']
-      allowedKeys: ['timeout', 'responsetime', 'username', 'password', 'bodycheck']
+      allowedKeys: true
       entries:
         url:
           title: "URL"
@@ -63,7 +63,7 @@ class SocketSensor extends Sensor
           title: "Body check"
           description: "substring or regular expression"
           check: 'type.any'
-          list: [
+          entries: [
             check: 'type.string'
             minLength: 1
           ,
@@ -162,8 +162,7 @@ class SocketSensor extends Sensor
         when 'fail'
           "#{@constructor.meta.name} exited with status code #{response.statusCode}"
       @_end status, message
-      return cb new Error message if status is 'fail'
-      cb()
+      cb null, @
 
 # Export class
 # -------------------------------------------------

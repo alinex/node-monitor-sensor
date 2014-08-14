@@ -55,9 +55,9 @@ here.
 
 Now you can start it using a callback method:
 
-    ping.run(function(err) {
+    ping.run(function(err, sensor) {
       // do something with result in ping object
-      console.log(ping);
+      console.log(sensor);
     });
 
 Or alternatively you may use an event based call:

@@ -204,8 +204,7 @@ class PingSensor extends Sensor
         when 'fail'
           "#{@constructor.meta.name} exited with status #{status}"
       @_end status, message
-      return cb new Error message if status is 'fail'
-      cb()
+      cb null, @
 
 # Export class
 # -------------------------------------------------
