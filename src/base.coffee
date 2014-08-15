@@ -5,14 +5,13 @@
 # -------------------------------------------------
 
 # include base modules
-EventEmitter = require('events').EventEmitter
 object = require('alinex-util').object
 colors = require 'colors'
 
 # Sensor class
 # -------------------------------------------------
 # This class contains all the basics for each sensor.
-class Sensor extends EventEmitter
+class Sensor
 
   # ### Default Configuration
   # This may be overwritten in sensor config or constructor parameter.
@@ -30,7 +29,6 @@ class Sensor extends EventEmitter
     @result =
       date: new Date
       status: 'running'
-    @emit 'start'
     if @config.verbose
       console.log "#{title}..."
 
@@ -46,8 +44,6 @@ class Sensor extends EventEmitter
       else
         console.log "#{@constructor.meta.name} #{status}!".magenta
       console.log @result.value
-    @emit status
-    @emit 'end'
 
 # Export class
 # -------------------------------------------------

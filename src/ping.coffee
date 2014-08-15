@@ -24,8 +24,9 @@
 # include base modules
 debug = require('debug')('monitor:sensor:ping')
 colors = require 'colors'
-EventEmitter = require('events').EventEmitter
+# include alinex packages
 {object,number} = require 'alinex-util'
+# include classes and helper
 Sensor = require './base'
 # specific modules for this check
 os = require 'os'

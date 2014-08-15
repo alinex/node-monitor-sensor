@@ -8,8 +8,9 @@
 # include base modules
 debug = require('debug')('monitor:sensor:socket')
 colors = require 'colors'
-EventEmitter = require('events').EventEmitter
+# include alinex packages
 object = require('alinex-util').object
+# include classes and helper modules
 Sensor = require './base'
 # specific modules for this check
 net = require 'net'
