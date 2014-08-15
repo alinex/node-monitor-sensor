@@ -4,7 +4,7 @@
   "description": "Sensors to check services and systems for monitoring",
   "copyright": "Alexander Schilling 2014",
   "private": false,
-  "keywords": [],
+  "keywords": [ "analyze", "ping", "socket" ],
   "homepage": "http://alinex.github.io/node-monitor-sensor/",
   "repository": {
     "type": "git",
@@ -34,8 +34,8 @@
   },
   "devDependencies": {
     "alinex-error": "0.x",
-    "alinex-make": "0.2.x",
-    "alinex-validator": "^0.1.1",
+    "alinex-make": "0.3.x",
+    "alinex-validator": "0.1.x",
     "chai": "1.x"
   },
   "optionalDependencies": {},
