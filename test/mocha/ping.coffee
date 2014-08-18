@@ -66,53 +66,53 @@ describe "Ping sensor", ->
   describe "check", ->
 
     it "should succeed for complete configuration", (done) ->
-      validator.check 'test',
+      validator.check 'test', PingSensor.meta.config,
         host: '193.99.144.80'
         count: 10
-        timeout: 5
+        timeout: 5000
         responsetime: 500
         responsemax: 1000
-      , PingSensor.meta.config, (err) ->
+      , (err) ->
         expect(err).to.not.exist
         done()
 
     it "should succeed with human readable values", (done) ->
-      validator.check 'test',
+      validator.check 'test', PingSensor.meta.config,
         host: '193.99.144.80'
         count: 10
         timeout: '5s'
         responsetime: 500
         responsemax: '1s'
-      , PingSensor.meta.config, (err) ->
+      , (err) ->
         expect(err).to.not.exist
         done()
 
     it "should succeed for simple configuration", (done) ->
-      validator.check 'test',
+      validator.check 'test', PingSensor.meta.config,
         host: '193.99.144.80'
-      , PingSensor.meta.config, (err) ->
+      , (err) ->
         expect(err).to.not.exist
         done()
 
     it "should fail for missing host", (done) ->
-      validator.check 'test',
+      validator.check 'test', PingSensor.meta.config,
         ip: '193.99.144.80'
-      , PingSensor.meta.config, (err) ->
+      , (err) ->
         expect(err).to.exist
         done()
 
     it "should fail for wrong timeout", (done) ->
-      validator.check 'test',
+      validator.check 'test', PingSensor.meta.config,
         host: '193.99.144.80'
         timeout: []
-      , PingSensor.meta.config, (err) ->
+      , (err) ->
         expect(err).to.exist
         done()
 
     it "should succeed with timeout as string", (done) ->
-      validator.check 'test',
+      validator.check 'test', PingSensor.meta.config,
         host: '193.99.144.80'
-        timeout: '5'
-      , PingSensor.meta.config, (err) ->
+        timeout: '5000'
+      , (err) ->
         expect(err).to.not.exist
         done()

@@ -91,13 +91,13 @@ describe "Http request sensor", ->
   describe "check", ->
 
     it "should succeed for complete configuration", (done) ->
-      validator.check 'test',
+      validator.check 'test', HttpSensor.meta.config,
         url: 'heise.de'
         timeout: 5000
         responsetime: 500
         username: 'alex'
         password: 'alex'
         bodycheck: 'Login'
-      , HttpSensor.meta.config, (err) ->
+      , (err) ->
         expect(err).to.not.exist
         done()

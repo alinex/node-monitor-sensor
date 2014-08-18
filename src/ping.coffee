@@ -48,38 +48,38 @@ class PingSensor extends Sensor
     # compatible:
     config:
       title: "Ping test"
-      check: 'type.object'
+      type: 'object'
       mandatoryKeys: ['host']
       allowedKeys: ['count', 'timeout', 'responsetime', 'responsemax']
       entries:
         host:
           title: "Hostname or IP"
           description: "the server hostname or ip address to be called for ping"
-          check: 'type.string'
+          type: 'string'
         count:
           title: "Number of packets to send"
           description: "the number of ping packets to send, each after the other"
-          check: 'type.integer'
+          type: 'integer'
           min: 1
         timeout:
           title: "Overall Timeout"
           description: "the time in milliseconds the whole test may take before
             stopping and failing it"
-          check: 'date.interval'
+          type: 'interval'
           unit: 'ms'
           min: 500
         reponsetime:
           title: "Average ping time"
           description: "the average time in milliseconds the pings may take to
             not be marked as warning"
-          check: 'date.interval'
+          type: 'interval'
           unit: 'ms'
           min: 0
         responsemax:
           title: "Maximum ping time"
           description: "the maximum time in milliseconds any ping may take to
             not be marked as warning"
-          check: 'date.interval'
+          type: 'interval'
           unit: 'ms'
           min: 0
     # Definition of response values
@@ -87,21 +87,21 @@ class PingSensor extends Sensor
       success:
         title: 'Success'
         description: "true if packets were echoed back"
-        type: 'bool'
+        type: 'boolean'
       responsetime:
         title: 'Avg. Response Time'
         description: "average round-trip time of packets"
-        type: 'int'
+        type: 'integer'
         unit: 'ms'
       responsemin:
         title: 'Min. Respons Time'
         description: "minimum round-trip time of packets"
-        type: 'int'
+        type: 'integer'
         unit: 'ms'
       responsemax:
         title: 'Max. Response Time'
         description: "maximum round-trip time of packets"
-        type: 'int'
+        type: 'integer'
         unit: 'ms'
       quality:
         title: 'Quality'

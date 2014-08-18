@@ -30,45 +30,45 @@ class SocketSensor extends Sensor
     # compatible:
     config:
       title: "Webserver response check"
-      check: 'type.object'
+      type: 'object'
       mandatoryKeys: ['url']
       allowedKeys: true
       entries:
         url:
           title: "URL"
           description: "the URL to request"
-          check: 'type.string'
+          type: 'string'
         timeout:
           title: "Timeout"
           description: "the timeout in milliseconds till the process is stopped
             and be considered as failed"
-          check: 'date.interval'
+          type: 'interval'
           unit: 'ms'
           min: 500
         responsetime:
           title: "Response Time"
           description: "the maximum time in milliseconds till the server
             responded after that the state is set to warning"
-          check: 'date.interval'
+          type: 'interval'
           unit: 'ms'
           min: 0
         username:
           title: "Username"
           description: "the name used for basic authentication"
-          check: 'type.string'
+          type: 'string'
         password:
           title: "Password"
           description: "the password used for basic authentication"
-          check: 'type.string'
+          type: 'string'
         bodycheck:
           title: "Body check"
           description: "substring or regular expression"
-          check: 'type.any'
+          type: 'any'
           entries: [
-            check: 'type.string'
+            type: 'string'
             minLength: 1
           ,
-            check: 'type.object'
+            type: 'object'
             instanceOf: RegExp
           ]
     # Definition of response values
@@ -76,20 +76,20 @@ class SocketSensor extends Sensor
       success:
         title: ""
         description: "true if server responded with correct http code"
-        type: 'bool'
+        type: 'boolean'
       responsetime:
         title: ""
         description: "time till connection could be established"
-        type: 'int'
+        type: 'integer'
         unit: 'ms'
       statuscode:
         title: ""
         description: "http status code"
         type: 'values'
-      bodycheck:
+      bodytype:
         title: ""
         description: "success of check for content"
-        type: 'bool'
+        type: 'boolean'
 
   # ### Default Configuration
   # The values starting with underscore are general help messages.

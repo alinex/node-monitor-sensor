@@ -70,11 +70,11 @@ describe "Socket connection sensor", ->
   describe "check", ->
 
     it "should succeed for complete configuration", (done) ->
-      validator.check 'test',
+      validator.check 'test', SocketSensor.meta.config,
         host: '193.99.144.80'
         port: 80
-        timeout: 5
+        timeout: 5000
         responsetime: 500
-      , SocketSensor.meta.config, (err) ->
+      , (err) ->
         expect(err).to.not.exist
         done()

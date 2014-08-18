@@ -31,31 +31,31 @@ class SocketSensor extends Sensor
     # compatible:
     config:
       title: "Socket connection test"
-      check: 'type.object'
+      type: 'object'
       mandatoryKeys: ['host', 'port']
       allowedKeys: ['timeout', 'responsetime']
       entries:
         host:
           title: "Hostname or IP"
           description: "the server hostname or ip address to establish connection to"
-          check: 'type.string'
+          type: 'string'
         port:
           title: "Port"
           description: "the port number used to connect to"
-          check: 'type.integer'
+          type: 'integer'
           min: 1
         timeout:
           title: "Timeout"
           description: "the timeout in milliseconds till the process is stopped
             and be considered as failed"
-          check: 'date.interval'
+          type: 'interval'
           unit: 'ms'
           min: 500
         reponsetime:
           title: "Response Time"
           description: "the maximum time in milliseconds till the connection
             can be established without setting the state to warning"
-          check: 'date.interval'
+          type: 'interval'
           unit: 'ms'
           min: 0
     # Definition of response values
@@ -63,11 +63,11 @@ class SocketSensor extends Sensor
       success:
         title: "Successful"
         description: "true if connecting is possible"
-        type: 'bool'
+        type: 'boolean'
       responsetime:
         title: "Response Time"
         description: "time in milliseconds till connection could be established"
-        type: 'int'
+        type: 'integer'
         unit: 'ms'
 
   # ### Default Configuration
