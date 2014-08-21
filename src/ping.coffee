@@ -113,7 +113,7 @@ class PingSensor extends Sensor
   # Explanation in the code.
   @config =
     count: 1
-    timeout: 1
+    timeout: 1000
     responsetime: 500
     responsemax: 1000
 

@@ -94,7 +94,7 @@ class SocketSensor extends Sensor
   # ### Default Configuration
   # The values starting with underscore are general help messages.
   @config =
-    timeout: 2
+    timeout: 2000
     responsetime: 1000
 
   # ### Create instance
