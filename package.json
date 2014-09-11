@@ -29,7 +29,7 @@
   "dependencies": {
     "alinex-util": "0.1.x",
     "colors": "0.6.x",
-    "debug": "1.x",
+    "debug": "0.8.0 - 2.x",
     "request": "2.x"
   },
   "devDependencies": {
