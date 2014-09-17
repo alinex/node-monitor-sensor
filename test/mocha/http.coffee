@@ -9,6 +9,9 @@ describe "Http request sensor", ->
 
   describe "check", ->
 
+    it "should has correct validator rules", ->
+      validator.selfcheck 'meta.config', HttpSensor.meta.config
+
     it "should be initialized", ->
       http = new HttpSensor {}
       expect(http).to.have.property 'config'

@@ -9,6 +9,9 @@ describe "Diskfree", ->
 
   describe "run", ->
 
+    it "should has correct validator rules", ->
+      validator.selfcheck 'meta.config', DiskfreeSensor.meta.config
+
     it "should be initialized", ->
       df = new DiskfreeSensor {}
       expect(df).to.have.property 'config'

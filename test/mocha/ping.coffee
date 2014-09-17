@@ -9,6 +9,9 @@ describe "Ping sensor", ->
 
   describe "run", ->
 
+    it "should has correct validator rules", ->
+      validator.selfcheck 'meta.config', PingSensor.meta.config
+
     it "should be initialized", ->
       ping = new PingSensor {}
       expect(ping).to.have.property 'config'

@@ -9,6 +9,9 @@ describe "Socket connection sensor", ->
 
   describe "run", ->
 
+    it "should has correct validator rules", ->
+      validator.selfcheck 'meta.config', SocketSensor.meta.config
+
     it "should be initialized", ->
       socket = new SocketSensor {}
       expect(socket).to.have.property 'config'
