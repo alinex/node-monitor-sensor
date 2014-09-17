@@ -44,6 +44,7 @@ describe "Socket connection sensor", ->
       socket = new SocketSensor
         host: '193.99.144.80'
         port: 1298
+        timeout: 4000
       socket.run (err) ->
         expect(err).to.not.exist
         expect(socket.result).to.exist

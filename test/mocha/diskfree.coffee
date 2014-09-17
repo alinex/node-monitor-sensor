@@ -13,7 +13,7 @@ describe "Diskfree", ->
       df = new DiskfreeSensor {}
       expect(df).to.have.property 'config'
 
-    it.only "should return success", (done) ->
+    it "should return success", (done) ->
       df = new DiskfreeSensor
         share: '/'
       df.run (err) ->

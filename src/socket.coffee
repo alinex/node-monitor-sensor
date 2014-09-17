@@ -92,7 +92,7 @@ class SocketSensor extends Sensor
     socket = new net.Socket()
     debug "connect to #{@config.host}:#{@config.port}"
     start = new Date().getTime()
-    socket.setTimeout @config.timeout*1000
+    socket.setTimeout @config.timeout
     socket.connect @config.port, @config.host, =>
       debug "connection established"
       end = new Date().getTime()
