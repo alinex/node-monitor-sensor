@@ -27,7 +27,7 @@ colors = require 'colors'
 # include alinex packages
 {object,number} = require 'alinex-util'
 # include classes and helper
-Sensor = require './base'
+Sensor = require '../base'
 # specific modules for this check
 os = require 'os'
 {spawn} = require 'child_process'
@@ -172,7 +172,7 @@ class PingSensor extends Sensor
       cb err
 
     # process finished
-    proc.on 'exit', (code) =>
+    proc.on 'exit', (code) => #process.nextTick (code) =>
       store code
       # get the values
       @result.value = value = {}
@@ -204,6 +204,7 @@ class PingSensor extends Sensor
       message = switch status
         when 'fail'
           "#{@constructor.meta.name} exited with status #{status}"
+      debug @config
       @_end status, message
       cb null, @
 

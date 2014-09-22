@@ -10,7 +10,7 @@ colors = require 'colors'
 # include alinex packages
 {object,number} = require 'alinex-util'
 # include classes and helper
-Sensor = require './base'
+Sensor = require '../base'
 # specific modules for this check
 os = require 'os'
 {exec} = require 'child_process'

@@ -3,7 +3,7 @@ expect = chai.expect
 require('alinex-error').install()
 validator = require 'alinex-validator'
 
-PingSensor = require '../../lib/ping'
+PingSensor = require '../../lib/type/ping'
 
 describe "Ping sensor", ->
 

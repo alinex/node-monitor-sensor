@@ -3,7 +3,7 @@ expect = chai.expect
 require('alinex-error').install()
 validator = require 'alinex-validator'
 
-HttpSensor = require '../../lib/http'
+HttpSensor = require '../../lib/type/http'
 
 describe "Http request sensor", ->
 

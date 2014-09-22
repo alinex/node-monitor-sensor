@@ -88,6 +88,7 @@ API
 - [Ping](src/ping.coffee) - network ping test
 - [Socket](src/socket.coffee) - test port connectivity
 - [Http](src/http.coffee) - try requesting an url
+- [Diskfree](src/diskfree.coffee) - free disk space
 
 #### Methods
 
@@ -120,7 +121,7 @@ API
 - `config` - configuration (given combined with defaults)
 - `result` - the results:
   - `date` - start date of last or current run
-  - `status` - status of the last or current run
+  - `status` - status of the last or current run (ok, warn, fail)
   - `value` - map of measured values
   - `data` - complete data from the last or current run
   - `message` - error message of the last or current run

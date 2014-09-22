@@ -11,7 +11,7 @@ colors = require 'colors'
 # include alinex packages
 object = require('alinex-util').object
 # include classes and helper modules
-Sensor = require './base'
+Sensor = require '../base'
 # specific modules for this check
 net = require 'net'
 
@@ -115,6 +115,7 @@ class SocketSensor extends Sensor
       message = switch status
         when 'fail'
           "#{@constructor.meta.name} exited with status #{status}"
+      debug @config
       @_end status, message
       cb null, @
 

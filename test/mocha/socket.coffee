@@ -3,7 +3,7 @@ expect = chai.expect
 require('alinex-error').install()
 validator = require 'alinex-validator'
 
-SocketSensor = require '../../lib//socket'
+SocketSensor = require '../../lib/type/socket'
 
 describe "Socket connection sensor", ->
 

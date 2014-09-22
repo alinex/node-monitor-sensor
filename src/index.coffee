@@ -5,11 +5,15 @@
 # -------------------------------------------------
 
 # include base modules
+fs = require 'fs'
+path = require 'path'
+# include alinex modules
+{string} = require 'alinex-util'
 
 
 # Collecting sensor classes
 # -------------------------------------------------
-module.exports.Ping = require './ping'
-module.exports.Socket = require './socket'
-module.exports.Http = require './http'
-
+for file in fs.readdirSync path.join __dirname, 'type'
+  if path.extname(file) is '.js'
+    type = path.basename file, path.extname file
+    module.exports[string.ucFirst type] = require "./type/#{type}"
