@@ -13,11 +13,12 @@ describe "Http request sensor", ->
       validator.selfcheck 'meta.config', HttpSensor.meta.config
 
     it "should be initialized", ->
-      http = new HttpSensor {}
+      http = new HttpSensor validator.check 'config', HttpSensor.meta.config,
+        url: 'http://heise.de'
       expect(http).to.have.property 'config'
 
     it "should connect to webserver", (done) ->
-      http = new HttpSensor
+      http = new HttpSensor validator.check 'config', HttpSensor.meta.config,
         url: 'http://heise.de'
       http.run (err) ->
         expect(err).to.not.exist
@@ -30,7 +31,7 @@ describe "Http request sensor", ->
 
     it "should fail for non-existent webserver", (done) ->
       @timeout 10000
-      http = new HttpSensor
+      http = new HttpSensor validator.check 'config', HttpSensor.meta.config,
         url: 'http://nonexistentsubdomain.unknown.site'
       http.run (err) ->
         expect(err).to.exist
@@ -42,7 +43,7 @@ describe "Http request sensor", ->
         done()
 
     it "should fail for wrong protocol", (done) ->
-      http = new HttpSensor
+      http = new HttpSensor validator.check 'config', HttpSensor.meta.config,
         url: 'ftp://heise.de'
       http.run (err) ->
         expect(err).to.exist
@@ -54,7 +55,7 @@ describe "Http request sensor", ->
         done()
 
     it "should fail for non-existing page", (done) ->
-      http = new HttpSensor
+      http = new HttpSensor validator.check 'config', HttpSensor.meta.config,
         url: 'http://heise.de/page-which-does-not-exit-on-this-server'
       http.run (err) ->
         expect(err).to.not.exist
@@ -66,7 +67,7 @@ describe "Http request sensor", ->
         done()
 
     it "should check the body part", (done) ->
-      http = new HttpSensor
+      http = new HttpSensor validator.check 'config', HttpSensor.meta.config,
         url: 'http://heise.de'
         bodycheck: 'Newsticker'
       http.run (err) ->
@@ -79,7 +80,7 @@ describe "Http request sensor", ->
         done()
 
     it "should check the body part with RegExp", (done) ->
-      http = new HttpSensor
+      http = new HttpSensor validator.check 'config', HttpSensor.meta.config,
         url: 'http://heise.de'
         bodycheck: /heise Developer|iX Magazin/
       http.run (err) ->

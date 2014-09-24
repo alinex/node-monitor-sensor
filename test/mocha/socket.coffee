@@ -13,11 +13,13 @@ describe "Socket connection sensor", ->
       validator.selfcheck 'meta.config', SocketSensor.meta.config
 
     it "should be initialized", ->
-      socket = new SocketSensor {}
+      socket = new SocketSensor validator.check 'config', SocketSensor.meta.config,
+        host: '193.99.144.80'
+        port: 80
       expect(socket).to.have.property 'config'
 
     it "should connect to webserver", (done) ->
-      socket = new SocketSensor
+      socket = new SocketSensor validator.check 'config', SocketSensor.meta.config,
         host: '193.99.144.80'
         port: 80
       socket.run (err) ->
@@ -30,7 +32,7 @@ describe "Socket connection sensor", ->
         done()
 
     it "should connect to webserver by hostname", (done) ->
-      socket = new SocketSensor
+      socket = new SocketSensor validator.check 'config', SocketSensor.meta.config,
         host: 'heise.de'
         port: 80
       socket.run (err) ->
@@ -44,7 +46,7 @@ describe "Socket connection sensor", ->
 
     it "should fail to connect to wrong port", (done) ->
       @timeout 5000
-      socket = new SocketSensor
+      socket = new SocketSensor validator.check 'config', SocketSensor.meta.config,
         host: '193.99.144.80'
         port: 1298
         timeout: 4000
@@ -59,7 +61,7 @@ describe "Socket connection sensor", ->
 
     it "should fail to connect to wrong host", (done) ->
       @timeout 5000
-      socket = new SocketSensor
+      socket = new SocketSensor validator.check 'config', SocketSensor.meta.config,
         host: 'unknownsubdomain.nonexisting.host'
         port: 80
       socket.run (err) ->

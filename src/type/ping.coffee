@@ -49,8 +49,7 @@ class PingSensor extends Sensor
     config:
       title: "Ping test"
       type: 'object'
-      mandatoryKeys: ['host']
-      allowedKeys: ['count', 'timeout', 'responsetime', 'responsemax']
+      allowedKeys: true
       entries:
         host:
           title: "Hostname or IP"
@@ -60,6 +59,7 @@ class PingSensor extends Sensor
           title: "Number of packets to send"
           description: "the number of ping packets to send, each after the other"
           type: 'integer'
+          default: 1
           min: 1
         timeout:
           title: "Overall Timeout"
@@ -67,13 +67,15 @@ class PingSensor extends Sensor
             stopping and failing it"
           type: 'interval'
           unit: 'ms'
+          default: 1000
           min: 500
-        reponsetime:
+        responsetime:
           title: "Average ping time"
           description: "the average time in milliseconds the pings may take to
             not be marked as warning"
           type: 'interval'
           unit: 'ms'
+          default: 500
           min: 0
         responsemax:
           title: "Maximum ping time"
@@ -81,7 +83,11 @@ class PingSensor extends Sensor
             not be marked as warning"
           type: 'interval'
           unit: 'ms'
-          min: 0
+          default: 1000
+          min:
+            reference: 'relative'
+            source: '<responsetime'
+
     # Definition of response values
     values:
       success:
@@ -107,21 +113,6 @@ class PingSensor extends Sensor
         title: 'Quality'
         description: "quality of response (packets succeeded)"
         type: 'percent'
-
-  # ### Default Configuration
-  # The values starting with underscore are general help messages.
-  # Explanation in the code.
-  @config =
-    count: 1
-    timeout: 1000
-    responsetime: 500
-    responsemax: 1000
-
-  # ### Create instance
-  constructor: (config) ->
-    super object.extend {}, @constructor.config, config
-    unless config
-      throw new Error "Could not initialize sensor without configuration."
 
   # ### Run the check
   run: (cb = ->) ->

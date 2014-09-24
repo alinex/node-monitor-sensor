@@ -31,8 +31,7 @@ class DiskfreeSensor extends Sensor
     config:
       title: "Disk free Test"
       type: 'object'
-      mandatoryKeys: ['share']
-      allowedKeys: ['count', 'timeout', 'responsetime', 'responsemax']
+      allowedKeys: true
       entries:
         share:
           title: "Share or mount point"
@@ -45,8 +44,10 @@ class DiskfreeSensor extends Sensor
           type: 'interval'
           unit: 'ms'
           min: 500
+          default: 1000
         freeWarn:
           type: 'any'
+          optional: true
           entries: [
             type: 'byte'
             min:
@@ -60,6 +61,7 @@ class DiskfreeSensor extends Sensor
           ]
         freeFail:
           type: 'any'
+          optional: true
           entries: [
             type: 'byte'
           ,
@@ -96,18 +98,6 @@ class DiskfreeSensor extends Sensor
         description: "the path this share is mounted to"
         type: 'string'
 
-  # ### Default Configuration
-  # The values starting with underscore are general help messages.
-  # Explanation in the code.
-  @config =
-    timeout: 1000
-
-
-  # ### Create instance
-  constructor: (config) ->
-    super object.extend {}, @constructor.config, config
-    unless config
-      throw new Error "Could not initialize sensor without configuration."
 
   # ### Run the check
   run: (cb = ->) ->

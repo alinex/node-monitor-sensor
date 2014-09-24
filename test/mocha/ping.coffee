@@ -17,7 +17,7 @@ describe "Ping sensor", ->
       expect(ping).to.have.property 'config'
 
     it "should return success", (done) ->
-      ping = new PingSensor
+      ping = new PingSensor validator.check 'config', PingSensor.meta.config,
         host: '193.99.144.80'
       ping.run (err) ->
         expect(err).to.not.exist
@@ -29,7 +29,7 @@ describe "Ping sensor", ->
         done()
 
     it "should succeed with domain name", (done) ->
-      ping = new PingSensor
+      ping = new PingSensor validator.check 'config', PingSensor.meta.config,
         host: 'heise.de'
       ping.run (err) ->
         expect(err).to.not.exist
@@ -42,7 +42,7 @@ describe "Ping sensor", ->
 
     it "should send multiple packets", (done) ->
       @timeout 10000
-      ping = new PingSensor
+      ping = new PingSensor validator.check 'config', PingSensor.meta.config,
         host: '193.99.144.80'
         count: 10
       ping.run (err) ->
@@ -55,7 +55,7 @@ describe "Ping sensor", ->
         done()
 
     it "should return fail", (done) ->
-      ping = new PingSensor
+      ping = new PingSensor validator.check 'config', PingSensor.meta.config,
         host: '137.168.111.222'
       ping.run (err) ->
         expect(err).to.not.exist

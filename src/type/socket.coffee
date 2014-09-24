@@ -32,8 +32,7 @@ class SocketSensor extends Sensor
     config:
       title: "Socket connection test"
       type: 'object'
-      mandatoryKeys: ['host', 'port']
-      allowedKeys: ['timeout', 'responsetime']
+      allowedKeys: true
       entries:
         host:
           title: "Hostname or IP"
@@ -51,13 +50,15 @@ class SocketSensor extends Sensor
           type: 'interval'
           unit: 'ms'
           min: 500
-        reponsetime:
+          default: 2000
+        responsetime:
           title: "Response Time"
           description: "the maximum time in milliseconds till the connection
             can be established without setting the state to warning"
           type: 'interval'
           unit: 'ms'
           min: 0
+          default: 1000
     # Definition of response values
     values:
       success:
@@ -70,17 +71,6 @@ class SocketSensor extends Sensor
         type: 'integer'
         unit: 'ms'
 
-  # ### Default Configuration
-  # The values starting with underscore are general help messages.
-  @config =
-    timeout: 2000
-    responsetime: 1000
-
-  # ### Create instance
-  constructor: (config) ->
-    super object.extend {}, @constructor.config, config
-    unless config
-      throw new Error "Could not initialize sensor without configuration."
 
   # ### Run the check
   run: (cb = ->) ->

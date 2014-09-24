@@ -17,7 +17,7 @@ request = require 'request'
 
 # Sensor class
 # -------------------------------------------------
-class SocketSensor extends Sensor
+class HttpSensor extends Sensor
 
   # ### General information
   # This information may be used later for display and explanation.
@@ -31,7 +31,6 @@ class SocketSensor extends Sensor
     config:
       title: "Webserver response check"
       type: 'object'
-      mandatoryKeys: ['url']
       allowedKeys: true
       entries:
         url:
@@ -45,6 +44,7 @@ class SocketSensor extends Sensor
           type: 'interval'
           unit: 'ms'
           min: 500
+          default: 2000
         responsetime:
           title: "Response Time"
           description: "the maximum time in milliseconds till the server
@@ -52,18 +52,22 @@ class SocketSensor extends Sensor
           type: 'interval'
           unit: 'ms'
           min: 0
+          default: 1000
         username:
           title: "Username"
           description: "the name used for basic authentication"
           type: 'string'
+          optional: true
         password:
           title: "Password"
           description: "the password used for basic authentication"
           type: 'string'
+          optional: true
         bodycheck:
           title: "Body check"
           description: "substring or regular expression"
           type: 'any'
+          optional: true
           entries: [
             type: 'string'
             minLength: 1
@@ -91,17 +95,6 @@ class SocketSensor extends Sensor
         description: "success of check for content"
         type: 'boolean'
 
-  # ### Default Configuration
-  # The values starting with underscore are general help messages.
-  @config =
-    timeout: 2000
-    responsetime: 1000
-
-  # ### Create instance
-  constructor: (config) ->
-    super object.extend {}, @constructor.config, config
-    unless config
-      throw new Error "Could not initialize sensor without configuration."
 
   # ### Run the check
   run: (cb = ->) ->
@@ -168,4 +161,4 @@ class SocketSensor extends Sensor
 
 # Export class
 # -------------------------------------------------
-module.exports = SocketSensor
+module.exports = HttpSensor

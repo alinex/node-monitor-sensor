@@ -80,6 +80,19 @@ The `ping` object looks like:
     }
 
 
+Status
+-------------------------------------------------
+The sensors uses the following status:
+
+__running__ if the sensor is already analyzing, you have to wait
+
+__ok__ if everything is perfect, there nothing have to be done
+
+__warn__ if the sensor reached the warning level, know you have to keep an eye on it
+
+__fail__ if the sensor failed and there is a problem
+
+
 API
 -------------------------------------------------
 

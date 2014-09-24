@@ -13,11 +13,12 @@ describe "Diskfree", ->
       validator.selfcheck 'meta.config', DiskfreeSensor.meta.config
 
     it "should be initialized", ->
-      df = new DiskfreeSensor {}
+      df = new DiskfreeSensor validator.check 'config', DiskfreeSensor.meta.config,
+        share: '/'
       expect(df).to.have.property 'config'
 
     it "should return success", (done) ->
-      df = new DiskfreeSensor
+      df = new DiskfreeSensor validator.check 'config', DiskfreeSensor.meta.config,
         share: '/'
       df.run (err) ->
         expect(err).to.not.exist
@@ -29,9 +30,9 @@ describe "Diskfree", ->
         done()
 
     it "should work with binary values", (done) ->
-      df = new DiskfreeSensor
+      df = new DiskfreeSensor validator.check 'config', DiskfreeSensor.meta.config,
         share: '/'
-        FreeWarn: '1GB'
+        freeWarn: '1GB'
       df.run (err) ->
         expect(err).to.not.exist
         expect(df.result).to.exist
