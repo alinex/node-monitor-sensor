@@ -98,10 +98,11 @@ API
 
 ### Sensor classes
 
-- [Ping](src/ping.coffee) - network ping test
-- [Socket](src/socket.coffee) - test port connectivity
-- [Http](src/http.coffee) - try requesting an url
-- [Diskfree](src/diskfree.coffee) - free disk space
+- [Load](src/type/load.coffee) - cpu load check
+- [Diskfree](src/type/diskfree.coffee) - free disk space
+- [Ping](src/type/ping.coffee) - network ping test
+- [Socket](src/type/socket.coffee) - test port connectivity
+- [Http](src/type/http.coffee) - try requesting an url
 
 #### Methods
 

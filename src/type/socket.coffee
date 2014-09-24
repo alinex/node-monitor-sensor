@@ -98,7 +98,7 @@ class SocketSensor extends Sensor
       status = switch
         when not value.success
           'fail'
-        when  @config.responsetime? and value.responsetime > @config.responsetime
+        when @config.responsetime? and value.responsetime > @config.responsetime
           'warn'
         else
           'ok'

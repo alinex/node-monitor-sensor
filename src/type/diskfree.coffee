@@ -35,7 +35,7 @@ class DiskfreeSensor extends Sensor
       entries:
         share:
           title: "Share or mount point"
-          description: "the disk share or mount point to check"
+          description: "the disk share's path or mount point to check"
           type: 'string'
         timeout:
           title: "Overall Timeout"
@@ -159,10 +159,10 @@ class DiskfreeSensor extends Sensor
         when value.used + value.avail is 0
           status = 'fail'
           message = "#{@constructor.meta.name} no space available on share #{@config.share}"
-        when value.free < @config.freeFail
+        when @config.freeFail? and value.free < @config.freeFail
           status = 'fail'
           message = "#{@constructor.meta.name} too less space on #{@config.share}"
-        when value.free < @config.freeWarn
+        when @config.freeWarn? and value.free < @config.freeWarn
           status = 'warn'
         else
           status = 'ok'
