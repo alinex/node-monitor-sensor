@@ -95,13 +95,12 @@ class HttpSensor extends Sensor
         description: "success of check for content"
         type: 'boolean'
 
+  # ### Create instance
+  constructor: (config) -> super config, debug
 
   # ### Run the check
   run: (cb = ->) ->
-
-    @_start "HTTP Request to #{@config.url}"
-    @result.data = data = ''
-
+    @_start()
     # configure request
     option =
       url: @config.url
@@ -110,54 +109,43 @@ class HttpSensor extends Sensor
       option.auth =
         username: @config.username
         password: @config.password
-
     # start the request
     debug "request #{@config.url}"
     start = new Date().getTime()
     request option, (err, response, body) =>
       # request finished
       end = new Date().getTime()
-
       # collecting data
       if response?
-        data += "HEADERS:\n"
+        @result.data += "HEADERS:\n"
         for key, value of response.headers
-          data += "#{key}: #{value}\n"
           debug "#{key}: #{value}".grey
-      data += "BODY:\n#{body}\n"
-
       # error checking
       if err
         debug err.toString().red
-        @_end 'fail', err
-        return cb err
-
+        return @_end 'fail', err, cb
       # get the values
-      @result.value = value = {}
-      value.success = 200 <= response.statusCode < 300
-      value.responsetime = end-start
-      value.statuscode = response.statusCode
+      val = @result.value
+      val.success = 200 <= response.statusCode < 300
+      val.responsetime = end-start
+      val.statuscode = response.statusCode
       if @config.bodycheck?
         if @config.bodycheck instanceof RegExp
-          value.bodycheck = (body.match @config.bodycheck)?
+          val.bodycheck = (body.match @config.bodycheck)?
         else
-          value.bodycheck = (~body.indexOf @config.bodycheck)?
-      debug value
-
+          val.bodycheck = (~body.indexOf @config.bodycheck)?
       # evaluate to check status
       status = switch
-        when not value.success
+        when not val.success
           'fail'
-        when  @config.responsetime? and value.responsetime > @config.responsetime
+        when  @config.responsetime? and val.responsetime > @config.responsetime
           'warn'
         else
           'ok'
       message = switch status
         when 'fail'
           "#{@constructor.meta.name} exited with status code #{response.statusCode}"
-      debug @config
-      @_end status, message
-      cb null, @
+      @_end status, message, cb
 
 # Export class
 # -------------------------------------------------

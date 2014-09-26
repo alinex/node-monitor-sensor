@@ -71,13 +71,12 @@ class SocketSensor extends Sensor
         type: 'integer'
         unit: 'ms'
 
+  # ### Create instance
+  constructor: (config) -> super config, debug
 
   # ### Run the check
   run: (cb = ->) ->
-
-    # run the ping test
-    @_start "Connect #{@config.host}:#{@config.port}"
-    @result.data = ''
+    @_start()
 
     socket = new net.Socket()
     debug "connect to #{@config.host}:#{@config.port}"
@@ -89,38 +88,33 @@ class SocketSensor extends Sensor
       socket.destroy()
 
       # get the values
-      @result.value = value = {}
-      value.success = true
-      value.responsetime = end-start
-      debug value
+      val = @result.value
+      val.success = true
+      val.responsetime = end-start
 
       # evaluate to check status
       status = switch
-        when not value.success
+        when not val.success
           'fail'
-        when @config.responsetime? and value.responsetime > @config.responsetime
+        when @config.responsetime? and val.responsetime > @config.responsetime
           'warn'
         else
           'ok'
       message = switch status
         when 'fail'
           "#{@constructor.meta.name} exited with status #{status}"
-      debug @config
-      @_end status, message
-      cb null, @
+      @_end status, message, cb
 
     # Timeout occurred
     socket.on 'timeout', =>
       message = "server not responding, timeout occurred"
       debug message.red
-      @_end 'fail', message
-      cb null, @
+      @_end 'fail', message, cb
 
     # Error management
     socket.on 'error', (err) =>
       debug err.toString().red
-      @_end 'fail', err
-      cb null, @
+      @_end 'fail', err, cb
 
 # Export class
 # -------------------------------------------------

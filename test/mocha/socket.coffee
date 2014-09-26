@@ -27,7 +27,6 @@ describe "Socket connection sensor", ->
         expect(socket.result).to.exist
         expect(socket.result.date).to.exist
         expect(socket.result.status).to.equal 'ok'
-        expect(socket.result.data).to.exist
         expect(socket.result.message).to.not.exist
         done()
 
@@ -40,7 +39,6 @@ describe "Socket connection sensor", ->
         expect(socket.result).to.exist
         expect(socket.result.date).to.exist
         expect(socket.result.status).to.equal 'ok'
-        expect(socket.result.data).to.exist
         expect(socket.result.message).to.not.exist
         done()
 
@@ -55,7 +53,6 @@ describe "Socket connection sensor", ->
         expect(socket.result).to.exist
         expect(socket.result.date).to.exist
         expect(socket.result.status).to.equal 'fail'
-        expect(socket.result.data).to.exist
         expect(socket.result.message).to.exist
         done()
 
@@ -69,7 +66,6 @@ describe "Socket connection sensor", ->
         expect(socket.result).to.exist
         expect(socket.result.date).to.exist
         expect(socket.result.status).to.equal 'fail'
-        expect(socket.result.data).to.exist
         expect(socket.result.message).to.exist
         done()
 

@@ -114,9 +114,12 @@ class PingSensor extends Sensor
         description: "quality of response (packets succeeded)"
         type: 'percent'
 
+  # ### Create instance
+  constructor: (config) -> super config, debug
+
   # ### Run the check
   run: (cb = ->) ->
-
+    @_start()
     # comand syntax, os dependent
     p = os.platform()
     ping = switch
@@ -132,42 +135,11 @@ class PingSensor extends Sensor
       else
         throw new Error "Operating system #{p} is not supported in ping."
     ping.args.push @config.host
-
     # run the ping test
-    @_start "Ping #{@config.host}"
-    @result.data = ''
-    debug "exec> #{ping.cmd} #{ping.args.join ' '}"
-    proc = spawn ping.cmd, ping.args
-
-    # collect results
-    stdout = stderr = ''
-    proc.stdout.on 'data', (data) ->
-      stdout += (text = data.toString())
-      for line in text.trim().split /\n/
-        debug line.grey
-    proc.stderr.on 'data', (data) ->
-      stderr += (text = data.toString())
-      for line in text.trim().split /\n/
-        debug line.magenta
-    store = (code) =>
-      @result.data = ''
-      @result.data += "STDOUT:\n#{stdout}\n" if stdout
-      @result.data += "STDERR:\n#{stderr}\n" if stderr
-      @result.data += "RETURN CODE: #{code}" if code?
-
-    # Error management
-    proc.on 'error', (err) =>
-      store()
-      debug err.toString().red
-      @_end 'fail', err
-      cb err
-
-    # process finished
-    proc.on 'exit', (code) => #process.nextTick (code) =>
-      store code
-      # get the values
-      @result.value = value = {}
-      value.success = code is 0
+    @_spawn ping.cmd, ping.args, null, (err, stdout, stderr, code) =>
+      return @_end 'fail', err, cb if err
+      # parse results
+      val = @result.value
       num = 0
       sum = 0
       re = /time=(\d+.?\d*) ms/g
@@ -175,29 +147,26 @@ class PingSensor extends Sensor
         time = parseFloat match[1]
         num++
         sum += time
-        if not value.responsemin? or time < value.responsemin
-          value.responsemin = time
-        if not value.responsemax? or time > value.responsemax
-          value.responsemax = time
-      value.responsetime = Math.round(sum/num*10)/10.0
+        if not val.responsemin? or time < val.responsemin
+          val.responsemin = time
+        if not val.responsemax? or time > val.responsemax
+          val.responsemax = time
+      val.responsetime = Math.round(sum/num*10)/10.0
       match = /\s(\d+)% packet loss/.exec stdout
-      value.quality = 100-match?[1]
-      debug value
+      val.quality = 100-match?[1]
       # evaluate to check status
       status = switch
-        when not value.success or value.quality < 100
+        when not val.success or val.quality < 100
           'fail'
-        when  @config.responsetime? and value.responsetime > @config.responsetime
-        ,  @config.responsemax? and value.responsemax > @config.responsemax
+        when @config.responsetime? and val.responsetime > @config.responsetime, \
+             @config.responsemax? and val.responsemax > @config.responsemax
           'warn'
         else
           'ok'
       message = switch status
         when 'fail'
           "#{@constructor.meta.name} exited with status #{status}"
-      debug @config
-      @_end status, message
-      cb null, @
+      @_end status, message, cb
 
 # Export class
 # -------------------------------------------------

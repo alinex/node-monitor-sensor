@@ -99,6 +99,7 @@ API
 ### Sensor classes
 
 - [Load](src/type/load.coffee) - cpu load check
+- [Memory](src/type/memory.coffee) - check free memory
 - [Diskfree](src/type/diskfree.coffee) - free disk space
 - [Ping](src/type/ping.coffee) - network ping test
 - [Socket](src/type/socket.coffee) - test port connectivity

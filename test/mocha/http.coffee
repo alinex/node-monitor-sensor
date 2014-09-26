@@ -25,7 +25,6 @@ describe "Http request sensor", ->
         expect(http.result).to.exist
         expect(http.result.date).to.exist
         expect(http.result.status).to.equal 'ok'
-        expect(http.result.data).to.exist
         expect(http.result.message).to.not.exist
         done()
 
@@ -34,11 +33,9 @@ describe "Http request sensor", ->
       http = new HttpSensor validator.check 'config', HttpSensor.meta.config,
         url: 'http://nonexistentsubdomain.unknown.site'
       http.run (err) ->
-        expect(err).to.exist
-        expect(http.result).to.exist
+        expect(err).to.not.exist
         expect(http.result.date).to.exist
         expect(http.result.status).to.equal 'fail'
-        expect(http.result.data).to.exist
         expect(http.result.message).to.exist
         done()
 
@@ -46,11 +43,10 @@ describe "Http request sensor", ->
       http = new HttpSensor validator.check 'config', HttpSensor.meta.config,
         url: 'ftp://heise.de'
       http.run (err) ->
-        expect(err).to.exist
+        expect(err).to.not.exist
         expect(http.result).to.exist
         expect(http.result.date).to.exist
         expect(http.result.status).to.equal 'fail'
-        expect(http.result.data).to.exist
         expect(http.result.message).to.exist
         done()
 
@@ -62,7 +58,6 @@ describe "Http request sensor", ->
         expect(http.result).to.exist
         expect(http.result.date).to.exist
         expect(http.result.status).to.equal 'fail'
-        expect(http.result.data).to.exist
         expect(http.result.message).to.exist
         done()
 

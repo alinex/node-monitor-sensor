@@ -1,6 +1,9 @@
 # Load test class
 # =================================================
 # This may be used to check the performance of a host.
+#
+# The load values will be normalized, meaning the load per single cpu core will
+# be calculated.
 
 # Node Modules
 # -------------------------------------------------
@@ -90,52 +93,49 @@ class LoadSensor extends Sensor
         type: 'integer'
       short:
         title: "1min load"
-        description: "average value of one minute processor load"
+        description: "average value of one minute processor load (normalized)"
         type: 'percent'
       medium:
         title: "5min load"
-        description: "average value of 5 minute processor load"
+        description: "average value of 5 minute processor load (normalized)"
         type: 'percent'
       long:
         title: "15min load"
-        description: "average value of 15 minute processor load"
+        description: "average value of 15 minute processor load (normalized)"
         type: 'percent'
 
+  # ### Create instance
+  constructor: (config) -> super config, debug
 
   # ### Run the check
   run: (cb = ->) ->
-
-    # run the load test
-    @_start "Check local system load"
-
-    @result.value = value = {}
-    cpus = os.cpus()
-    value.cpus = cpus.length
-    value.cpu = cpus[0].model.replace /\s+/g, ' '
+    @_start()
+    # get data
     load = os.loadavg()
-    value.short = load[0] / value.cpus
-    value.medium = load[1] / value.cpus
-    value.long = load[2] / value.cpus
-    debug value
-
+    cpus = os.cpus()
+    # calculate values
+    val = @result.value
+    val.cpus = cpus.length
+    val.cpu = cpus[0].model.replace /\s+/g, ' '
+    val.short = load[0] / val.cpus
+    val.medium = load[1] / val.cpus
+    val.long = load[2] / val.cpus
     # evaluate to check status
     status = switch
-      when @config.shortFail? and value.short > @config.shortFail, \
-           @config.mediumFail? and value.medium > @config.mediumFail, \
-           @config.longFail? and value.long > @config.longFail
+      when @config.shortFail? and val.short > @config.shortFail, \
+           @config.mediumFail? and val.medium > @config.mediumFail, \
+           @config.longFail? and val.long > @config.longFail
         'fail'
-      when @config.shortWarn? and value.short > @config.shortWarn, \
-           @config.mediumWarn? and value.medium > @config.mediumWarn, \
-           @config.longWarn? and value.long > @config.longWarn
+      when @config.shortWarn? and val.short > @config.shortWarn, \
+           @config.mediumWarn? and val.medium > @config.mediumWarn, \
+           @config.longWarn? and val.long > @config.longWarn
         'warn'
       else
         'ok'
     message = switch status
       when 'fail'
         "#{@constructor.meta.name} exited with status #{status}"
-    debug @config
-    @_end status, message
-    cb null, @
+    @_end status, message, cb
 
 
 # Export class

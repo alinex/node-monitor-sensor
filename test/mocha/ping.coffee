@@ -24,7 +24,6 @@ describe "Ping sensor", ->
         expect(ping.result).to.exist
         expect(ping.result.date).to.exist
         expect(ping.result.status).to.equal 'ok'
-        expect(ping.result.data).to.exist
         expect(ping.result.message).to.not.exist
         done()
 
@@ -36,7 +35,6 @@ describe "Ping sensor", ->
         expect(ping.result).to.exist
         expect(ping.result.date).to.exist
         expect(ping.result.status).to.equal 'ok'
-        expect(ping.result.data).to.exist
         expect(ping.result.message).to.not.exist
         done()
 
@@ -50,7 +48,6 @@ describe "Ping sensor", ->
         expect(ping.result).to.exist
         expect(ping.result.date).to.exist
         expect(ping.result.status).to.equal 'ok'
-        expect(ping.result.data).to.exist
         expect(ping.result.message).to.not.exist
         done()
 
@@ -62,7 +59,6 @@ describe "Ping sensor", ->
         expect(ping.result).to.exist
         expect(ping.result.date).to.exist
         expect(ping.result.status).to.equal 'fail'
-        expect(ping.result.data).to.exist
         expect(ping.result.message).to.exist
         done()
 

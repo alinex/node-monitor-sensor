@@ -98,77 +98,61 @@ class DiskfreeSensor extends Sensor
         description: "the path this share is mounted to"
         type: 'string'
 
+  # ### Create instance
+  constructor: (config) -> super config, debug
 
   # ### Run the check
   run: (cb = ->) ->
-
+    @_start()
     # comand syntax, os dependent
     p = os.platform()
     diskfree = switch p
       when 'linux', 'darwin'
-        "/bin/df -kT #{@config.share} | tail -n 1"
+        cmd: '/bin/df'
+        args: ['-kT', @config.share]
       when p.match /^win/
         # For windows maybe [drivespace](https://github.com/keverw/drivespace)
         # works, but this is not tested.
-        "../bin/drivespace.exe drive-#{@config.share}"
+        cmd: '../bin/drivespace.exe'
+        args: ["drive-#{@config.share}"]
       else
         throw new Error "Operating system #{p} is not supported in diskfree."
-
     # run the diskfree test
-    @_start "Diskfree #{@config.share}"
-    @result.data = ''
-    debug "exec> #{diskfree}"
-    proc = exec diskfree,
+    @_spawn diskfree.cmd, diskfree.args,
       timeout: @config.timeout
-    , (err, stdout, stderr) =>
-      stdout = stdout.trim()
-      stderr = stderr.trim()
-      # analyze success
-      if stdout
-        debug stdout.grey
-      if stderr
-        debug stderr.magenta
-      @result.data = ''
-      @result.data += "STDOUT:\n#{stdout}\n" if stdout
-      @result.data += "STDERR:\n#{stderr}\n" if stderr
-      @result.data += "RETURN CODE: #{err.signal}" if err?
-      if err?
-        debug err.toString().red
-        @_end 'fail', err
-        return cb err
-      # get the values
-      @result.value = value = {}
+    , (err, stdout, stderr, code) =>
+      return @_end 'fail', err, cb if err
+      # parse results
+      lines = stdout.split /\n/
+      val = @result.value
       if p.match /^win/
-        [value.total, value.free, status]
-        col = stdout.split ','
-        value.total = Number(col[0])*1024
-        value.free = Number(col[1])*1024
-        value.used = value.total - value.free
-        value.mount = @config.share
+        [val.total, val.free, status]
+        col = lines[0].split ','
+        val.total = Number(col[0])*1024
+        val.free = Number(col[1])*1024
+        val.used = val.total - val.free
+        val.mount = @config.share
       else
-        col = stdout.split /\s+/
-        value.share = col[0]
-        value.type = col[1]
-        value.used = Number(col[3])*1024
-        value.free = Number(col[4])*1024
-        value.total = value.used + value.free
-        value.mount = col[6]
-      debug value
+        col = lines[1].split /\s+/
+        val.share = col[0]
+        val.type = col[1]
+        val.used = Number(col[3])*1024
+        val.free = Number(col[4])*1024
+        val.total = val.used + val.free
+        val.mount = col[6]
       # evaluate to check status
       switch
-        when value.used + value.avail is 0
+        when val.used + val.avail is 0
           status = 'fail'
           message = "#{@constructor.meta.name} no space available on share #{@config.share}"
-        when @config.freeFail? and value.free < @config.freeFail
+        when @config.freeFail? and val.free < @config.freeFail
           status = 'fail'
           message = "#{@constructor.meta.name} too less space on #{@config.share}"
-        when @config.freeWarn? and value.free < @config.freeWarn
+        when @config.freeWarn? and val.free < @config.freeWarn
           status = 'warn'
         else
           status = 'ok'
-      debug @config
-      @_end status, message
-      cb null, @
+      @_end status, message, cb
 
 # Export class
 # -------------------------------------------------
