@@ -34,8 +34,11 @@ class Sensor
     @result.status = status
     @result.message = message if message
     # report results
+    out = {}
+    for key, val of @config
+      out[key] = val if val?
     @debug 'result values', util.inspect(@result.value).replace(/\s+/g, ' ').grey
-    @debug 'check config', util.inspect(@config).replace(/\s+/g, ' ').grey
+    @debug 'check config', util.inspect(out).replace(/\s+/g, ' ').grey
     # return
     cb null, @
 

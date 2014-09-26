@@ -14,7 +14,6 @@ object = require('alinex-util').object
 Sensor = require '../base'
 # specific modules for this check
 os = require 'os'
-util = require 'util'
 
 # Sensor class
 # -------------------------------------------------
@@ -79,6 +78,21 @@ class MemorySensor extends Sensor
           max:
             reference: 'relative'
             source: '<swapFail'
+        swapPercentFail:
+          title: "percent of free swap memory to fail"
+          description: "the minimum free swap memory which is needed to not fail in percent"
+          type: 'percent'
+          optional: true
+          min: 0
+        swapPercentWarn:
+          title: "percent of free swap memory to warn"
+          description: "the minimum free swap memory which is needed to be ok in percent"
+          type: 'percent'
+          optional: true
+          min: 0
+          max:
+            reference: 'relative'
+            source: '<swapPercentFail'
     # Definition of response values
     values:
       success:
@@ -125,6 +139,14 @@ class MemorySensor extends Sensor
         title: "Actual Free"
         description: "real free system memory"
         type: 'byte'
+      percentFree:
+        title: "Percent Free"
+        description: "percentage of real free system memory"
+        type: 'percent'
+      swapPercentFree:
+        title: "Swap Percent Free"
+        description: "percentage of free swap memory"
+        type: 'percent'
 
   # ### Create instance
   constructor: (config) -> super config, debug
@@ -150,16 +172,20 @@ class MemorySensor extends Sensor
       val.swapUsed = parseInt lines[3][2]
       val.swapFree = parseInt lines[3][3]
       val.actualFree = val.free + val.buffers + val.cached
+      val.percentFree = val.actualFree/val.total
+      val.swapPercentFree = val.swapFree/val.swapTotal
       # evaluate to check status
       status = switch
         when not val.success, \
              @config.freeFail? and val.actualFree < @config.freeFail, \
-             @config.percentFail? and val.percentFree/val.total < @config.percentFail, \
-             @config.swapFail? and val.swapFree < @config.swapFail
+             @config.percentFail? and val.percentFree < @config.percentFail, \
+             @config.swapFail? and val.swapFree < @config.swapFail, \
+             @config.swapPercentFail? and val.swapPercentFree < @config.swapPercentFail
           'fail'
-        when @config.freeFail? and val.actualFree < @config.freeFail, \
-             @config.percentFail? and val.percentFree/val.total < @config.percentFail, \
-             @config.swapFail? and val.swapFree < @config.swapFail
+        when @config.freeWarn? and val.actualFree < @config.freeWarn, \
+             @config.percentWarn? and val.percentFree < @config.percentWarn, \
+             @config.swapWarn? and val.swapFree < @config.swapWarn, \
+             @config.swapPercentWarn? and val.swapPercentFree < @config.swapPercentWarn
           'warn'
         else
           'ok'

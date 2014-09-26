@@ -98,6 +98,7 @@ API
 
 ### Sensor classes
 
+- [Cpu](src/type/cpu.coffee) - cpu activity check
 - [Load](src/type/load.coffee) - cpu load check
 - [Memory](src/type/memory.coffee) - check free memory
 - [Diskfree](src/type/diskfree.coffee) - free disk space

@@ -13,7 +13,6 @@ colors = require 'colors'
 Sensor = require '../base'
 # specific modules for this check
 os = require 'os'
-{exec} = require 'child_process'
 
 # Sensor class
 # -------------------------------------------------

@@ -30,7 +30,6 @@ colors = require 'colors'
 Sensor = require '../base'
 # specific modules for this check
 os = require 'os'
-{spawn} = require 'child_process'
 
 # Sensor class
 # -------------------------------------------------
