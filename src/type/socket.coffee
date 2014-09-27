@@ -7,7 +7,7 @@
 
 # include base modules
 debug = require('debug')('monitor:sensor:socket')
-colors = require 'colors'
+chalk = require 'chalk'
 # include alinex packages
 object = require('alinex-util').object
 # include classes and helper modules
@@ -108,12 +108,12 @@ class SocketSensor extends Sensor
     # Timeout occurred
     socket.on 'timeout', =>
       message = "server not responding, timeout occurred"
-      debug message.red
+      debug chalk.red message
       @_end 'fail', message, cb
 
     # Error management
     socket.on 'error', (err) =>
-      debug err.toString().red
+      debug chalk.red err.toString()
       @_end 'fail', err, cb
 
 # Export class

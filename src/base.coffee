@@ -6,7 +6,7 @@
 
 # include base modules
 object = require('alinex-util').object
-colors = require 'colors'
+chalk = require 'chalk'
 {spawn} = require 'child_process'
 util = require 'util'
 
@@ -37,8 +37,8 @@ class Sensor
     out = {}
     for key, val of @config
       out[key] = val if val?
-    @debug 'result values', util.inspect(@result.value).replace(/\s+/g, ' ').grey
-    @debug 'check config', util.inspect(out).replace(/\s+/g, ' ').grey
+    @debug 'result values', chalk.grey util.inspect(@result.value).replace(/\s+/g, ' ')
+    @debug 'check config', chalk.grey util.inspect(out).replace(/\s+/g, ' ')
     # return
     cb null, @
 
@@ -53,16 +53,16 @@ class Sensor
     proc.stdout.on 'data', (data) =>
       stdout += (text = data.toString())
       for line in text.trim().split /\n/
-        @debug line.grey
+        @debug chalk.grey line
     proc.stderr.setEncoding "utf8"
     proc.stderr.on 'data', (data) =>
       stderr += (text = data.toString())
       for line in text.trim().split /\n/
-        @debug line.magenta
+        @debug chalk.magenta line
     # error management
     error = null
     proc.on 'error', (err) =>
-      @debug err.toString().red
+      @debug chalk.red err.toString()
       error = err
     # process finished
     proc.on 'close', (code) =>

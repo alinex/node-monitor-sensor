@@ -7,7 +7,6 @@
 
 # include base modules
 debug = require('debug')('monitor:sensor:memory')
-colors = require 'colors'
 # include alinex packages
 object = require('alinex-util').object
 # include classes and helper modules

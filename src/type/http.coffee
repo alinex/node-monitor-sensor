@@ -7,7 +7,7 @@
 
 # include base modules
 debug = require('debug')('monitor:sensor:http')
-colors = require 'colors'
+chalk = require 'chalk'
 # include alinex modules
 object = require('alinex-util').object
 # include classes and helper
@@ -119,10 +119,10 @@ class HttpSensor extends Sensor
       if response?
         @result.data += "HEADERS:\n"
         for key, value of response.headers
-          debug "#{key}: #{value}".grey
+          debug chalk.grey "#{key}: #{value}"
       # error checking
       if err
-        debug err.toString().red
+        debug chalk.red err.toString()
         return @_end 'fail', err, cb
       # get the values
       val = @result.value
