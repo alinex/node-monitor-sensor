@@ -24,6 +24,8 @@ class DiskfreeSensor extends Sensor
     description: "Test the free diskspace of one share."
     category: 'sys'
     level: 1
+    hint: "If a share is full it will make I/O problems in the system or applications
+    in case of the root partition it may also neither be possible to log errors. "
     # Check for configuration settings [alinex-validator](http://alinex.githhub.io/node-validator)
     # compatible:
     config:

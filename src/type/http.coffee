@@ -26,6 +26,7 @@ class HttpSensor extends Sensor
     description: "Connect to an HTTP or HTTPS server and check the response."
     category: 'net'
     level: 2
+    hint: "If the server didn't respond it also may be a network problem. "
     # Check for configuration settings [alinex-validator](http://alinex.githhub.io/node-validator)
     # compatible:
     config:

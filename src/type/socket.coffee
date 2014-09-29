@@ -27,6 +27,7 @@ class SocketSensor extends Sensor
     behind a given port."
     category: 'net'
     level: 1
+    hint: "On problems the service may not run or a network problem exists. "
     # Check for configuration settings [alinex-validator](http://alinex.githhub.io/node-validator)
     # compatible:
     config:

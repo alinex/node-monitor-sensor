@@ -25,6 +25,7 @@ class MemorySensor extends Sensor
     description: "Check the free memory on localhost."
     category: 'sys'
     level: 1
+    hint: "If the memory is steadily increasing you may look for memory leaks. "
     # Check for configuration settings [alinex-validator](http://alinex.githhub.io/node-validator)
     # compatible:
     config:

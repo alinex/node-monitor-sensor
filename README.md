@@ -119,7 +119,7 @@ API
 - `warn` - warning means high load or critical state
 - `fail` - not working correctly
 
-#### Static properties
+#### Class properties
 
 - `meta` - some meta data for this test type
   - `name` - title of the test
@@ -138,9 +138,9 @@ API
 - `result` - the results:
   - `date` - start date of last or current run
   - `status` - status of the last or current run (ok, warn, fail)
-  - `value` - map of measured values
-  - `data` - complete data from the last or current run
   - `message` - error message of the last or current run
+  - `value` - map of measured values
+  - `analysis` - additional analysis data
 
 
 License

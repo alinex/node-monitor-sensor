@@ -70,6 +70,15 @@ class Sensor
       @result.value.success = code is 0
       cb error, stdout, stderr, code
 
+    # ### Format last result
+    format: ->
+      text = ''
+      # title
+      # table of values
+      # configuration settings
+      # hint
+      text += "\nHINT: #{@meta.hint} " if @meta.hint
+      text
 
 # Export class
 # -------------------------------------------------

@@ -26,6 +26,9 @@ class CpuSensor extends Sensor
     description: "Check the current activity in average percent of all cores."
     category: 'sys'
     level: 1
+    hint: "A high cpu usage means that the server may not start another task immediately.
+    If the load is also very high the system is overloaded check if any application
+    goes evil."
     # Check for configuration settings [alinex-validator](http://alinex.githhub.io/node-validator)
     # compatible:
     config:
@@ -41,7 +44,7 @@ class CpuSensor extends Sensor
           min: 0
         warn:
           title: "Max CPU activity to warn"
-          description: "the maximum activity levelfor all cpus to be ok"
+          description: "the maximum activity level for all cpus to be ok"
           type: 'percent'
           optional: true
           min: 0

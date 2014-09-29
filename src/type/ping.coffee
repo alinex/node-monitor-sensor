@@ -42,6 +42,8 @@ class PingSensor extends Sensor
     round-trip time for the messages send."
     category: 'net'
     level: 1
+    hint: "Check the network connection if local ping won't work or the network
+    connection for external pings. "
     # Check for configuration settings [alinex-validator](http://alinex.githhub.io/node-validator)
     # compatible:
     config:

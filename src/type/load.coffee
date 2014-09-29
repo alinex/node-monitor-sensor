@@ -28,6 +28,8 @@ class LoadSensor extends Sensor
     description: "Check the local processor activity over the last minute to 15 minutes."
     category: 'sys'
     level: 1
+    hint: "A very high system load makes the system irresponsible or really slow.
+    Check for too much processes. "
     # Check for configuration settings [alinex-validator](http://alinex.githhub.io/node-validator)
     # compatible:
     config:
