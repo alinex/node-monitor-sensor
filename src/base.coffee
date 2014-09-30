@@ -5,10 +5,13 @@
 # -------------------------------------------------
 
 # include base modules
-object = require('alinex-util').object
 chalk = require 'chalk'
 {spawn} = require 'child_process'
 util = require 'util'
+# include other alinex modules
+object = require('alinex-util').object
+string = require('alinex-util').string
+math = require 'mathjs'
 
 # Sensor class
 # -------------------------------------------------
@@ -70,15 +73,53 @@ class Sensor
       @result.value.success = code is 0
       cb error, stdout, stderr, code
 
-    # ### Format last result
-    format: ->
-      text = ''
-      # title
-      # table of values
-      # configuration settings
-      # hint
-      text += "\nHINT: #{@meta.hint} " if @meta.hint
-      text
+  # ### Format last result
+  format: ->
+    meta = @constructor.meta
+    text = """
+      #{meta.description}\n\nLast check results are:
+
+      |       RESULT       |  VALUE                                             |
+      | ------------------ | -------------------------------------------------: |\n"""
+    # table of values
+    for name, set of meta.values
+      val = ''
+      if @result.value[name]?
+        val = switch set.type
+          when 'percent'
+            (Math.round(@result.value[name] * 100) / 100).toString() + ' %'
+          when 'byte'
+            byte = math.unit @result.value[name], (set.unit ? 'B')
+            byte.format 3
+          else
+            val = @result.value[name]
+            val += " #{set.unit}" if val and set.unit
+            val
+      text += "| #{string.rpad set.title, 18}
+      | #{string.lpad val.toString(), 50} |\n"
+    # configuration settings
+    text += """
+      \nAnd the following configuration was used:
+
+      |       CONFIG       |  VALUE                                             |
+      | ------------------ | -------------------------------------------------: |\n"""
+    for name, set of meta.config.entries
+      val = ''
+      continue unless @config[name]?
+      val = switch set.type
+        when 'percent'
+          (Math.round(@config[name] * 100) / 100).toString() + ' %'
+        when 'byte'
+          byte = math.unit @config[name], 'B'
+          byte.format 3
+        else
+          val = @config[name]
+          val += " #{set.unit}" if val and set.unit
+          val
+      text += "| #{string.rpad set.title, 18}
+      | #{string.lpad val.toString(), 50} |\n"
+    # hint
+    text += "\nHINT: #{meta.hint} " if meta.hint
 
 # Export class
 # -------------------------------------------------

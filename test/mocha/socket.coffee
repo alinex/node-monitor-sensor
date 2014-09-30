@@ -5,7 +5,7 @@ validator = require 'alinex-validator'
 
 SocketSensor = require '../../lib/type/socket'
 
-describe "Socket connection sensor", ->
+describe.only "Socket connection sensor", ->
 
   describe "run", ->
 
@@ -79,4 +79,15 @@ describe "Socket connection sensor", ->
         responsetime: 500
       , (err) ->
         expect(err).to.not.exist
+        done()
+
+    it "should format result", (done) ->
+      socket = new SocketSensor validator.check 'config', SocketSensor.meta.config,
+        host: '193.99.144.80'
+        port: 80
+      socket.run (err) ->
+        expect(err).to.not.exist
+        text = socket.format()
+        expect(text).to.exist
+        console.log text
         done()

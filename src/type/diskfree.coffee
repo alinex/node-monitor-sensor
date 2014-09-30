@@ -25,7 +25,8 @@ class DiskfreeSensor extends Sensor
     category: 'sys'
     level: 1
     hint: "If a share is full it will make I/O problems in the system or applications
-    in case of the root partition it may also neither be possible to log errors. "
+    in case of the root partition it may also neither be possible to log errors.
+    Maybe some old files like temp or logs can be removed or compressed. "
     # Check for configuration settings [alinex-validator](http://alinex.githhub.io/node-validator)
     # compatible:
     config:
@@ -34,7 +35,7 @@ class DiskfreeSensor extends Sensor
       allowedKeys: true
       entries:
         share:
-          title: "Share or mount point"
+          title: "Share or Mount"
           description: "the disk share's path or mount point to check"
           type: 'string'
         timeout:
@@ -46,6 +47,7 @@ class DiskfreeSensor extends Sensor
           min: 500
           default: 1000
         freeWarn:
+          title: "Free Warn"
           type: 'any'
           optional: true
           entries: [
@@ -60,6 +62,7 @@ class DiskfreeSensor extends Sensor
               source: '<freeFail'
           ]
         freeFail:
+          title: "Free Fail"
           type: 'any'
           optional: true
           entries: [
@@ -75,7 +78,7 @@ class DiskfreeSensor extends Sensor
         description: "path name of the share"
         type: 'string'
       type:
-        title: 'type'
+        title: 'Type'
         description: "type of filesystem"
         type: 'string'
       total:

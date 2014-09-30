@@ -9,11 +9,13 @@
 debug = require('debug')('monitor:sensor:cpu')
 # include alinex packages
 object = require('alinex-util').object
+string = require('alinex-util').string
 # include classes and helper modules
 Sensor = require '../base'
 # specific modules for this check
 os = require 'os'
 fs = require 'fs'
+{exec} = require 'child_process'
 
 # Sensor class
 # -------------------------------------------------
@@ -37,14 +39,14 @@ class CpuSensor extends Sensor
       allowedKeys: true
       entries:
         fail:
-          title: "Max CPU activity to fail"
-          description: "the maximum activity level for all cpus to fail"
+          title: "%CPU Fail"
+          description: "the activity level for all cpus to be considered as fail"
           type: 'percent'
           optional: true
           min: 0
         warn:
-          title: "Max CPU activity to warn"
-          description: "the maximum activity level for all cpus to be ok"
+          title: "%CPU Warn"
+          description: "the activity level for all cpus to be considered as ok"
           type: 'percent'
           optional: true
           min: 0
@@ -53,12 +55,8 @@ class CpuSensor extends Sensor
             source: '<fail'
     # Definition of response values
     values:
-      success:
-        title: 'Success'
-        description: "true if external command runs successfully"
-        type: 'boolean'
       cpu:
-        tittle: "cpu"
+        title: "CPU Model"
         description: "cpu model name with brand"
         type: 'string'
       cpus:
@@ -70,19 +68,19 @@ class CpuSensor extends Sensor
         description: "speed in MHz"
         type: 'integer'
       user:
-        tittle: "User time"
+        title: "User time"
         description: "percentage of user time over all cpu cores"
         type: 'percent'
       system:
-        tittle: "System time"
+        title: "System time"
         description: "percentage of system time over all cpu cores"
         type: 'percent'
       idle:
-        tittle: "Idle time"
+        title: "Idle time"
         description: "percentage of idle time over all cpu cores"
         type: 'percent'
       active:
-        tittle: "Activity"
+        title: "Activity"
         description: "percentage of active time over all cpu cores"
         type: 'percent'
 
@@ -123,8 +121,57 @@ class CpuSensor extends Sensor
     message = switch status
       when 'fail'
         "too high activity on cpu"
-    @_end status, message, cb
+    # done if no problem found
+    if status is 'ok'
+      return @_end status, message, cb
+    # get additional information
+    cmd = "ps axu | awk '{print $2, $3, $4, $11}' | sort -k2 -nr | head -5"
+    exec cmd, (err, stdout, stderr) =>
+      unless err
+        @result.analysis = """
+        Currently the top cpu consuming processes are:
 
+        |  PID  |  %CPU |  %MEM | COMMAND                                            |
+        | ----: | ----: | ----: | -------------------------------------------------- |\n"""
+        for line in stdout.toString().split /\n/
+          continue unless line
+          col = line.split /\s/, 4
+          @result.analysis += "| #{string.lpad col[0], 5} | #{string.lpad col[1], 5}
+            | #{string.lpad col[2], 5} | #{string.rpad col[3], 50} |\n"
+        debug @result.analysis
+      @_end status, message, cb
+
+  # ### Format last result
+  format: ->
+    meta = @constructor.meta
+    text = """
+      #{meta.description}\n\nLast check results are:
+
+      |       RESULT       |    VALUE     |     WARN     |    ERROR     |
+      | ------------------ | -----------: | -----------: | -----------: |\n"""
+    # table of values
+    for name, set of meta.values
+      val = ''
+      if @result.value[name]?
+        val = switch set.type
+          when 'percent'
+            (Math.round(@result.value[name] * 100) / 100).toString() + '%'
+          else
+            @result.value[name]
+      text += "| #{string.rpad set.title, 18} "
+      if name is 'cpu'
+        text += "| #{string.rpad val.toString(), 42} |\n"
+        continue
+      text += "| #{string.lpad val.toString(), 12}% "
+      if name is 'active'
+        text += "| #{string.lpad (@config.warn?.toString()+'%' ? ''), 12}
+        | #{string.lpad (@config.fail?.toString()+'%' ? ''), 12} |\n"
+      else
+        text += "|              |              |\n"
+    # configuration settings
+    # hint
+    text += "\nHINT: #{meta.hint} " if meta.hint
+    text
 
 # Export class
 # -------------------------------------------------

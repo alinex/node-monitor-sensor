@@ -42,8 +42,8 @@ class PingSensor extends Sensor
     round-trip time for the messages send."
     category: 'net'
     level: 1
-    hint: "Check the network connection if local ping won't work or the network
-    connection for external pings. "
+    hint: "Check the network card configuration if local ping won't work or the
+    network connection for external pings. "
     # Check for configuration settings [alinex-validator](http://alinex.githhub.io/node-validator)
     # compatible:
     config:
@@ -56,7 +56,7 @@ class PingSensor extends Sensor
           description: "the server hostname or ip address to be called for ping"
           type: 'string'
         count:
-          title: "Number of packets to send"
+          title: "Number of Packets"
           description: "the number of ping packets to send, each after the other"
           type: 'integer'
           default: 1
@@ -70,7 +70,7 @@ class PingSensor extends Sensor
           default: 1000
           min: 500
         responsetime:
-          title: "Average ping time"
+          title: "Average Ping Time"
           description: "the average time in milliseconds the pings may take to
             not be marked as warning"
           type: 'interval'
@@ -78,7 +78,7 @@ class PingSensor extends Sensor
           default: 500
           min: 0
         responsemax:
-          title: "Maximum ping time"
+          title: "Maximum Ping Time"
           description: "the maximum time in milliseconds any ping may take to
             not be marked as warning"
           type: 'interval'

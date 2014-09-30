@@ -25,7 +25,8 @@ class MemorySensor extends Sensor
     description: "Check the free memory on localhost."
     category: 'sys'
     level: 1
-    hint: "If the memory is steadily increasing you may look for memory leaks. "
+    hint: "Check which process consumes how much memory, maybe some processes have
+      a memory leak."
     # Check for configuration settings [alinex-validator](http://alinex.githhub.io/node-validator)
     # compatible:
     config:
@@ -34,13 +35,13 @@ class MemorySensor extends Sensor
       allowedKeys: true
       entries:
         freeFail:
-          title: "free memory to fail"
+          title: "Free Fail"
           description: "the minimum free memory which is needed to not fail"
           type: 'byte'
           optional: true
           min: 0
         freeWarn:
-          title: "free memory to warn"
+          title: "Free Warn"
           description: "the minimum free memory which is needed to be ok"
           type: 'byte'
           optional: true
@@ -49,13 +50,13 @@ class MemorySensor extends Sensor
             reference: 'relative'
             source: '<freeFail'
         percentFail:
-          title: "percent of free memory to fail"
+          title: "%Free Fail"
           description: "the minimum free memory which is needed to not fail in percent"
           type: 'percent'
           optional: true
           min: 0
         percentWarn:
-          title: "percent of free memory to warn"
+          title: "%Free Warn"
           description: "the minimum free memory which is needed to be ok in percent"
           type: 'percent'
           optional: true
@@ -64,13 +65,13 @@ class MemorySensor extends Sensor
             reference: 'relative'
             source: '<percentFail'
         swapFail:
-          title: "free swap memory to fail"
+          title: "Swap Fail"
           description: "the minimum free swap memory which is needed to not fail"
           type: 'byte'
           optional: true
           min: 0
         swapWarn:
-          title: "free swap memory to warn"
+          title: "Swap Warn"
           description: "the minimum free swap memory which is needed to be ok"
           type: 'byte'
           optional: true
@@ -79,13 +80,13 @@ class MemorySensor extends Sensor
             reference: 'relative'
             source: '<swapFail'
         swapPercentFail:
-          title: "percent of free swap memory to fail"
+          title: "%Swap Fail"
           description: "the minimum free swap memory which is needed to not fail in percent"
           type: 'percent'
           optional: true
           min: 0
         swapPercentWarn:
-          title: "percent of free swap memory to warn"
+          title: "%Swap Warn"
           description: "the minimum free swap memory which is needed to be ok in percent"
           type: 'percent'
           optional: true
@@ -100,45 +101,55 @@ class MemorySensor extends Sensor
         description: "true if external command runs successfully"
         type: 'boolean'
       total:
-        tittle: "Total"
+        title: "Total"
         description: "total system memory"
         type: 'byte'
+        unit: 'kB'
       used:
         title: "Used"
         description: "used system memory"
         type: 'byte'
+        unit: 'kB'
       free:
         title: "Free"
         description: "free system memory"
         type: 'byte'
+        unit: 'kB'
       shared:
         title: "Shared"
         description: "shared system memory"
         type: 'byte'
+        unit: 'kB'
       buffers:
         title: "Buffers"
         description: "system memory used as buffer"
         type: 'byte'
+        unit: 'kB'
       cached:
         title: "Cached"
         description: "system memory used as cache"
         type: 'byte'
+        unit: 'kB'
       swapTotal:
         title: "Swap Total"
         description: "total swap memory"
         type: 'byte'
+        unit: 'kB'
       swapUsed:
         title: "Swap Used"
         description: "used swap memory"
         type: 'byte'
+        unit: 'kB'
       swapFree:
         title: "Swap Free"
         description: "free swap memory"
         type: 'byte'
+        unit: 'kB'
       actualFree:
         title: "Actual Free"
         description: "real free system memory"
         type: 'byte'
+        unit: 'kB'
       percentFree:
         title: "Percent Free"
         description: "percentage of real free system memory"
@@ -195,7 +206,25 @@ class MemorySensor extends Sensor
             "Not enought free memory left on system"
           else
             "#{@constructor.meta.name} check exited with status #{status}"
-      @_end status, message, cb
+      # done if no problem found
+      if status is 'ok'
+        return @_end status, message, cb
+      # get additional information
+      cmd = "ps axu | awk '{print $2, $3, $4, $11}' | sort -k3 -nr | head -5"
+      exec cmd, (err, stdout, stderr) =>
+        unless err
+          @result.analysis = """
+          Currently the top memory consuming processes are:
+
+          |  PID  |  %CPU |  %MEM | COMMAND                                            |
+          | ----: | ----: | ----: | -------------------------------------------------- |\n"""
+          for line in stdout.toString().split /\n/
+            continue unless line
+            col = line.split /\s/, 4
+            @result.analysis += "| #{string.lpad col[0], 5} | #{string.lpad col[1], 5}
+              | #{string.lpad col[2], 5} | #{string.rpad col[3], 50} |\n"
+          debug @result.analysis
+        @_end status, message, cb
 
 
 # Export class

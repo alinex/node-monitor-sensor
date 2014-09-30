@@ -42,3 +42,12 @@ describe "Diskfree", ->
         expect(df.result.message).to.not.exist
         done()
 
+    it "should format result", (done) ->
+      df = new DiskfreeSensor validator.check 'config', DiskfreeSensor.meta.config,
+        share: '/'
+      df.run (err) ->
+        expect(err).to.not.exist
+        text = df.format()
+        expect(text).to.exist
+        console.log text
+        done()

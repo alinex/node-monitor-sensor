@@ -65,7 +65,7 @@ class HttpSensor extends Sensor
           type: 'string'
           optional: true
         bodycheck:
-          title: "Body check"
+          title: "Body Check"
           description: "substring or regular expression"
           type: 'any'
           optional: true
@@ -79,20 +79,20 @@ class HttpSensor extends Sensor
     # Definition of response values
     values:
       success:
-        title: ""
+        title: "Success"
         description: "true if server responded with correct http code"
         type: 'boolean'
       responsetime:
-        title: ""
+        title: "Response Time"
         description: "time till connection could be established"
         type: 'integer'
         unit: 'ms'
       statuscode:
-        title: ""
+        title: "Status Code"
         description: "http status code"
         type: 'values'
       bodytype:
-        title: ""
+        title: "Body Check OK"
         description: "success of check for content"
         type: 'boolean'
 

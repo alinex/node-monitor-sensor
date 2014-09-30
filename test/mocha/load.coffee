@@ -13,22 +13,31 @@ describe "Load", ->
       validator.selfcheck 'meta.config', LoadSensor.meta.config
 
     it "should be initialized", ->
-      df = new LoadSensor validator.check 'config', LoadSensor.meta.config,
+      load = new LoadSensor validator.check 'config', LoadSensor.meta.config,
         longWarn: 15
-      expect(df).to.have.property 'config'
+      expect(load).to.have.property 'config'
 
     it "should return success", (done) ->
-      df = new LoadSensor validator.check 'config', LoadSensor.meta.config,
+      load = new LoadSensor validator.check 'config', LoadSensor.meta.config,
         longWarn: 15
-      df.run (err) ->
+      load.run (err) ->
         expect(err).to.not.exist
-        expect(df.result).to.exist
-        expect(df.result.value.cpu).to.exist
-        expect(df.result.value.cpus).to.be.above 0
-        expect(df.result.value.short).to.be.above 0
-        expect(df.result.value.medium).to.be.above 0
-        expect(df.result.value.long).to.be.above 0
-        expect(df.result.status).to.equal 'ok'
-        expect(df.result.message).to.not.exist
+        expect(load.result).to.exist
+        expect(load.result.value.cpu).to.exist
+        expect(load.result.value.cpus).to.be.above 0
+        expect(load.result.value.short).to.be.above 0
+        expect(load.result.value.medium).to.be.above 0
+        expect(load.result.value.long).to.be.above 0
+        expect(load.result.status).to.equal 'ok'
+        expect(load.result.message).to.not.exist
         done()
 
+    it "should format result", (done) ->
+      load = new LoadSensor validator.check 'config', LoadSensor.meta.config,
+        longWarn: 15
+      load.run (err) ->
+        expect(err).to.not.exist
+        text = load.format()
+        expect(text).to.exist
+        console.log text
+        done()

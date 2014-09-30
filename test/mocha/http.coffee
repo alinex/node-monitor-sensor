@@ -100,3 +100,13 @@ describe "Http request sensor", ->
       , (err) ->
         expect(err).to.not.exist
         done()
+
+    it "should format result", (done) ->
+      http = new HttpSensor validator.check 'config', HttpSensor.meta.config,
+        url: 'http://heise.de'
+      http.run (err) ->
+        expect(err).to.not.exist
+        text = http.format()
+        expect(text).to.exist
+        console.log text
+        done()

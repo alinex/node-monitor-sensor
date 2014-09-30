@@ -5,7 +5,7 @@ validator = require 'alinex-validator'
 
 CpuSensor = require '../../lib/type/cpu'
 
-describe.only "Cpu", ->
+describe "Cpu", ->
 
   describe "run", ->
 
@@ -13,23 +13,32 @@ describe.only "Cpu", ->
       validator.selfcheck 'meta.config', CpuSensor.meta.config
 
     it "should be initialized", ->
-      df = new CpuSensor validator.check 'config', CpuSensor.meta.config,
+      cpu = new CpuSensor validator.check 'config', CpuSensor.meta.config,
         warn: 0.90
-      expect(df).to.have.property 'config'
+      expect(cpu).to.have.property 'config'
 
     it "should return success", (done) ->
-      df = new CpuSensor validator.check 'config', CpuSensor.meta.config,
+      cpu = new CpuSensor validator.check 'config', CpuSensor.meta.config,
         warn: 0.99
-      df.run (err) ->
+      cpu.run (err) ->
         expect(err).to.not.exist
-        expect(df.result).to.exist
-        expect(df.result.value.cpu).to.exist
-        expect(df.result.value.cpus).to.be.above 0
-        expect(df.result.value.user).to.exist
-        expect(df.result.value.system).to.exist
-        expect(df.result.value.idle).to.exist
-        expect(df.result.value.active).to.exist
-        expect(df.result.status).to.equal 'ok'
-        expect(df.result.message).to.not.exist
+        expect(cpu.result).to.exist
+        expect(cpu.result.value.cpu).to.exist
+        expect(cpu.result.value.cpus).to.be.above 0
+        expect(cpu.result.value.user).to.exist
+        expect(cpu.result.value.system).to.exist
+        expect(cpu.result.value.idle).to.exist
+        expect(cpu.result.value.active).to.exist
+        expect(cpu.result.status).to.equal 'ok'
+        expect(cpu.result.message).to.not.exist
         done()
 
+    it "should format result", (done) ->
+      cpu = new CpuSensor validator.check 'config', CpuSensor.meta.config,
+        warn: 0.99
+      cpu.run (err) ->
+        expect(err).to.not.exist
+        text = cpu.format()
+        expect(text).to.exist
+        console.log text
+        done()

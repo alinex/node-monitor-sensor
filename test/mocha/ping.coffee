@@ -115,3 +115,13 @@ describe "Ping sensor", ->
       , (err) ->
         expect(err).to.not.exist
         done()
+
+    it "should format result", (done) ->
+      ping = new PingSensor validator.check 'config', PingSensor.meta.config,
+        host: '193.99.144.80'
+      ping.run (err) ->
+        expect(err).to.not.exist
+        text = ping.format()
+        expect(text).to.exist
+        console.log text
+        done()

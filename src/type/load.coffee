@@ -30,6 +30,7 @@ class LoadSensor extends Sensor
     level: 1
     hint: "A very high system load makes the system irresponsible or really slow.
     Check for too much processes. "
+
     # Check for configuration settings [alinex-validator](http://alinex.githhub.io/node-validator)
     # compatible:
     config:
@@ -85,23 +86,23 @@ class LoadSensor extends Sensor
     # Definition of response values
     values:
       cpu:
-        tittle: "cpu"
+        title: "CPU"
         description: "cpu model name with brand"
         type: 'string'
       cpus:
-        title: "cpu cores"
+        title: "Num Cores"
         description: "number of cpu cores"
         type: 'integer'
       short:
-        title: "1min load"
+        title: "1min Load"
         description: "average value of one minute processor load (normalized)"
         type: 'percent'
       medium:
-        title: "5min load"
+        title: "5min Load"
         description: "average value of 5 minute processor load (normalized)"
         type: 'percent'
       long:
-        title: "15min load"
+        title: "15min Load"
         description: "average value of 15 minute processor load (normalized)"
         type: 'percent'
 
