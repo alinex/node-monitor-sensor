@@ -118,6 +118,8 @@ class Sensor
           val
       text += "| #{string.rpad set.title, 18}
       | #{string.lpad val.toString(), 50} |\n"
+    # additional information
+    text += "\n#{@result.analysis}" if @result.analysis?
     # hint
     text += "\nHINT: #{meta.hint} " if meta.hint
 

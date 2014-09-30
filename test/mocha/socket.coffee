@@ -5,7 +5,7 @@ validator = require 'alinex-validator'
 
 SocketSensor = require '../../lib/type/socket'
 
-describe.only "Socket connection sensor", ->
+describe "Socket connection sensor", ->
 
   describe "run", ->
 

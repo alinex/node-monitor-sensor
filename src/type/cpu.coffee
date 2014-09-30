@@ -67,6 +67,7 @@ class CpuSensor extends Sensor
         title: "cpu speed"
         description: "speed in MHz"
         type: 'integer'
+        unit: 'MHz'
       user:
         title: "User time"
         description: "percentage of user time over all cpu cores"
@@ -122,8 +123,8 @@ class CpuSensor extends Sensor
       when 'fail'
         "too high activity on cpu"
     # done if no problem found
-    if status is 'ok'
-      return @_end status, message, cb
+#    if status is 'ok'
+#      return @_end status, message, cb
     # get additional information
     cmd = "ps axu | awk '{print $2, $3, $4, $11}' | sort -k2 -nr | head -5"
     exec cmd, (err, stdout, stderr) =>
@@ -155,20 +156,25 @@ class CpuSensor extends Sensor
       if @result.value[name]?
         val = switch set.type
           when 'percent'
-            (Math.round(@result.value[name] * 100) / 100).toString() + '%'
+            (Math.round(@result.value[name] * 100) / 100).toString() + ' %'
           else
-            @result.value[name]
+            val = @result.value[name]
+            val += " #{set.unit}" if val and set.unit
+            val
       text += "| #{string.rpad set.title, 18} "
       if name is 'cpu'
         text += "| #{string.rpad val.toString(), 42} |\n"
         continue
-      text += "| #{string.lpad val.toString(), 12}% "
+      text += "| #{string.lpad val.toString(), 12} "
       if name is 'active'
-        text += "| #{string.lpad (@config.warn?.toString()+'%' ? ''), 12}
-        | #{string.lpad (@config.fail?.toString()+'%' ? ''), 12} |\n"
+        warn = if @config.warn? then @config.warn.toString()+' %' else ''
+        fail = if @config.fail? then @config.fail.toString()+' %' else ''
+        text += "| #{string.lpad warn, 12}
+        | #{string.lpad fail, 12} |\n"
       else
         text += "|              |              |\n"
-    # configuration settings
+    # additional information
+    text += "\n#{@result.analysis}" if @result.analysis?
     # hint
     text += "\nHINT: #{meta.hint} " if meta.hint
     text
