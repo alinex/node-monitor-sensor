@@ -5,7 +5,7 @@ validator = require 'alinex-validator'
 
 CpuSensor = require '../../lib/type/cpu'
 
-describe.only "Cpu", ->
+describe "Cpu", ->
 
   describe "run", ->
 
