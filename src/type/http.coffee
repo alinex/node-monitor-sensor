@@ -45,7 +45,7 @@ class HttpSensor extends Sensor
           type: 'interval'
           unit: 'ms'
           min: 500
-          default: 2000
+          default: 3000
         responsetime:
           title: "Response Time"
           description: "the maximum time in milliseconds till the server
@@ -53,7 +53,7 @@ class HttpSensor extends Sensor
           type: 'interval'
           unit: 'ms'
           min: 0
-          default: 1000
+          default: 2000
         username:
           title: "Username"
           description: "the name used for basic authentication"

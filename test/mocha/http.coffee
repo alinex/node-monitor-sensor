@@ -21,7 +21,7 @@ describe "Http request sensor", ->
       http = new HttpSensor validator.check 'config', HttpSensor.meta.config,
         url: 'http://heise.de'
       http.run (err) ->
-        console.log err, http.result
+        console.log err, http.result unless http.result.status is 'ok'
         expect(err).to.not.exist
         expect(http.result).to.exist
         expect(http.result.date).to.exist
