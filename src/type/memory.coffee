@@ -9,10 +9,12 @@
 debug = require('debug')('monitor:sensor:memory')
 # include alinex packages
 object = require('alinex-util').object
+string = require('alinex-util').string
 # include classes and helper modules
 Sensor = require '../base'
 # specific modules for this check
 os = require 'os'
+{exec} = require 'child_process'
 
 # Sensor class
 # -------------------------------------------------

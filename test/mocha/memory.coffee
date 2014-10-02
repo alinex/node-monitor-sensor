@@ -19,8 +19,9 @@ describe "Memory", ->
 
     it "should return success", (done) ->
       memory = new MemorySensor validator.check 'config', MemorySensor.meta.config,
-        freeFail: '1M'
+        freeFail: '100k'
       memory.run (err) ->
+        console.log err, memory.result unless memory.result.status is 'ok'
         expect(err).to.not.exist
         expect(memory.result).to.exist
         expect(memory.result.value.success).to.equal true
