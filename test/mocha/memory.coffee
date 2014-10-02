@@ -27,12 +27,12 @@ describe "Memory", ->
         expect(memory.result.value.total).to.be.above 0
         expect(memory.result.value.used).to.be.above 0
         expect(memory.result.value.free).to.be.above 0
-        expect(memory.result.value.shared).to.be.above 0
-        expect(memory.result.value.buffers).to.be.above 0
-        expect(memory.result.value.cached).to.be.above 0
-        expect(memory.result.value.swapTotal).to.be.above 0
-        expect(memory.result.value.swapUsed).to.be.above 0
-        expect(memory.result.value.swapFree).to.be.above 0
+        expect(memory.result.value.shared).to.exist
+        expect(memory.result.value.buffers).to.exist
+        expect(memory.result.value.cached).to.exist
+        expect(memory.result.value.swapTotal).to.exist
+        expect(memory.result.value.swapUsed).to.exist
+        expect(memory.result.value.swapFree).to.exist
         expect(memory.result.value.actualFree).to.be.above 0
         expect(memory.result.status).to.equal 'ok'
         expect(memory.result.message).to.not.exist
