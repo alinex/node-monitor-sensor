@@ -121,7 +121,7 @@ class Sensor
     # additional information
     text += "\n#{@result.analysis}" if @result.analysis?
     # hint
-    text += "\nHINT: #{meta.hint} " if meta.hint
+    text += "\n#{meta.hint} " if meta.hint
 
 # Export class
 # -------------------------------------------------

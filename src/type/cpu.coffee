@@ -123,8 +123,8 @@ class CpuSensor extends Sensor
       when 'fail'
         "too high activity on cpu"
     # done if no problem found
-#    if status is 'ok'
-#      return @_end status, message, cb
+    if status is 'ok'
+      return @_end status, message, cb
     # get additional information
     cmd = "ps axu | awk '{print $2, $3, $4, $11}' | sort -k2 -nr | head -5"
     exec cmd, (err, stdout, stderr) =>
