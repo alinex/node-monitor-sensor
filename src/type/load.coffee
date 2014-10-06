@@ -12,6 +12,7 @@
 debug = require('debug')('monitor:sensor:load')
 # include alinex packages
 object = require('alinex-util').object
+string = require('alinex-util').string
 # include classes and helper modules
 Sensor = require '../base'
 # specific modules for this check
@@ -140,6 +141,42 @@ class LoadSensor extends Sensor
         "#{@constructor.meta.name} exited with status #{status}"
     @_end status, message, cb
 
+  # ### Format last result
+  format: ->
+    meta = @constructor.meta
+    text = """
+      #{meta.description}\n\nLast check results are:
+
+      |       RESULT       |    VALUE     |     WARN     |    ERROR     |
+      | ------------------ | -----------: | -----------: | -----------: |\n"""
+    # table of values
+    for name, set of meta.values
+      val = ''
+      if @result.value[name]?
+        val = switch set.type
+          when 'percent'
+            (Math.round(@result.value[name] * 100) / 100).toString() + ' %'
+          else
+            val = @result.value[name]
+            val += " #{set.unit}" if val and set.unit
+            val
+      text += "| #{string.rpad set.title, 18} "
+      if name is 'cpu'
+        text += "| #{string.rpad val.toString(), 42} |\n"
+        continue
+      text += "| #{string.lpad val.toString(), 12} "
+      if name in ['ashort','medium','long']
+        warn = if @config["#{name}Warn"]? then @config["#{name}Warn"].toString()+' %' else ''
+        fail = if @config["#{name}Fail"]? then @config["#{name}Fail"].toString()+' %' else ''
+        text += "| #{string.lpad warn, 12}
+        | #{string.lpad fail, 12} |\n"
+      else
+        text += "|              |              |\n"
+    # additional information
+    text += "\n#{@result.analysis}" if @result.analysis?
+    # hint
+    text += "\nHINT: #{meta.hint} " if meta.hint
+    text
 
 # Export class
 # -------------------------------------------------

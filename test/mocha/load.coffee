@@ -5,7 +5,7 @@ validator = require 'alinex-validator'
 
 LoadSensor = require '../../lib/type/load'
 
-describe "Load", ->
+describe.only "Load", ->
 
   describe "run", ->
 
