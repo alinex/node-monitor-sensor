@@ -45,7 +45,7 @@ class HttpSensor extends Sensor
           type: 'interval'
           unit: 'ms'
           min: 500
-          default: 3000
+          default: 10000
         responsetime:
           title: "Response Time"
           description: "the maximum time in milliseconds till the server
@@ -53,7 +53,7 @@ class HttpSensor extends Sensor
           type: 'interval'
           unit: 'ms'
           min: 0
-          default: 2000
+          default: 3000
         username:
           title: "Username"
           description: "the name used for basic authentication"
@@ -118,9 +118,10 @@ class HttpSensor extends Sensor
       end = new Date().getTime()
       # collecting data
       if response?
-        @result.data += "HEADERS:\n"
         for key, value of response.headers
           debug chalk.grey "#{key}: #{value}"
+      if body?
+        debug chalk.grey body
       # error checking
       if err
         debug chalk.red err.toString()

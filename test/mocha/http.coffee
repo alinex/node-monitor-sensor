@@ -18,6 +18,7 @@ describe "Http request sensor", ->
       expect(http).to.have.property 'config'
 
     it "should connect to webserver", (done) ->
+      @timeout 10000
       http = new HttpSensor validator.check 'config', HttpSensor.meta.config,
         url: 'http://heise.de'
       http.run (err) ->
