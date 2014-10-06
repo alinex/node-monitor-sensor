@@ -5,7 +5,7 @@ validator = require 'alinex-validator'
 
 DiskfreeSensor = require '../../lib/type/diskfree'
 
-describe "Diskfree", ->
+describe.only "Diskfree", ->
 
   describe "run", ->
 
@@ -20,6 +20,7 @@ describe "Diskfree", ->
     it "should return success", (done) ->
       df = new DiskfreeSensor validator.check 'config', DiskfreeSensor.meta.config,
         share: '/'
+        analysis: ['/tmp']
       df.run (err) ->
         expect(err).to.not.exist
         expect(df.result).to.exist

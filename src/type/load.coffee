@@ -145,7 +145,6 @@ class LoadSensor extends Sensor
     # get additional information
     cmd = "ps axu | awk 'NR>1 {print $2, $3, $4, $11}'"
     exec cmd, (err, stdout, stderr) =>
-      console.log '-------------------------------'
       unless err
         procs = {}
         for line in stdout.toString().split /\n/

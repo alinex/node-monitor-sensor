@@ -7,11 +7,12 @@
 # include base modules
 debug = require('debug')('monitor:sensor:diskfree')
 # include alinex packages
-{object,number} = require 'alinex-util'
+{object,number,string} = require 'alinex-util'
 # include classes and helper
 Sensor = require '../base'
 # specific modules for this check
 os = require 'os'
+{exec} = require 'child_process'
 
 # Sensor class
 # -------------------------------------------------
@@ -48,6 +49,7 @@ class DiskfreeSensor extends Sensor
           default: 1000
         freeWarn:
           title: "Free Warn"
+          description: "the minimum free space on share"
           type: 'any'
           optional: true
           entries: [
@@ -63,6 +65,7 @@ class DiskfreeSensor extends Sensor
           ]
         freeFail:
           title: "Free Fail"
+          description: "the minimum free space on share"
           type: 'any'
           optional: true
           entries: [
@@ -70,6 +73,15 @@ class DiskfreeSensor extends Sensor
           ,
             type: 'percent'
           ]
+        analysis:
+          title: "Analysis Paths"
+          description: "list of directories to monitor their volume on warning"
+          type: 'array'
+          optional: true
+          delimiter: /,\s+/
+          entries:
+            title: "Directory"
+            type: 'string'
 
     # Definition of response values
     values:
@@ -84,18 +96,18 @@ class DiskfreeSensor extends Sensor
       total:
         title: 'Available'
         description: "the space, which is available"
-        type: 'integer'
-        unit: 'bytes'
+        type: 'byte'
+        unit: 'B'
       used:
         title: 'Used'
         description: "the space, which is already used"
-        type: 'integer'
-        unit: 'bytes'
+        type: 'byte'
+        unit: 'B'
       free:
         title: 'Free'
         description: "the space, which is free"
-        type: 'integer'
-        unit: 'bytes'
+        type: 'byte'
+        unit: 'B'
       mount:
         title: 'Mountpoint'
         description: "the path this share is mounted to"
@@ -155,6 +167,25 @@ class DiskfreeSensor extends Sensor
           status = 'warn'
         else
           status = 'ok'
+      if not @config.analysis?.length
+        return @_end status, message, cb
+      # get additional information
+      @result.analysis = """
+        Maybe some files in one of the following directories may be deleted or moved:
+
+        | PATH                                               | SIZE  |   OLDEST   |
+        | -------------------------------------------------- | ----: | ---------: |\n"""
+      async------for dir in @config.analysis
+        exec "du -sh #{dir}", (err, stdout, stderr) =>
+          col = stdout.toString().split /\s+/
+          @result.analysis += "| #{string.rpad col[1], 50} | #{string.lpad col[0], 5} "
+          # oldest file
+          exec "find #{dir} -type f -print0 | xargs -0 ls -ltr --time-style=+%Y-%m-%d
+          | head -1 | awk '{ print $6 }'", (err, stdout, stderr) =>
+            @result.analysis += "| #{string.lpad stdout.toString().trim(), 10} |\n"
+            console.log '----------2', @result.analysis
+      console.log '---------------------3', @result.analysis
+      debug @result.analysis
       @_end status, message, cb
 
 # Export class
