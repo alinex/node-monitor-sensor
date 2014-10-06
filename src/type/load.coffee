@@ -17,6 +17,7 @@ string = require('alinex-util').string
 Sensor = require '../base'
 # specific modules for this check
 os = require 'os'
+{exec} = require 'child_process'
 
 # Sensor class
 # -------------------------------------------------
@@ -139,7 +140,36 @@ class LoadSensor extends Sensor
     message = switch status
       when 'fail'
         "#{@constructor.meta.name} exited with status #{status}"
-    @_end status, message, cb
+    if status is 'ok'
+      return @_end status, message, cb
+    # get additional information
+    cmd = "ps axu | awk 'NR>1 {print $2, $3, $4, $11}'"
+    exec cmd, (err, stdout, stderr) =>
+      console.log '-------------------------------'
+      unless err
+        procs = {}
+        for line in stdout.toString().split /\n/
+          continue unless line
+          col = line.split /\s/, 4
+          unless procs[col[3]]
+            procs[col[3]] = [ 0, 0, 0 ]
+          procs[col[3]][0]++
+          procs[col[3]][1] += parseFloat col[1]
+          procs[col[3]][2] += parseFloat col[2]
+        keys = Object.keys(procs).sort (a,b) ->
+          (procs[b][0]*100+procs[b][1]) - (procs[a][0]*100+procs[a][1])
+        @result.analysis = """
+        Currently the top processes are:
+
+        | COUNT |  %CPU |  %MEM | COMMAND                                            |
+        | ----: | ----: | ----: | -------------------------------------------------- |\n"""
+        for proc in keys
+          value = procs[proc]
+          continue if value[0] is 1 and value[1] < 10
+          @result.analysis += "| #{string.lpad value[0], 5} | #{string.lpad value[1], 5}
+          | #{string.lpad value[2], 5} | #{string.rpad proc, 50} |\n"
+        debug @result.analysis
+      @_end status, message, cb
 
   # ### Format last result
   format: ->
