@@ -13,6 +13,7 @@ Sensor = require '../base'
 # specific modules for this check
 os = require 'os'
 {exec} = require 'child_process'
+async = require 'async'
 
 # Sensor class
 # -------------------------------------------------
@@ -175,18 +176,20 @@ class DiskfreeSensor extends Sensor
 
         | PATH                                               | SIZE  |   OLDEST   |
         | -------------------------------------------------- | ----: | ---------: |\n"""
-      async------for dir in @config.analysis
-        exec "du -sh #{dir}", (err, stdout, stderr) =>
+      async.map @config.analysis, (dir, cb) =>
+        exec "du -sh #{dir}", (err, stdout, stderr) ->
           col = stdout.toString().split /\s+/
-          @result.analysis += "| #{string.rpad col[1], 50} | #{string.lpad col[0], 5} "
+          analysis = "| #{string.rpad col[1], 50} | #{string.lpad col[0], 5} "
           # oldest file
           exec "find #{dir} -type f -print0 | xargs -0 ls -ltr --time-style=+%Y-%m-%d
-          | head -1 | awk '{ print $6 }'", (err, stdout, stderr) =>
-            @result.analysis += "| #{string.lpad stdout.toString().trim(), 10} |\n"
-            console.log '----------2', @result.analysis
-      console.log '---------------------3', @result.analysis
-      debug @result.analysis
-      @_end status, message, cb
+          | head -1 | awk '{ print $6 }'", (err, stdout, stderr) ->
+            analysis += "| #{string.lpad stdout.toString().trim(), 10} |\n"
+            cb null, analysis
+      , (err, lines) =>
+        @result.analysis += line for line in lines
+        debug @result.analysis
+        console.log '---------------------3', @result.analysis
+        @_end status, message, cb
 
 # Export class
 # -------------------------------------------------
