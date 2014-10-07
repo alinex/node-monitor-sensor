@@ -20,7 +20,6 @@ describe.only "Diskfree", ->
     it "should return success", (done) ->
       df = new DiskfreeSensor validator.check 'config', DiskfreeSensor.meta.config,
         share: '/'
-        analysis: ['/tmp']
       df.run (err) ->
         expect(err).to.not.exist
         expect(df.result).to.exist
@@ -46,6 +45,7 @@ describe.only "Diskfree", ->
     it "should format result", (done) ->
       df = new DiskfreeSensor validator.check 'config', DiskfreeSensor.meta.config,
         share: '/'
+        analysis: ['/tmp']
       df.run (err) ->
         expect(err).to.not.exist
         text = df.format()

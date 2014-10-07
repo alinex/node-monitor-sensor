@@ -14,6 +14,7 @@ Sensor = require '../base'
 os = require 'os'
 {exec} = require 'child_process'
 async = require 'async'
+math = require 'mathjs'
 
 # Sensor class
 # -------------------------------------------------
@@ -174,21 +175,24 @@ class DiskfreeSensor extends Sensor
       @result.analysis = """
         Maybe some files in one of the following directories may be deleted or moved:
 
-        | PATH                                               | SIZE  |   OLDEST   |
-        | -------------------------------------------------- | ----: | ---------: |\n"""
+        | PATH                                     | FILES |    SIZE    |   OLDEST   |
+        | ---------------------------------------- | ----: | ---------: | :--------- |\n"""
       async.map @config.analysis, (dir, cb) =>
-        exec "du -sh #{dir}", (err, stdout, stderr) ->
+        cmd = "find /tmp -type f 2>/dev/null | xargs ls -ltr --time-style=+%Y-%m-%d 
+        | awk '{n++;b+=$5;if(d==\"\"){d=$6};if(d>$6){d=$6}} END{print n,b,d}'"
+        exec cmd,
+          timeout: 30000
+        , (err, stdout, stderr) ->
+          unless stdout
+            return cb null, "| #{string.rpad dir, 40} |     ? |          ? | ?          |\n"
           col = stdout.toString().split /\s+/
-          analysis = "| #{string.rpad col[1], 50} | #{string.lpad col[0], 5} "
-          # oldest file
-          exec "find #{dir} -type f -print0 | xargs -0 ls -ltr --time-style=+%Y-%m-%d
-          | head -1 | awk '{ print $6 }'", (err, stdout, stderr) ->
-            analysis += "| #{string.lpad stdout.toString().trim(), 10} |\n"
-            cb null, analysis
+          byte = math.unit parseInt(col[1]), 'B'
+          cb null, "| #{string.rpad dir, 40} | #{string.lpad col[0], 5} 
+          | #{string.lpad byte.format(3), 10} 
+          | #{string.lpad col[2], 10} |\n"
       , (err, lines) =>
         @result.analysis += line for line in lines
         debug @result.analysis
-        console.log '---------------------3', @result.analysis
         @_end status, message, cb
 
 # Export class
