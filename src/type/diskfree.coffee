@@ -175,8 +175,8 @@ class DiskfreeSensor extends Sensor
       @result.analysis = """
         Maybe some files in one of the following directories may be deleted or moved:
 
-        | PATH                                     | FILES |    SIZE    |   OLDEST   |
-        | ---------------------------------------- | ----: | ---------: | :--------- |\n"""
+        | PATH                                |  FILES  |    SIZE    |   OLDEST   |
+        | ----------------------------------- | ------: | ---------: | :--------- |\n"""
       async.map @config.analysis, (dir, cb) =>
         cmd = "find /tmp -type f 2>/dev/null | xargs ls -ltr --time-style=+%Y-%m-%d 
         | awk '{n++;b+=$5;if(d==\"\"){d=$6};if(d>$6){d=$6}} END{print n,b,d}'"
@@ -187,7 +187,7 @@ class DiskfreeSensor extends Sensor
             return cb null, "| #{string.rpad dir, 40} |     ? |          ? | ?          |\n"
           col = stdout.toString().split /\s+/
           byte = math.unit parseInt(col[1]), 'B'
-          cb null, "| #{string.rpad dir, 40} | #{string.lpad col[0], 5} 
+          cb null, "| #{string.rpad dir, 35} | #{string.lpad col[0], 7} 
           | #{string.lpad byte.format(3), 10} 
           | #{string.lpad col[2], 10} |\n"
       , (err, lines) =>

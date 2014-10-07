@@ -5,7 +5,7 @@ validator = require 'alinex-validator'
 
 DiskfreeSensor = require '../../lib/type/diskfree'
 
-describe.only "Diskfree", ->
+describe "Diskfree", ->
 
   describe "run", ->
 
