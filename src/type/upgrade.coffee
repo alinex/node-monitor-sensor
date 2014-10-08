@@ -5,7 +5,7 @@
 # -------------------------------------------------
 
 # include base modules
-debug = require('debug')('monitor:sensor:diskfree')
+debug = require('debug')('monitor:sensor:upgrade')
 # include alinex packages
 {object,number,string} = require 'alinex-util'
 # include classes and helper
@@ -18,53 +18,33 @@ math = require 'mathjs'
 
 # Sensor class
 # -------------------------------------------------
-class DiskfreeSensor extends Sensor
+class UpgradeSensor extends Sensor
 
   # ### General information
   # This information may be used later for display and explanation.
   @meta =
-    name: 'Diskfree'
-    description: "Test the free diskspace of one share."
+    name: 'Upgrade'
+    description: "Check for possible package upgrades."
     category: 'sys'
     level: 1
-    hint: "If a share is full it will make I/O problems in the system or applications
-    in case of the root partition it may also neither be possible to log errors.
-    Maybe some old files like temp or logs can be removed or compressed. "
+    hint: "Maybe there are some updates to the installed packages. This may
+    also be a security update. "
     # Check for configuration settings [alinex-validator](http://alinex.githhub.io/node-validator)
     # compatible:
     config:
-      title: "Disk free Test"
+      title: "Package Upgrade"
       type: 'object'
       allowedKeys: true
       entries:
-        share:
-          title: "Share or Mount"
-          description: "the disk share's path or mount point to check"
-          type: 'string'
-        timeout:
-          title: "Overall Timeout"
-          description: "the time in milliseconds the whole test may take before
-            stopping and failing it"
+        timeWarn:
+          title: "Time Warn"
+          description: "the time for packages to be "
           type: 'interval'
-          unit: 'ms'
-          min: 500
-          default: 1000
-        freeWarn:
-          title: "Free Warn"
-          description: "the minimum free space on share"
-          type: 'any'
-          optional: true
-          entries: [
-            type: 'byte'
-            min:
-              reference: 'relative'
-              source: '<freeFail'
-          ,
-            type: 'percent'
-            min:
-              reference: 'relative'
-              source: '<freeFail'
-          ]
+          unit: 'd'
+        timeFail:
+        securityTimeWarn:
+        securityTimeFail:
+
         freeFail:
           title: "Free Fail"
           description: "the minimum free space on share"
@@ -75,15 +55,6 @@ class DiskfreeSensor extends Sensor
           ,
             type: 'percent'
           ]
-        analysis:
-          title: "Analysis Paths"
-          description: "list of directories to monitor their volume on warning"
-          type: 'array'
-          optional: true
-          delimiter: /,\s+/
-          entries:
-            title: "Directory"
-            type: 'string'
 
     # Definition of response values
     values:
@@ -197,4 +168,4 @@ class DiskfreeSensor extends Sensor
 
 # Export class
 # -------------------------------------------------
-module.exports = DiskfreeSensor
+module.exports = UpgradeSensor
