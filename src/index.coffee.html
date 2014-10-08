@@ -6,7 +6,7 @@
   <link rel="stylesheet" media="all" href="../doc-style.css" />
   <script src="../doc-filelist.js"></script>
   <script>
-    var relativeDir = "../", thisFile = "home/alex/a3/node-monitor-sensor/src/index.coffee", defaultSidebar = true;
+    var relativeDir = "../", thisFile = "home/alex/a3/node-monitor-sensor/src/indexcoffee", defaultSidebar = true;
   </script>
   <script src="../doc-script.js"></script>
   <script src="../fileSearch.js"></script>
@@ -74,6 +74,21 @@
 <p>include base modules</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
+<span class="nv">fs = </span><span class="nx">require</span> <span class="s">&#39;fs&#39;</span>
+<span class="nv">path = </span><span class="nx">require</span> <span class="s">&#39;path&#39;</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-4" id="section-4">&#182;</a>
+</div>
+<p>include alinex modules</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+<span class="p">{</span><span class="nx">string</span><span class="p">}</span> <span class="o">=</span> <span class="nx">require</span> <span class="s">&#39;alinex-util&#39;</span>
 
 
 
@@ -91,9 +106,10 @@
 
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-<span class="nv">module.exports.Ping = </span><span class="nx">require</span> <span class="s">&#39;./ping&#39;</span>
-<span class="nv">module.exports.Socket = </span><span class="nx">require</span> <span class="s">&#39;./socket&#39;</span>
-<span class="nv">module.exports.Http = </span><span class="nx">require</span> <span class="s">&#39;./http&#39;</span>
+<span class="k">for</span> <span class="nx">file</span> <span class="k">in</span> <span class="nx">fs</span><span class="p">.</span><span class="nx">readdirSync</span> <span class="nx">path</span><span class="p">.</span><span class="nx">join</span> <span class="nx">__dirname</span><span class="p">,</span> <span class="s">&#39;type&#39;</span>
+  <span class="k">if</span> <span class="nx">path</span><span class="p">.</span><span class="nx">extname</span><span class="p">(</span><span class="nx">file</span><span class="p">)</span> <span class="o">is</span> <span class="s">&#39;.js&#39;</span>
+    <span class="nv">type = </span><span class="nx">path</span><span class="p">.</span><span class="nx">basename</span> <span class="nx">file</span><span class="p">,</span> <span class="nx">path</span><span class="p">.</span><span class="nx">extname</span> <span class="nx">file</span>
+    <span class="nx">module</span><span class="p">.</span><span class="nx">exports</span><span class="p">[</span><span class="nx">string</span><span class="p">.</span><span class="nx">ucFirst</span> <span class="nx">type</span><span class="p">]</span> <span class="o">=</span> <span class="nx">require</span> <span class="s">&quot;./type/</span><span class="si">#{</span><span class="nx">type</span><span class="si">}</span><span class="s">&quot;</span>
 </pre></div>
         </td>
       </tr>

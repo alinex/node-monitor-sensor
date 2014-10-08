@@ -3,16 +3,16 @@
 <head>
   <title>socket.coffee</title>
   <meta http-equiv="content-type" content="text/html; charset=UTF-8">
-  <link rel="stylesheet" media="all" href="../doc-style.css" />
-  <script src="../doc-filelist.js"></script>
+  <link rel="stylesheet" media="all" href="../../doc-style.css" />
+  <script src="../../doc-filelist.js"></script>
   <script>
-    var relativeDir = "../", thisFile = "home/alex/a3/node-monitor-sensor/src/socket.coffee", defaultSidebar = true;
+    var relativeDir = "../../", thisFile = "home/alex/a3/node-monitor-sensor/src/type/socketcoffee", defaultSidebar = true;
   </script>
-  <script src="../doc-script.js"></script>
-  <script src="../fileSearch.js"></script>
-  <script src="../goToLine.js"></script>
-  <link rel="stylesheet" href="../fileSearch.css" />
-  <link rel="stylesheet" href="../goToLine.css" />
+  <script src="../../doc-script.js"></script>
+  <script src="../../fileSearch.js"></script>
+  <script src="../../goToLine.js"></script>
+  <link rel="stylesheet" href="../../fileSearch.css" />
+  <link rel="stylesheet" href="../../goToLine.css" />
 </head>
 <body>
   <div id="sidebar_wrapper">
@@ -33,12 +33,6 @@
       </div>
       <div class="heading h3">
         <a href="#general%20information">General information</a>
-      </div>
-      <div class="heading h3">
-        <a href="#value%20definition">Value Definition</a>
-      </div>
-      <div class="heading h3">
-        <a href="#default%20configuration">Default Configuration</a>
       </div>
       <div class="heading h3">
         <a href="#create%20instance">Create instance</a>
@@ -95,10 +89,7 @@
         </td>
         <td class="code highlight"><div class="highlight"><pre>
 <span class="nv">debug = </span><span class="nx">require</span><span class="p">(</span><span class="s">&#39;debug&#39;</span><span class="p">)(</span><span class="s">&#39;monitor:sensor:socket&#39;</span><span class="p">)</span>
-<span class="nv">colors = </span><span class="nx">require</span> <span class="s">&#39;colors&#39;</span>
-<span class="nv">EventEmitter = </span><span class="nx">require</span><span class="p">(</span><span class="s">&#39;events&#39;</span><span class="p">).</span><span class="nx">EventEmitter</span>
-<span class="nv">object = </span><span class="nx">require</span><span class="p">(</span><span class="s">&#39;alinex-util&#39;</span><span class="p">).</span><span class="nx">object</span>
-<span class="nv">Sensor = </span><span class="nx">require</span> <span class="s">&#39;./base&#39;</span>
+<span class="nv">chalk = </span><span class="nx">require</span> <span class="s">&#39;chalk&#39;</span>
 
 </pre></div>
         </td>
@@ -107,6 +98,32 @@
         <td class="docs">
 <div class="pilwrap">
   <a class="pilcrow" href="#section-4" id="section-4">&#182;</a>
+</div>
+<p>include alinex packages</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+<span class="nv">object = </span><span class="nx">require</span><span class="p">(</span><span class="s">&#39;alinex-util&#39;</span><span class="p">).</span><span class="nx">object</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-5" id="section-5">&#182;</a>
+</div>
+<p>include classes and helper modules</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+<span class="nv">Sensor = </span><span class="nx">require</span> <span class="s">&#39;../base&#39;</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-6" id="section-6">&#182;</a>
 </div>
 <p>specific modules for this check</p>
         </td>
@@ -153,60 +170,72 @@
 <span class="s">    behind a given port.&quot;</span>
     <span class="nv">category: </span><span class="s">&#39;net&#39;</span>
     <span class="nv">level: </span><span class="mi">1</span>
-
-
-</pre></div>
-        </td>
-      </tr>
-      <tr>
-        <td class="docs">
-<div class="pilwrap" id="value%20definition">
-  <h3>
-    <a href="#value%20definition" name="value%20definition" class="pilcrow">&#182;</a>
-    Value Definition
-  </h3>
-</div>
-
-
-<p>This will define the values measured and their specifics, used to display
-results.</p>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-  <span class="vi">@values = </span><span class="p">[</span>
-    <span class="nv">name: </span><span class="s">&#39;success&#39;</span>
-    <span class="nv">description: </span><span class="s">&quot;true if connection is possible&quot;</span>
-    <span class="nv">type: </span><span class="s">&#39;bool&#39;</span>
-  <span class="p">,</span>
-    <span class="nv">name: </span><span class="s">&#39;responsetime&#39;</span>
-    <span class="nv">description: </span><span class="s">&quot;time till connection could be established&quot;</span>
-    <span class="nv">type: </span><span class="s">&#39;int&#39;</span>
-    <span class="nv">unit: </span><span class="s">&#39;ms&#39;</span>
-  <span class="p">]</span>
-
+    <span class="nv">hint: </span><span class="s">&quot;On problems the service may not run or a network problem exists. &quot;</span>
 
 </pre></div>
         </td>
       </tr>
       <tr>
         <td class="docs">
-<div class="pilwrap" id="default%20configuration">
-  <h3>
-    <a href="#default%20configuration" name="default%20configuration" class="pilcrow">&#182;</a>
-    Default Configuration
-  </h3>
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-9" id="section-9">&#182;</a>
 </div>
-
-
-<p>The values starting with underscore are general help messages.</p>
+<p>Check for configuration settings <a href="http://alinex.githhub.io/node-validator">alinex-validator</a>
+compatible:</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-  <span class="vi">@config =</span>
-    <span class="nv">_host: </span><span class="s">&quot;hostname or ip address to test&quot;</span>
-    <span class="nv">_port: </span><span class="s">&quot;portnumber to connect to&quot;</span>
-    <span class="nv">timeout: </span><span class="mi">2</span>
-    <span class="nv">_timeout: </span><span class="s">&quot;timeout in seconds&quot;</span>
-    <span class="nv">responsetime: </span><span class="mi">1000</span>
-    <span class="nv">_responsetime: </span><span class="s">&quot;maximum time in ms till connection is established&quot;</span>
+    <span class="nv">config:</span>
+      <span class="nv">title: </span><span class="s">&quot;Socket connection test&quot;</span>
+      <span class="nv">type: </span><span class="s">&#39;object&#39;</span>
+      <span class="nv">allowedKeys: </span><span class="kc">true</span>
+      <span class="nv">entries:</span>
+        <span class="nv">host:</span>
+          <span class="nv">title: </span><span class="s">&quot;Hostname or IP&quot;</span>
+          <span class="nv">description: </span><span class="s">&quot;the server hostname or ip address to establish connection to&quot;</span>
+          <span class="nv">type: </span><span class="s">&#39;string&#39;</span>
+        <span class="nv">port:</span>
+          <span class="nv">title: </span><span class="s">&quot;Port&quot;</span>
+          <span class="nv">description: </span><span class="s">&quot;the port number used to connect to&quot;</span>
+          <span class="nv">type: </span><span class="s">&#39;integer&#39;</span>
+          <span class="nv">min: </span><span class="mi">1</span>
+        <span class="nv">timeout:</span>
+          <span class="nv">title: </span><span class="s">&quot;Timeout&quot;</span>
+          <span class="nv">description: </span><span class="s">&quot;the timeout in milliseconds till the process is stopped</span>
+<span class="s">            and be considered as failed&quot;</span>
+          <span class="nv">type: </span><span class="s">&#39;interval&#39;</span>
+          <span class="nv">unit: </span><span class="s">&#39;ms&#39;</span>
+          <span class="nv">min: </span><span class="mi">500</span>
+          <span class="nv">default: </span><span class="mi">2000</span>
+        <span class="nv">responsetime:</span>
+          <span class="nv">title: </span><span class="s">&quot;Response Time&quot;</span>
+          <span class="nv">description: </span><span class="s">&quot;the maximum time in milliseconds till the connection</span>
+<span class="s">            can be established without setting the state to warning&quot;</span>
+          <span class="nv">type: </span><span class="s">&#39;interval&#39;</span>
+          <span class="nv">unit: </span><span class="s">&#39;ms&#39;</span>
+          <span class="nv">min: </span><span class="mi">0</span>
+          <span class="nv">default: </span><span class="mi">1000</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-10" id="section-10">&#182;</a>
+</div>
+<p>Definition of response values</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+    <span class="nv">values:</span>
+      <span class="nv">success:</span>
+        <span class="nv">title: </span><span class="s">&quot;Successful&quot;</span>
+        <span class="nv">description: </span><span class="s">&quot;true if connecting is possible&quot;</span>
+        <span class="nv">type: </span><span class="s">&#39;boolean&#39;</span>
+      <span class="nv">responsetime:</span>
+        <span class="nv">title: </span><span class="s">&quot;Response Time&quot;</span>
+        <span class="nv">description: </span><span class="s">&quot;time in milliseconds till connection could be established&quot;</span>
+        <span class="nv">type: </span><span class="s">&#39;integer&#39;</span>
+        <span class="nv">unit: </span><span class="s">&#39;ms&#39;</span>
 
 
 </pre></div>
@@ -223,10 +252,7 @@ results.</p>
 
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-  <span class="nv">constructor: </span><span class="nf">(config) -&gt;</span>
-    <span class="k">super</span> <span class="nx">object</span><span class="p">.</span><span class="nx">extend</span> <span class="p">{},</span> <span class="nx">@constructor</span><span class="p">.</span><span class="nx">config</span><span class="p">,</span> <span class="nx">config</span>
-    <span class="k">unless</span> <span class="nx">config</span>
-      <span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span> <span class="s">&quot;Could not initialize sensor without configuration.&quot;</span>
+  <span class="nv">constructor: </span><span class="nf">(config) -&gt;</span> <span class="k">super</span> <span class="nx">config</span><span class="p">,</span> <span class="nx">debug</span>
 
 
 </pre></div>
@@ -244,26 +270,12 @@ results.</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
   <span class="nv">run: </span><span class="nf">(cb = -&gt;) -&gt;</span>
-
-
-</pre></div>
-        </td>
-      </tr>
-      <tr>
-        <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-11" id="section-11">&#182;</a>
-</div>
-<p>run the ping test</p>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-    <span class="nx">@_start</span> <span class="s">&quot;Connect </span><span class="si">#{</span><span class="nx">@config</span><span class="p">.</span><span class="nx">host</span><span class="si">}</span><span class="s">:</span><span class="si">#{</span><span class="nx">@config</span><span class="p">.</span><span class="nx">port</span><span class="si">}</span><span class="s">&quot;</span>
-    <span class="vi">@result.data = </span><span class="s">&#39;&#39;</span>
+    <span class="nx">@_start</span><span class="p">()</span>
 
     <span class="nv">socket = </span><span class="k">new</span> <span class="nx">net</span><span class="p">.</span><span class="nx">Socket</span><span class="p">()</span>
     <span class="nx">debug</span> <span class="s">&quot;connect to </span><span class="si">#{</span><span class="nx">@config</span><span class="p">.</span><span class="nx">host</span><span class="si">}</span><span class="s">:</span><span class="si">#{</span><span class="nx">@config</span><span class="p">.</span><span class="nx">port</span><span class="si">}</span><span class="s">&quot;</span>
     <span class="nv">start = </span><span class="k">new</span> <span class="nb">Date</span><span class="p">().</span><span class="nx">getTime</span><span class="p">()</span>
-    <span class="nx">socket</span><span class="p">.</span><span class="nx">setTimeout</span> <span class="nx">@config</span><span class="p">.</span><span class="nx">timeout</span><span class="o">*</span><span class="mi">1000</span>
+    <span class="nx">socket</span><span class="p">.</span><span class="nx">setTimeout</span> <span class="nx">@config</span><span class="p">.</span><span class="nx">timeout</span>
     <span class="nx">socket</span><span class="p">.</span><span class="nx">connect</span> <span class="nx">@config</span><span class="p">.</span><span class="nx">port</span><span class="p">,</span> <span class="nx">@config</span><span class="p">.</span><span class="nx">host</span><span class="p">,</span> <span class="o">=&gt;</span>
       <span class="nx">debug</span> <span class="s">&quot;connection established&quot;</span>
       <span class="nv">end = </span><span class="k">new</span> <span class="nb">Date</span><span class="p">().</span><span class="nx">getTime</span><span class="p">()</span>
@@ -276,41 +288,14 @@ results.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-12" id="section-12">&#182;</a>
+  <a class="pilcrow" href="#section-13" id="section-13">&#182;</a>
 </div>
 <p>get the values</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-      <span class="vi">@result.value = </span><span class="nv">value = </span><span class="p">{}</span>
-      <span class="nv">value.success = </span><span class="kc">true</span>
-      <span class="nv">value.responsetime = </span><span class="nx">end</span><span class="o">-</span><span class="nx">start</span>
-      <span class="nx">debug</span> <span class="nx">value</span>
-
-
-</pre></div>
-        </td>
-      </tr>
-      <tr>
-        <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-13" id="section-13">&#182;</a>
-</div>
-<p>evaluate to check status</p>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-      <span class="nv">status = </span><span class="k">switch</span>
-        <span class="k">when</span> <span class="o">not</span> <span class="nx">value</span><span class="p">.</span><span class="nx">success</span>
-          <span class="s">&#39;fail&#39;</span>
-        <span class="k">when</span>  <span class="nx">@config</span><span class="p">.</span><span class="nx">responsetime</span><span class="o">?</span> <span class="o">and</span> <span class="nx">value</span><span class="p">.</span><span class="nx">responsetime</span> <span class="o">&gt;</span> <span class="nx">@config</span><span class="p">.</span><span class="nx">responsetime</span>
-          <span class="s">&#39;warn&#39;</span>
-        <span class="k">else</span>
-          <span class="s">&#39;ok&#39;</span>
-      <span class="nv">message = </span><span class="k">switch</span> <span class="nx">status</span>
-        <span class="k">when</span> <span class="s">&#39;fail&#39;</span>
-          <span class="s">&quot;</span><span class="si">#{</span><span class="nx">@constructor</span><span class="p">.</span><span class="nx">meta</span><span class="p">.</span><span class="nx">name</span><span class="si">}</span><span class="s"> exited with status </span><span class="si">#{</span><span class="nx">status</span><span class="si">}</span><span class="s">&quot;</span>
-      <span class="nx">@_end</span> <span class="nx">status</span><span class="p">,</span> <span class="nx">message</span>
-      <span class="k">return</span> <span class="nx">cb</span> <span class="k">new</span> <span class="nb">Error</span> <span class="nx">message</span> <span class="k">if</span> <span class="nx">status</span> <span class="o">is</span> <span class="s">&#39;fail&#39;</span>
-      <span class="nx">cb</span><span class="p">()</span>
+      <span class="nv">val = </span><span class="nx">@result</span><span class="p">.</span><span class="nx">value</span>
+      <span class="nv">val.success = </span><span class="kc">true</span>
+      <span class="nv">val.responsetime = </span><span class="nx">end</span><span class="o">-</span><span class="nx">start</span>
 
 
 </pre></div>
@@ -321,14 +306,20 @@ results.</p>
 <div class="pilwrap">
   <a class="pilcrow" href="#section-14" id="section-14">&#182;</a>
 </div>
-<p>Timeout occurred</p>
+<p>evaluate to check status</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-    <span class="nx">socket</span><span class="p">.</span><span class="nx">on</span> <span class="s">&#39;timeout&#39;</span><span class="p">,</span> <span class="o">=&gt;</span>
-      <span class="nv">message = </span><span class="s">&quot;server not responding, timeout occurred&quot;</span>
-      <span class="nx">debug</span> <span class="nx">message</span><span class="p">.</span><span class="nx">red</span>
-      <span class="nx">@_end</span> <span class="s">&#39;fail&#39;</span><span class="p">,</span> <span class="nx">message</span>
-      <span class="nx">cb</span> <span class="k">new</span> <span class="nb">Error</span> <span class="nx">message</span>
+      <span class="nv">status = </span><span class="k">switch</span>
+        <span class="k">when</span> <span class="o">not</span> <span class="nx">val</span><span class="p">.</span><span class="nx">success</span>
+          <span class="s">&#39;fail&#39;</span>
+        <span class="k">when</span> <span class="nx">@config</span><span class="p">.</span><span class="nx">responsetime</span><span class="o">?</span> <span class="o">and</span> <span class="nx">val</span><span class="p">.</span><span class="nx">responsetime</span> <span class="o">&gt;</span> <span class="nx">@config</span><span class="p">.</span><span class="nx">responsetime</span>
+          <span class="s">&#39;warn&#39;</span>
+        <span class="k">else</span>
+          <span class="s">&#39;ok&#39;</span>
+      <span class="nv">message = </span><span class="k">switch</span> <span class="nx">status</span>
+        <span class="k">when</span> <span class="s">&#39;fail&#39;</span>
+          <span class="s">&quot;</span><span class="si">#{</span><span class="nx">@constructor</span><span class="p">.</span><span class="nx">meta</span><span class="p">.</span><span class="nx">name</span><span class="si">}</span><span class="s"> exited with status </span><span class="si">#{</span><span class="nx">status</span><span class="si">}</span><span class="s">&quot;</span>
+      <span class="nx">@_end</span> <span class="nx">status</span><span class="p">,</span> <span class="nx">message</span><span class="p">,</span> <span class="nx">cb</span>
 
 
 </pre></div>
@@ -339,13 +330,29 @@ results.</p>
 <div class="pilwrap">
   <a class="pilcrow" href="#section-15" id="section-15">&#182;</a>
 </div>
+<p>Timeout occurred</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+    <span class="nx">socket</span><span class="p">.</span><span class="nx">on</span> <span class="s">&#39;timeout&#39;</span><span class="p">,</span> <span class="o">=&gt;</span>
+      <span class="nv">message = </span><span class="s">&quot;server not responding, timeout occurred&quot;</span>
+      <span class="nx">debug</span> <span class="nx">chalk</span><span class="p">.</span><span class="nx">red</span> <span class="nx">message</span>
+      <span class="nx">@_end</span> <span class="s">&#39;fail&#39;</span><span class="p">,</span> <span class="nx">message</span><span class="p">,</span> <span class="nx">cb</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-16" id="section-16">&#182;</a>
+</div>
 <p>Error management</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
     <span class="nx">socket</span><span class="p">.</span><span class="nx">on</span> <span class="s">&#39;error&#39;</span><span class="p">,</span> <span class="nf">(err) =&gt;</span>
-      <span class="nx">debug</span> <span class="nx">err</span><span class="p">.</span><span class="nx">toString</span><span class="p">().</span><span class="nx">red</span>
-      <span class="nx">@_end</span> <span class="s">&#39;fail&#39;</span><span class="p">,</span> <span class="nx">err</span>
-      <span class="nx">cb</span> <span class="nx">err</span>
+      <span class="nx">debug</span> <span class="nx">chalk</span><span class="p">.</span><span class="nx">red</span> <span class="nx">err</span><span class="p">.</span><span class="nx">toString</span><span class="p">()</span>
+      <span class="nx">@_end</span> <span class="s">&#39;fail&#39;</span><span class="p">,</span> <span class="nx">err</span><span class="p">,</span> <span class="nx">cb</span>
 
 
 </pre></div>

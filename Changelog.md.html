@@ -6,7 +6,7 @@
   <link rel="stylesheet" media="all" href="doc-style.css" />
   <script src="doc-filelist.js"></script>
   <script>
-    var relativeDir = "", thisFile = "home/alex/a3/node-monitor-sensor/Changelog.md", defaultSidebar = true;
+    var relativeDir = "", thisFile = "home/alex/a3/node-monitor-sensor/Changelogmd", defaultSidebar = true;
   </script>
   <script src="doc-script.js"></script>
   <script src="fileSearch.js"></script>
@@ -26,6 +26,12 @@
         <a href="#version%20changes">Version changes</a>
       </div>
       <div class="heading h2">
+        <a href="#version%200.1.0%20(2014-10-08)">Version 0.1.0 (2014-10-08)</a>
+      </div>
+      <div class="heading h2">
+        <a href="#version%200.0.2%20(2014-08-09)">Version 0.0.2 (2014-08-09)</a>
+      </div>
+      <div class="heading h2">
         <a href="#version%200.0.1%20(2014-07-25)">Version 0.0.1 (2014-07-25)</a>
       </div>
     </div>
@@ -42,6 +48,78 @@
 
 <p>The following list gives a short overview about what is changed between
 individual versions:</p>
+
+
+<div class="pilwrap" id="version%200.1.0%20(2014-10-08)">
+  <h2>
+    <a href="#version%200.1.0%20(2014-10-08)" name="version%200.1.0%20(2014-10-08)" class="pilcrow">&#182;</a>
+    Version 0.1.0 (2014-10-08)
+  </h2>
+</div>
+
+
+<ul>
+<li>Fixed npmignore file.</li>
+<li>Small format fixes.</li>
+<li>Optimized dir analyzation to work quick in max. 30 sec for diskfree analysis.</li>
+<li>Initial disk space analyzation running.</li>
+<li>Initial disk space analyzation.</li>
+<li>Added top process analysis to load sensor.</li>
+<li>Added special format for load sensor.</li>
+<li>Changed timeouts on test run.</li>
+<li>Changed hint description for load.</li>
+<li>Fixed missing requires.</li>
+<li>Made default max responsetime for http longer.</li>
+<li>More output in tests.</li>
+<li>Fixed mocha test settings.</li>
+<li>Optimized layout in format().</li>
+<li>Reenable full test suite.</li>
+<li>Add analysis info to formatted output.</li>
+<li>Added format methods to return formated rersult.</li>
+<li>Added hints to sensor.</li>
+<li>Replace solors with chalk.</li>
+<li>Added cpu activity check.</li>
+<li>Internal restructure to get more functionality into base class.</li>
+<li>Added memory check.</li>
+<li>Added cpu load test sensor.</li>
+<li>Updated to new validator.</li>
+<li>Restructured sensors to automatically include them.</li>
+<li>Added validator selfchecks to mocha tests.</li>
+<li>Fixed bug in timeout of sockets.</li>
+<li>Updated to debug 2.0.0</li>
+<li>Added new sensor diskfree.</li>
+<li>Updated to use alinex-validator 0.2.</li>
+<li>Fixed calls to new make tool.</li>
+<li>Updated to alinex-make 0.3 for development.</li>
+<li>Remove EventEmitter support in sensor (done through controller).</li>
+<li>Return sensor in run() callback without error on normal fail.</li>
+<li>Removed direct dependency to alinex-validator.</li>
+</ul>
+
+
+<div class="pilwrap" id="version%200.0.2%20(2014-08-09)">
+  <h2>
+    <a href="#version%200.0.2%20(2014-08-09)" name="version%200.0.2%20(2014-08-09)" class="pilcrow">&#182;</a>
+    Version 0.0.2 (2014-08-09)
+  </h2>
+</div>
+
+
+<ul>
+<li>Added check methods for sensor configurations.</li>
+<li>Successful integration of alinex-validator.</li>
+<li>Changed check to use alinex-validator.</li>
+<li>Use validator in check method.</li>
+<li>Fixed config checks in ping.</li>
+<li>Merge branch 'master' of <a href='https://github.com/alinex/node-monitor-sensor'>https://github.com/alinex/node-monitor-sensor</a></li>
+<li>Added Ping.check function.</li>
+<li>Extended documentation.</li>
+<li>Fixed bug in data collection for requests.</li>
+<li>Use the timeout settings in http requests.</li>
+<li>Added headers and body to data collection for http check.</li>
+<li>Add bodycheck and basic auth to http check.</li>
+<li>Added travis url.</li>
+</ul>
 
 
 <div class="pilwrap" id="version%200.0.1%20(2014-07-25)">

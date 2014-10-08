@@ -6,7 +6,7 @@
   <link rel="stylesheet" media="all" href="doc-style.css" />
   <script src="doc-filelist.js"></script>
   <script>
-    var relativeDir = "", thisFile = "home/alex/a3/node-monitor-sensor/README.md", defaultSidebar = true;
+    var relativeDir = "", thisFile = "home/alex/a3/node-monitor-sensor/READMEmd", defaultSidebar = true;
   </script>
   <script src="doc-script.js"></script>
   <script src="fileSearch.js"></script>
@@ -35,6 +35,9 @@
         <a href="#sensor%20run">Sensor run</a>
       </div>
       <div class="heading h2">
+        <a href="#status">Status</a>
+      </div>
+      <div class="heading h2">
         <a href="#api">API</a>
       </div>
       <div class="heading h3">
@@ -47,7 +50,7 @@
         <a href="#events">Events</a>
       </div>
       <div class="heading h4">
-        <a href="#static%20properties">Static properties</a>
+        <a href="#class%20properties">Class properties</a>
       </div>
       <div class="heading h4">
         <a href="#properties">Properties</a>
@@ -71,7 +74,7 @@
 <a href="https://coveralls.io/r/alinex/node-monitor-sensor?branch=master"><img src="https://coveralls.io/repos/alinex/node-monitor-sensor/badge.png?branch=master" alt="Coverage Status" title="" /></a>
 <a href="https://gemnasium.com/alinex/node-monitor-sensor"><img src="https://gemnasium.com/alinex/node-monitor-sensor.png" alt="Dependency Status" title="" /></a></p>
 
-<p>This module is part of the <a href="http://alinex.github.io/node-monitor">Monitoring</a>
+<p>This module is part of the <a href="http://alinex.github.io/node-monitor.html">Monitoring</a>
 modules and applications but can be used as standalone module in other projects,
 too.</p>
 
@@ -83,7 +86,7 @@ too.</p>
 <li>supports verbose mode and debugging</li>
 </ul>
 
-<p>It is one of the modules of the <a href="http://alinex.github.io/node-alinex">Alinex Universe</a>
+<p>It is one of the modules of the <a href="http://alinex.github.io/node-alinex.html">Alinex Universe</a>
 following the code standards defined there.</p>
 
 
@@ -151,15 +154,15 @@ following the code standards defined there.</p>
 
 
 
-<p>You may also give a <a href="http://alinex.github.io/node-config">alinex-config</a> object
+<p>You may also give a <a href="http://alinex.github.io/node-config.html">alinex-config</a> object
 here.</p>
 
 <p>Now you can start it using a callback method:</p>
 
 
-<div class="highlight"><pre><code><span class="nx">ping</span><span class="p">.</span><span class="nx">run</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
+<div class="highlight"><pre><code><span class="nx">ping</span><span class="p">.</span><span class="nx">run</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">sensor</span><span class="p">)</span> <span class="p">{</span>
   <span class="c1">// do something with result in ping object</span>
-  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">ping</span><span class="p">);</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">sensor</span><span class="p">);</span>
 <span class="p">});</span>
 </code></pre></div>
 
@@ -193,6 +196,25 @@ here.</p>
 
 
 
+<div class="pilwrap" id="status">
+  <h2>
+    <a href="#status" name="status" class="pilcrow">&#182;</a>
+    Status
+  </h2>
+</div>
+
+
+<p>The sensors uses the following status:</p>
+
+<p><strong>running</strong> if the sensor is already analyzing, you have to wait</p>
+
+<p><strong>ok</strong> if everything is perfect, there nothing have to be done</p>
+
+<p><strong>warn</strong> if the sensor reached the warning level, know you have to keep an eye on it</p>
+
+<p><strong>fail</strong> if the sensor failed and there is a problem</p>
+
+
 <div class="pilwrap" id="api">
   <h2>
     <a href="#api" name="api" class="pilcrow">&#182;</a>
@@ -211,9 +233,13 @@ here.</p>
 
 
 <ul>
-<li><a href="src/ping.coffee.html">Ping</a> - network ping test</li>
-<li><a href="src/socket.coffee.html">Socket</a> - test port connectivity</li>
-<li><a href="src/http.coffee.html">Http</a> - try requesting an url</li>
+<li><a href="src/type/cpu.coffee.html">Cpu</a> - cpu activity check</li>
+<li><a href="src/type/load.coffee.html">Load</a> - cpu load check</li>
+<li><a href="src/type/memory.coffee.html">Memory</a> - check free memory</li>
+<li><a href="src/type/diskfree.coffee.html">Diskfree</a> - free disk space</li>
+<li><a href="src/type/ping.coffee.html">Ping</a> - network ping test</li>
+<li><a href="src/type/socket.coffee.html">Socket</a> - test port connectivity</li>
+<li><a href="src/type/http.coffee.html">Http</a> - try requesting an url</li>
 </ul>
 
 
@@ -248,10 +274,10 @@ here.</p>
 </ul>
 
 
-<div class="pilwrap" id="static%20properties">
+<div class="pilwrap" id="class%20properties">
   <h4>
-    <a href="#static%20properties" name="static%20properties" class="pilcrow">&#182;</a>
-    Static properties
+    <a href="#class%20properties" name="class%20properties" class="pilcrow">&#182;</a>
+    Class properties
   </h4>
 </div>
 
@@ -282,10 +308,10 @@ style)</li>
 <li><code>config</code> - configuration (given combined with defaults)</li>
 <li><code>result</code> - the results:
 <ul><li><code>date</code> - start date of last or current run</li>
-<li><code>status</code> - status of the last or current run</li>
+<li><code>status</code> - status of the last or current run (ok, warn, fail)</li>
+<li><code>message</code> - error message of the last or current run</li>
 <li><code>value</code> - map of measured values</li>
-<li><code>data</code> - complete data from the last or current run</li>
-<li><code>message</code> - error message of the last or current run</li></ul></li>
+<li><code>analysis</code> - additional analysis data</li></ul></li>
 </ul>
 
 

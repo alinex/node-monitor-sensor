@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>diskfree.coffee</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <link rel="stylesheet" media="all" href="../../doc-style.css" />
+  <script src="../../doc-filelist.js"></script>
+  <script>
+    var relativeDir = "../../", thisFile = "home/alex/a3/node-monitor-sensor/src/type/diskfreecoffee", defaultSidebar = true;
+  </script>
+  <script src="../../doc-script.js"></script>
+  <script src="../../fileSearch.js"></script>
+  <script src="../../goToLine.js"></script>
+  <link rel="stylesheet" href="../../fileSearch.css" />
+  <link rel="stylesheet" href="../../goToLine.css" />
+</head>
+<body>
+  <div id="sidebar_wrapper">
+    <div id="sidebar_switch">
+      <span class="tree">Files</span>
+      <span class="headings">Headings</span>
+    </div>
+    <div id="tree"></div>
+    <div id="headings">
+      <div class="heading h1">
+        <a href="#check%20disk%20space">Check disk space</a>
+      </div>
+      <div class="heading h2">
+        <a href="#node%20modules">Node Modules</a>
+      </div>
+      <div class="heading h2">
+        <a href="#sensor%20class">Sensor class</a>
+      </div>
+      <div class="heading h3">
+        <a href="#general%20information">General information</a>
+      </div>
+      <div class="heading h3">
+        <a href="#create%20instance">Create instance</a>
+      </div>
+      <div class="heading h3">
+        <a href="#run%20the%20check">Run the check</a>
+      </div>
+      <div class="heading h2">
+        <a href="#export%20class">Export class</a>
+      </div>
+    </div>
+  </div>
+  <div id="sidebar-toggle"></div>
+  <div id="container"><a id="fork" href="https://github.com/alinex/node-monitor-sensor" title="Fork me on GitHub"></a><div class="background highlight"></div>
+<table cellpadding="0" cellspacing="0">
+  <tbody>
+      <tr>
+        <td class="docs">
+<div class="pilwrap" id="check%20disk%20space">
+  <h1>
+    <a href="#check%20disk%20space" name="check%20disk%20space" class="pilcrow">&#182;</a>
+    Check disk space
+  </h1>
+</div>
+
+        </td>
+        <td class="code highlight"><div class="highlight"><pre></pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap" id="node%20modules">
+  <h2>
+    <a href="#node%20modules" name="node%20modules" class="pilcrow">&#182;</a>
+    Node Modules
+  </h2>
+</div>
+
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-3" id="section-3">&#182;</a>
+</div>
+<p>include base modules</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+<span class="nv">debug = </span><span class="nx">require</span><span class="p">(</span><span class="s">&#39;debug&#39;</span><span class="p">)(</span><span class="s">&#39;monitor:sensor:diskfree&#39;</span><span class="p">)</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-4" id="section-4">&#182;</a>
+</div>
+<p>include alinex packages</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+<span class="p">{</span><span class="nx">object</span><span class="p">,</span><span class="nx">number</span><span class="p">,</span><span class="nx">string</span><span class="p">}</span> <span class="o">=</span> <span class="nx">require</span> <span class="s">&#39;alinex-util&#39;</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-5" id="section-5">&#182;</a>
+</div>
+<p>include classes and helper</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+<span class="nv">Sensor = </span><span class="nx">require</span> <span class="s">&#39;../base&#39;</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-6" id="section-6">&#182;</a>
+</div>
+<p>specific modules for this check</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+<span class="nv">os = </span><span class="nx">require</span> <span class="s">&#39;os&#39;</span>
+<span class="p">{</span><span class="nx">exec</span><span class="p">}</span> <span class="o">=</span> <span class="nx">require</span> <span class="s">&#39;child_process&#39;</span>
+<span class="nv">async = </span><span class="nx">require</span> <span class="s">&#39;async&#39;</span>
+<span class="nv">math = </span><span class="nx">require</span> <span class="s">&#39;mathjs&#39;</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap" id="sensor%20class">
+  <h2>
+    <a href="#sensor%20class" name="sensor%20class" class="pilcrow">&#182;</a>
+    Sensor class
+  </h2>
+</div>
+
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+<span class="k">class</span> <span class="nx">DiskfreeSensor</span> <span class="k">extends</span> <span class="nx">Sensor</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap" id="general%20information">
+  <h3>
+    <a href="#general%20information" name="general%20information" class="pilcrow">&#182;</a>
+    General information
+  </h3>
+</div>
+
+
+<p>This information may be used later for display and explanation.</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+  <span class="vi">@meta =</span>
+    <span class="nv">name: </span><span class="s">&#39;Diskfree&#39;</span>
+    <span class="nv">description: </span><span class="s">&quot;Test the free diskspace of one share.&quot;</span>
+    <span class="nv">category: </span><span class="s">&#39;sys&#39;</span>
+    <span class="nv">level: </span><span class="mi">1</span>
+    <span class="nv">hint: </span><span class="s">&quot;If a share is full it will make I/O problems in the system or applications</span>
+<span class="s">    in case of the root partition it may also neither be possible to log errors.</span>
+<span class="s">    Maybe some old files like temp or logs can be removed or compressed. &quot;</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-9" id="section-9">&#182;</a>
+</div>
+<p>Check for configuration settings <a href="http://alinex.githhub.io/node-validator">alinex-validator</a>
+compatible:</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+    <span class="nv">config:</span>
+      <span class="nv">title: </span><span class="s">&quot;Disk free Test&quot;</span>
+      <span class="nv">type: </span><span class="s">&#39;object&#39;</span>
+      <span class="nv">allowedKeys: </span><span class="kc">true</span>
+      <span class="nv">entries:</span>
+        <span class="nv">share:</span>
+          <span class="nv">title: </span><span class="s">&quot;Share or Mount&quot;</span>
+          <span class="nv">description: </span><span class="s">&quot;the disk share&#39;s path or mount point to check&quot;</span>
+          <span class="nv">type: </span><span class="s">&#39;string&#39;</span>
+        <span class="nv">timeout:</span>
+          <span class="nv">title: </span><span class="s">&quot;Overall Timeout&quot;</span>
+          <span class="nv">description: </span><span class="s">&quot;the time in milliseconds the whole test may take before</span>
+<span class="s">            stopping and failing it&quot;</span>
+          <span class="nv">type: </span><span class="s">&#39;interval&#39;</span>
+          <span class="nv">unit: </span><span class="s">&#39;ms&#39;</span>
+          <span class="nv">min: </span><span class="mi">500</span>
+          <span class="nv">default: </span><span class="mi">1000</span>
+        <span class="nv">freeWarn:</span>
+          <span class="nv">title: </span><span class="s">&quot;Free Warn&quot;</span>
+          <span class="nv">description: </span><span class="s">&quot;the minimum free space on share&quot;</span>
+          <span class="nv">type: </span><span class="s">&#39;any&#39;</span>
+          <span class="nv">optional: </span><span class="kc">true</span>
+          <span class="nv">entries: </span><span class="p">[</span>
+            <span class="nv">type: </span><span class="s">&#39;byte&#39;</span>
+            <span class="nv">min:</span>
+              <span class="nv">reference: </span><span class="s">&#39;relative&#39;</span>
+              <span class="nv">source: </span><span class="s">&#39;&lt;freeFail&#39;</span>
+          <span class="p">,</span>
+            <span class="nv">type: </span><span class="s">&#39;percent&#39;</span>
+            <span class="nv">min:</span>
+              <span class="nv">reference: </span><span class="s">&#39;relative&#39;</span>
+              <span class="nv">source: </span><span class="s">&#39;&lt;freeFail&#39;</span>
+          <span class="p">]</span>
+        <span class="nv">freeFail:</span>
+          <span class="nv">title: </span><span class="s">&quot;Free Fail&quot;</span>
+          <span class="nv">description: </span><span class="s">&quot;the minimum free space on share&quot;</span>
+          <span class="nv">type: </span><span class="s">&#39;any&#39;</span>
+          <span class="nv">optional: </span><span class="kc">true</span>
+          <span class="nv">entries: </span><span class="p">[</span>
+            <span class="nv">type: </span><span class="s">&#39;byte&#39;</span>
+          <span class="p">,</span>
+            <span class="nv">type: </span><span class="s">&#39;percent&#39;</span>
+          <span class="p">]</span>
+        <span class="nv">analysis:</span>
+          <span class="nv">title: </span><span class="s">&quot;Analysis Paths&quot;</span>
+          <span class="nv">description: </span><span class="s">&quot;list of directories to monitor their volume on warning&quot;</span>
+          <span class="nv">type: </span><span class="s">&#39;array&#39;</span>
+          <span class="nv">optional: </span><span class="kc">true</span>
+          <span class="nv">delimiter: </span><span class="sr">/,\s+/</span>
+          <span class="nv">entries:</span>
+            <span class="nv">title: </span><span class="s">&quot;Directory&quot;</span>
+            <span class="nv">type: </span><span class="s">&#39;string&#39;</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-10" id="section-10">&#182;</a>
+</div>
+<p>Definition of response values</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+    <span class="nv">values:</span>
+      <span class="nv">share:</span>
+        <span class="nv">title: </span><span class="s">&#39;Share&#39;</span>
+        <span class="nv">description: </span><span class="s">&quot;path name of the share&quot;</span>
+        <span class="nv">type: </span><span class="s">&#39;string&#39;</span>
+      <span class="nv">type:</span>
+        <span class="nv">title: </span><span class="s">&#39;Type&#39;</span>
+        <span class="nv">description: </span><span class="s">&quot;type of filesystem&quot;</span>
+        <span class="nv">type: </span><span class="s">&#39;string&#39;</span>
+      <span class="nv">total:</span>
+        <span class="nv">title: </span><span class="s">&#39;Available&#39;</span>
+        <span class="nv">description: </span><span class="s">&quot;the space, which is available&quot;</span>
+        <span class="nv">type: </span><span class="s">&#39;byte&#39;</span>
+        <span class="nv">unit: </span><span class="s">&#39;B&#39;</span>
+      <span class="nv">used:</span>
+        <span class="nv">title: </span><span class="s">&#39;Used&#39;</span>
+        <span class="nv">description: </span><span class="s">&quot;the space, which is already used&quot;</span>
+        <span class="nv">type: </span><span class="s">&#39;byte&#39;</span>
+        <span class="nv">unit: </span><span class="s">&#39;B&#39;</span>
+      <span class="nv">free:</span>
+        <span class="nv">title: </span><span class="s">&#39;Free&#39;</span>
+        <span class="nv">description: </span><span class="s">&quot;the space, which is free&quot;</span>
+        <span class="nv">type: </span><span class="s">&#39;byte&#39;</span>
+        <span class="nv">unit: </span><span class="s">&#39;B&#39;</span>
+      <span class="nv">mount:</span>
+        <span class="nv">title: </span><span class="s">&#39;Mountpoint&#39;</span>
+        <span class="nv">description: </span><span class="s">&quot;the path this share is mounted to&quot;</span>
+        <span class="nv">type: </span><span class="s">&#39;string&#39;</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap" id="create%20instance">
+  <h3>
+    <a href="#create%20instance" name="create%20instance" class="pilcrow">&#182;</a>
+    Create instance
+  </h3>
+</div>
+
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+  <span class="nv">constructor: </span><span class="nf">(config) -&gt;</span> <span class="k">super</span> <span class="nx">config</span><span class="p">,</span> <span class="nx">debug</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap" id="run%20the%20check">
+  <h3>
+    <a href="#run%20the%20check" name="run%20the%20check" class="pilcrow">&#182;</a>
+    Run the check
+  </h3>
+</div>
+
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+  <span class="nv">run: </span><span class="nf">(cb = -&gt;) -&gt;</span>
+    <span class="nx">@_start</span><span class="p">()</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-13" id="section-13">&#182;</a>
+</div>
+<p>comand syntax, os dependent</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+    <span class="nv">p = </span><span class="nx">os</span><span class="p">.</span><span class="nx">platform</span><span class="p">()</span>
+    <span class="nv">diskfree = </span><span class="k">switch</span> <span class="nx">p</span>
+      <span class="k">when</span> <span class="s">&#39;linux&#39;</span><span class="p">,</span> <span class="s">&#39;darwin&#39;</span>
+        <span class="nv">cmd: </span><span class="s">&#39;/bin/df&#39;</span>
+        <span class="nv">args: </span><span class="p">[</span><span class="s">&#39;-kT&#39;</span><span class="p">,</span> <span class="nx">@config</span><span class="p">.</span><span class="nx">share</span><span class="p">]</span>
+      <span class="k">when</span> <span class="nx">p</span><span class="p">.</span><span class="nx">match</span> <span class="sr">/^win/</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-14" id="section-14">&#182;</a>
+</div>
+<p>For windows maybe <a href="https://github.com/keverw/drivespace">drivespace</a>
+works, but this is not tested.</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+        <span class="nv">cmd: </span><span class="s">&#39;../bin/drivespace.exe&#39;</span>
+        <span class="nv">args: </span><span class="p">[</span><span class="s">&quot;drive-</span><span class="si">#{</span><span class="nx">@config</span><span class="p">.</span><span class="nx">share</span><span class="si">}</span><span class="s">&quot;</span><span class="p">]</span>
+      <span class="k">else</span>
+        <span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span> <span class="s">&quot;Operating system </span><span class="si">#{</span><span class="nx">p</span><span class="si">}</span><span class="s"> is not supported in diskfree.&quot;</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-15" id="section-15">&#182;</a>
+</div>
+<p>run the diskfree test</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+    <span class="nx">@_spawn</span> <span class="nx">diskfree</span><span class="p">.</span><span class="nx">cmd</span><span class="p">,</span> <span class="nx">diskfree</span><span class="p">.</span><span class="nx">args</span><span class="p">,</span>
+      <span class="nv">timeout: </span><span class="nx">@config</span><span class="p">.</span><span class="nx">timeout</span>
+    <span class="p">,</span> <span class="nf">(err, stdout, stderr, code) =&gt;</span>
+      <span class="k">return</span> <span class="nx">@_end</span> <span class="s">&#39;fail&#39;</span><span class="p">,</span> <span class="nx">err</span><span class="p">,</span> <span class="nx">cb</span> <span class="k">if</span> <span class="nx">err</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-16" id="section-16">&#182;</a>
+</div>
+<p>parse results</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+      <span class="nv">lines = </span><span class="nx">stdout</span><span class="p">.</span><span class="nx">split</span> <span class="sr">/\n/</span>
+      <span class="nv">val = </span><span class="nx">@result</span><span class="p">.</span><span class="nx">value</span>
+      <span class="k">if</span> <span class="nx">p</span><span class="p">.</span><span class="nx">match</span> <span class="sr">/^win/</span>
+        <span class="p">[</span><span class="nx">val</span><span class="p">.</span><span class="nx">total</span><span class="p">,</span> <span class="nx">val</span><span class="p">.</span><span class="nx">free</span><span class="p">,</span> <span class="nx">status</span><span class="p">]</span>
+        <span class="nv">col = </span><span class="nx">lines</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nx">split</span> <span class="s">&#39;,&#39;</span>
+        <span class="nv">val.total = </span><span class="nb">Number</span><span class="p">(</span><span class="nx">col</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">*</span><span class="mi">1024</span>
+        <span class="nv">val.free = </span><span class="nb">Number</span><span class="p">(</span><span class="nx">col</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span><span class="o">*</span><span class="mi">1024</span>
+        <span class="nv">val.used = </span><span class="nx">val</span><span class="p">.</span><span class="nx">total</span> <span class="o">-</span> <span class="nx">val</span><span class="p">.</span><span class="nx">free</span>
+        <span class="nv">val.mount = </span><span class="nx">@config</span><span class="p">.</span><span class="nx">share</span>
+      <span class="k">else</span>
+        <span class="nv">col = </span><span class="nx">lines</span><span class="p">[</span><span class="mi">1</span><span class="p">].</span><span class="nx">split</span> <span class="sr">/\s+/</span>
+        <span class="nv">val.share = </span><span class="nx">col</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="nv">val.type = </span><span class="nx">col</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="nv">val.used = </span><span class="nb">Number</span><span class="p">(</span><span class="nx">col</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span><span class="o">*</span><span class="mi">1024</span>
+        <span class="nv">val.free = </span><span class="nb">Number</span><span class="p">(</span><span class="nx">col</span><span class="p">[</span><span class="mi">4</span><span class="p">])</span><span class="o">*</span><span class="mi">1024</span>
+        <span class="nv">val.total = </span><span class="nx">val</span><span class="p">.</span><span class="nx">used</span> <span class="o">+</span> <span class="nx">val</span><span class="p">.</span><span class="nx">free</span>
+        <span class="nv">val.mount = </span><span class="nx">col</span><span class="p">[</span><span class="mi">6</span><span class="p">]</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-17" id="section-17">&#182;</a>
+</div>
+<p>evaluate to check status</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+      <span class="k">switch</span>
+        <span class="k">when</span> <span class="nx">val</span><span class="p">.</span><span class="nx">used</span> <span class="o">+</span> <span class="nx">val</span><span class="p">.</span><span class="nx">avail</span> <span class="o">is</span> <span class="mi">0</span>
+          <span class="nv">status = </span><span class="s">&#39;fail&#39;</span>
+          <span class="nv">message = </span><span class="s">&quot;</span><span class="si">#{</span><span class="nx">@constructor</span><span class="p">.</span><span class="nx">meta</span><span class="p">.</span><span class="nx">name</span><span class="si">}</span><span class="s"> no space available on share </span><span class="si">#{</span><span class="nx">@config</span><span class="p">.</span><span class="nx">share</span><span class="si">}</span><span class="s">&quot;</span>
+        <span class="k">when</span> <span class="nx">@config</span><span class="p">.</span><span class="nx">freeFail</span><span class="o">?</span> <span class="o">and</span> <span class="nx">val</span><span class="p">.</span><span class="nx">free</span> <span class="o">&lt;</span> <span class="nx">@config</span><span class="p">.</span><span class="nx">freeFail</span>
+          <span class="nv">status = </span><span class="s">&#39;fail&#39;</span>
+          <span class="nv">message = </span><span class="s">&quot;</span><span class="si">#{</span><span class="nx">@constructor</span><span class="p">.</span><span class="nx">meta</span><span class="p">.</span><span class="nx">name</span><span class="si">}</span><span class="s"> too less space on </span><span class="si">#{</span><span class="nx">@config</span><span class="p">.</span><span class="nx">share</span><span class="si">}</span><span class="s">&quot;</span>
+        <span class="k">when</span> <span class="nx">@config</span><span class="p">.</span><span class="nx">freeWarn</span><span class="o">?</span> <span class="o">and</span> <span class="nx">val</span><span class="p">.</span><span class="nx">free</span> <span class="o">&lt;</span> <span class="nx">@config</span><span class="p">.</span><span class="nx">freeWarn</span>
+          <span class="nv">status = </span><span class="s">&#39;warn&#39;</span>
+        <span class="k">else</span>
+          <span class="nv">status = </span><span class="s">&#39;ok&#39;</span>
+      <span class="k">if</span> <span class="o">not</span> <span class="nx">@config</span><span class="p">.</span><span class="nx">analysis</span><span class="o">?</span><span class="p">.</span><span class="nx">length</span>
+        <span class="k">return</span> <span class="nx">@_end</span> <span class="nx">status</span><span class="p">,</span> <span class="nx">message</span><span class="p">,</span> <span class="nx">cb</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-18" id="section-18">&#182;</a>
+</div>
+<p>get additional information</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+      <span class="vi">@result.analysis = </span><span class="s">&quot;&quot;&quot;</span>
+<span class="s">        Maybe some files in one of the following directories may be deleted or moved:</span>
+
+<span class="s">        | PATH                                |  FILES  |    SIZE    |   OLDEST   |</span>
+<span class="s">        | ----------------------------------- | ------: | ---------: | :--------- |\n&quot;&quot;&quot;</span>
+      <span class="nx">async</span><span class="p">.</span><span class="nx">map</span> <span class="nx">@config</span><span class="p">.</span><span class="nx">analysis</span><span class="p">,</span> <span class="nf">(dir, cb) =&gt;</span>
+        <span class="nv">cmd = </span><span class="s">&quot;find /tmp -type f 2&gt;/dev/null | xargs ls -ltr --time-style=+%Y-%m-%d </span>
+<span class="s">        | awk &#39;{n++;b+=$5;if(d==\&quot;\&quot;){d=$6};if(d&gt;$6){d=$6}} END{print n,b,d}&#39;&quot;</span>
+        <span class="nx">exec</span> <span class="nx">cmd</span><span class="p">,</span>
+          <span class="nv">timeout: </span><span class="mi">30000</span>
+        <span class="p">,</span> <span class="nf">(err, stdout, stderr) -&gt;</span>
+          <span class="k">unless</span> <span class="nx">stdout</span>
+            <span class="k">return</span> <span class="nx">cb</span> <span class="kc">null</span><span class="p">,</span> <span class="s">&quot;| </span><span class="si">#{</span><span class="nx">string</span><span class="p">.</span><span class="nx">rpad</span> <span class="nx">dir</span><span class="p">,</span> <span class="mi">40</span><span class="si">}</span><span class="s"> |     ? |          ? | ?          |\n&quot;</span>
+          <span class="nv">col = </span><span class="nx">stdout</span><span class="p">.</span><span class="nx">toString</span><span class="p">().</span><span class="nx">split</span> <span class="sr">/\s+/</span>
+          <span class="nv">byte = </span><span class="nx">math</span><span class="p">.</span><span class="nx">unit</span> <span class="nb">parseInt</span><span class="p">(</span><span class="nx">col</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span> <span class="s">&#39;B&#39;</span>
+          <span class="nx">cb</span> <span class="kc">null</span><span class="p">,</span> <span class="s">&quot;| </span><span class="si">#{</span><span class="nx">string</span><span class="p">.</span><span class="nx">rpad</span> <span class="nx">dir</span><span class="p">,</span> <span class="mi">35</span><span class="si">}</span><span class="s"> | </span><span class="si">#{</span><span class="nx">string</span><span class="p">.</span><span class="nx">lpad</span> <span class="nx">col</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">7</span><span class="si">}</span><span class="s"> </span>
+<span class="s">          | </span><span class="si">#{</span><span class="nx">string</span><span class="p">.</span><span class="nx">lpad</span> <span class="nx">byte</span><span class="p">.</span><span class="nx">format</span><span class="p">(</span><span class="mi">3</span><span class="p">),</span> <span class="mi">10</span><span class="si">}</span><span class="s"> </span>
+<span class="s">          | </span><span class="si">#{</span><span class="nx">string</span><span class="p">.</span><span class="nx">lpad</span> <span class="nx">col</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="mi">10</span><span class="si">}</span><span class="s"> |\n&quot;</span>
+      <span class="p">,</span> <span class="nf">(err, lines) =&gt;</span>
+        <span class="nx">@result</span><span class="p">.</span><span class="nx">analysis</span> <span class="o">+=</span> <span class="nx">line</span> <span class="k">for</span> <span class="nx">line</span> <span class="k">in</span> <span class="nx">lines</span>
+        <span class="nx">debug</span> <span class="nx">@result</span><span class="p">.</span><span class="nx">analysis</span>
+        <span class="nx">@_end</span> <span class="nx">status</span><span class="p">,</span> <span class="nx">message</span><span class="p">,</span> <span class="nx">cb</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap" id="export%20class">
+  <h2>
+    <a href="#export%20class" name="export%20class" class="pilcrow">&#182;</a>
+    Export class
+  </h2>
+</div>
+
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+<span class="nv">module.exports = </span><span class="nx">DiskfreeSensor</span>
+</pre></div>
+        </td>
+      </tr>
+  </tbody>
+</table>
+  </div>
+</body>
+</html>

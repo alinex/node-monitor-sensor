@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>load.coffee</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <link rel="stylesheet" media="all" href="../../doc-style.css" />
+  <script src="../../doc-filelist.js"></script>
+  <script>
+    var relativeDir = "../../", thisFile = "home/alex/a3/node-monitor-sensor/src/type/loadcoffee", defaultSidebar = true;
+  </script>
+  <script src="../../doc-script.js"></script>
+  <script src="../../fileSearch.js"></script>
+  <script src="../../goToLine.js"></script>
+  <link rel="stylesheet" href="../../fileSearch.css" />
+  <link rel="stylesheet" href="../../goToLine.css" />
+</head>
+<body>
+  <div id="sidebar_wrapper">
+    <div id="sidebar_switch">
+      <span class="tree">Files</span>
+      <span class="headings">Headings</span>
+    </div>
+    <div id="tree"></div>
+    <div id="headings">
+      <div class="heading h1">
+        <a href="#load%20test%20class">Load test class</a>
+      </div>
+      <div class="heading h2">
+        <a href="#node%20modules">Node Modules</a>
+      </div>
+      <div class="heading h2">
+        <a href="#sensor%20class">Sensor class</a>
+      </div>
+      <div class="heading h3">
+        <a href="#general%20information">General information</a>
+      </div>
+      <div class="heading h3">
+        <a href="#create%20instance">Create instance</a>
+      </div>
+      <div class="heading h3">
+        <a href="#run%20the%20check">Run the check</a>
+      </div>
+      <div class="heading h3">
+        <a href="#format%20last%20result">Format last result</a>
+      </div>
+      <div class="heading h2">
+        <a href="#export%20class">Export class</a>
+      </div>
+    </div>
+  </div>
+  <div id="sidebar-toggle"></div>
+  <div id="container"><a id="fork" href="https://github.com/alinex/node-monitor-sensor" title="Fork me on GitHub"></a><div class="background highlight"></div>
+<table cellpadding="0" cellspacing="0">
+  <tbody>
+      <tr>
+        <td class="docs">
+<div class="pilwrap" id="load%20test%20class">
+  <h1>
+    <a href="#load%20test%20class" name="load%20test%20class" class="pilcrow">&#182;</a>
+    Load test class
+  </h1>
+</div>
+
+
+<p>This may be used to check the performance of a host.</p>
+
+<p>The load values will be normalized, meaning the load per single cpu core will
+be calculated.</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre></pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap" id="node%20modules">
+  <h2>
+    <a href="#node%20modules" name="node%20modules" class="pilcrow">&#182;</a>
+    Node Modules
+  </h2>
+</div>
+
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-3" id="section-3">&#182;</a>
+</div>
+<p>include base modules</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+<span class="nv">debug = </span><span class="nx">require</span><span class="p">(</span><span class="s">&#39;debug&#39;</span><span class="p">)(</span><span class="s">&#39;monitor:sensor:load&#39;</span><span class="p">)</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-4" id="section-4">&#182;</a>
+</div>
+<p>include alinex packages</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+<span class="nv">object = </span><span class="nx">require</span><span class="p">(</span><span class="s">&#39;alinex-util&#39;</span><span class="p">).</span><span class="nx">object</span>
+<span class="nv">string = </span><span class="nx">require</span><span class="p">(</span><span class="s">&#39;alinex-util&#39;</span><span class="p">).</span><span class="nx">string</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-5" id="section-5">&#182;</a>
+</div>
+<p>include classes and helper modules</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+<span class="nv">Sensor = </span><span class="nx">require</span> <span class="s">&#39;../base&#39;</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-6" id="section-6">&#182;</a>
+</div>
+<p>specific modules for this check</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+<span class="nv">os = </span><span class="nx">require</span> <span class="s">&#39;os&#39;</span>
+<span class="p">{</span><span class="nx">exec</span><span class="p">}</span> <span class="o">=</span> <span class="nx">require</span> <span class="s">&#39;child_process&#39;</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap" id="sensor%20class">
+  <h2>
+    <a href="#sensor%20class" name="sensor%20class" class="pilcrow">&#182;</a>
+    Sensor class
+  </h2>
+</div>
+
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+<span class="k">class</span> <span class="nx">LoadSensor</span> <span class="k">extends</span> <span class="nx">Sensor</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap" id="general%20information">
+  <h3>
+    <a href="#general%20information" name="general%20information" class="pilcrow">&#182;</a>
+    General information
+  </h3>
+</div>
+
+
+<p>This information may be used later for display and explanation.</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+  <span class="vi">@meta =</span>
+    <span class="nv">name: </span><span class="s">&#39;Load&#39;</span>
+    <span class="nv">description: </span><span class="s">&quot;Check the local processor activity over the last minute to 15 minutes.&quot;</span>
+    <span class="nv">category: </span><span class="s">&#39;sys&#39;</span>
+    <span class="nv">level: </span><span class="mi">1</span>
+    <span class="nv">hint: </span><span class="s">&quot;A very high system load makes the system irresponsible or really slow.</span>
+<span class="s">    Mostly this is CPU-bound load, load caused by out of memory issues or I/O-bound</span>
+<span class="s">    load problems. &quot;</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-9" id="section-9">&#182;</a>
+</div>
+<p>Check for configuration settings <a href="http://alinex.githhub.io/node-validator">alinex-validator</a>
+compatible:</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+    <span class="nv">config:</span>
+      <span class="nv">title: </span><span class="s">&quot;CPU load check&quot;</span>
+      <span class="nv">type: </span><span class="s">&#39;object&#39;</span>
+      <span class="nv">allowedKeys: </span><span class="kc">true</span>
+      <span class="nv">entries:</span>
+        <span class="nv">shortFail:</span>
+          <span class="nv">title: </span><span class="s">&quot;1min load fail&quot;</span>
+          <span class="nv">description: </span><span class="s">&quot;the minimum level for the one minute load average to fail&quot;</span>
+          <span class="nv">type: </span><span class="s">&#39;percent&#39;</span>
+          <span class="nv">optional: </span><span class="kc">true</span>
+          <span class="nv">min: </span><span class="mi">0</span>
+        <span class="nv">shortWarn:</span>
+          <span class="nv">title: </span><span class="s">&quot;1min load warn&quot;</span>
+          <span class="nv">description: </span><span class="s">&quot;the minimum level for the one minute load average to warn&quot;</span>
+          <span class="nv">type: </span><span class="s">&#39;percent&#39;</span>
+          <span class="nv">optional: </span><span class="kc">true</span>
+          <span class="nv">min: </span><span class="mi">0</span>
+          <span class="nv">max:</span>
+            <span class="nv">reference: </span><span class="s">&#39;relative&#39;</span>
+            <span class="nv">source: </span><span class="s">&#39;&lt;shortFail&#39;</span>
+        <span class="nv">mediumFail:</span>
+          <span class="nv">title: </span><span class="s">&quot;5min load fail&quot;</span>
+          <span class="nv">description: </span><span class="s">&quot;the minimum level for the 5 minute load average to fail&quot;</span>
+          <span class="nv">type: </span><span class="s">&#39;percent&#39;</span>
+          <span class="nv">optional: </span><span class="kc">true</span>
+          <span class="nv">min: </span><span class="mi">0</span>
+        <span class="nv">mediumWarn:</span>
+          <span class="nv">title: </span><span class="s">&quot;5min load warn&quot;</span>
+          <span class="nv">description: </span><span class="s">&quot;the minimum level for the 5 minute load average to warn&quot;</span>
+          <span class="nv">type: </span><span class="s">&#39;percent&#39;</span>
+          <span class="nv">optional: </span><span class="kc">true</span>
+          <span class="nv">min: </span><span class="mi">0</span>
+          <span class="nv">max:</span>
+            <span class="nv">reference: </span><span class="s">&#39;relative&#39;</span>
+            <span class="nv">source: </span><span class="s">&#39;&lt;mediumFail&#39;</span>
+        <span class="nv">longFail:</span>
+          <span class="nv">title: </span><span class="s">&quot;15min load fail&quot;</span>
+          <span class="nv">description: </span><span class="s">&quot;the minimum level for the 15 minute load average to fail&quot;</span>
+          <span class="nv">type: </span><span class="s">&#39;percent&#39;</span>
+          <span class="nv">optional: </span><span class="kc">true</span>
+          <span class="nv">min: </span><span class="mi">0</span>
+        <span class="nv">longWarn:</span>
+          <span class="nv">title: </span><span class="s">&quot;15min load warn&quot;</span>
+          <span class="nv">description: </span><span class="s">&quot;the minimum level for the 15 minute load average to warn&quot;</span>
+          <span class="nv">type: </span><span class="s">&#39;percent&#39;</span>
+          <span class="nv">optional: </span><span class="kc">true</span>
+          <span class="nv">min: </span><span class="mi">0</span>
+          <span class="nv">max:</span>
+            <span class="nv">reference: </span><span class="s">&#39;relative&#39;</span>
+            <span class="nv">source: </span><span class="s">&#39;&lt;longFail&#39;</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-10" id="section-10">&#182;</a>
+</div>
+<p>Definition of response values</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+    <span class="nv">values:</span>
+      <span class="nv">cpu:</span>
+        <span class="nv">title: </span><span class="s">&quot;CPU&quot;</span>
+        <span class="nv">description: </span><span class="s">&quot;cpu model name with brand&quot;</span>
+        <span class="nv">type: </span><span class="s">&#39;string&#39;</span>
+      <span class="nv">cpus:</span>
+        <span class="nv">title: </span><span class="s">&quot;Num Cores&quot;</span>
+        <span class="nv">description: </span><span class="s">&quot;number of cpu cores&quot;</span>
+        <span class="nv">type: </span><span class="s">&#39;integer&#39;</span>
+      <span class="nv">short:</span>
+        <span class="nv">title: </span><span class="s">&quot;1min Load&quot;</span>
+        <span class="nv">description: </span><span class="s">&quot;average value of one minute processor load (normalized)&quot;</span>
+        <span class="nv">type: </span><span class="s">&#39;percent&#39;</span>
+      <span class="nv">medium:</span>
+        <span class="nv">title: </span><span class="s">&quot;5min Load&quot;</span>
+        <span class="nv">description: </span><span class="s">&quot;average value of 5 minute processor load (normalized)&quot;</span>
+        <span class="nv">type: </span><span class="s">&#39;percent&#39;</span>
+      <span class="nv">long:</span>
+        <span class="nv">title: </span><span class="s">&quot;15min Load&quot;</span>
+        <span class="nv">description: </span><span class="s">&quot;average value of 15 minute processor load (normalized)&quot;</span>
+        <span class="nv">type: </span><span class="s">&#39;percent&#39;</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap" id="create%20instance">
+  <h3>
+    <a href="#create%20instance" name="create%20instance" class="pilcrow">&#182;</a>
+    Create instance
+  </h3>
+</div>
+
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+  <span class="nv">constructor: </span><span class="nf">(config) -&gt;</span> <span class="k">super</span> <span class="nx">config</span><span class="p">,</span> <span class="nx">debug</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap" id="run%20the%20check">
+  <h3>
+    <a href="#run%20the%20check" name="run%20the%20check" class="pilcrow">&#182;</a>
+    Run the check
+  </h3>
+</div>
+
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+  <span class="nv">run: </span><span class="nf">(cb = -&gt;) -&gt;</span>
+    <span class="nx">@_start</span><span class="p">()</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-13" id="section-13">&#182;</a>
+</div>
+<p>get data</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+    <span class="nv">load = </span><span class="nx">os</span><span class="p">.</span><span class="nx">loadavg</span><span class="p">()</span>
+    <span class="nv">cpus = </span><span class="nx">os</span><span class="p">.</span><span class="nx">cpus</span><span class="p">()</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-14" id="section-14">&#182;</a>
+</div>
+<p>calculate values</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+    <span class="nv">val = </span><span class="nx">@result</span><span class="p">.</span><span class="nx">value</span>
+    <span class="nv">val.cpus = </span><span class="nx">cpus</span><span class="p">.</span><span class="nx">length</span>
+    <span class="nv">val.cpu = </span><span class="nx">cpus</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nx">model</span><span class="p">.</span><span class="nx">replace</span> <span class="sr">/\s+/g</span><span class="p">,</span> <span class="s">&#39; &#39;</span>
+    <span class="nv">val.short = </span><span class="nx">load</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">/</span> <span class="nx">val</span><span class="p">.</span><span class="nx">cpus</span>
+    <span class="nv">val.medium = </span><span class="nx">load</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">/</span> <span class="nx">val</span><span class="p">.</span><span class="nx">cpus</span>
+    <span class="nv">val.long = </span><span class="nx">load</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">/</span> <span class="nx">val</span><span class="p">.</span><span class="nx">cpus</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-15" id="section-15">&#182;</a>
+</div>
+<p>evaluate to check status</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+    <span class="nv">status = </span><span class="k">switch</span>
+      <span class="k">when</span> <span class="nx">@config</span><span class="p">.</span><span class="nx">shortFail</span><span class="o">?</span> <span class="o">and</span> <span class="nx">val</span><span class="p">.</span><span class="nx">short</span> <span class="o">&gt;</span> <span class="nx">@config</span><span class="p">.</span><span class="nx">shortFail</span><span class="p">,</span> <span class="o">\</span>
+           <span class="nx">@config</span><span class="p">.</span><span class="nx">mediumFail</span><span class="o">?</span> <span class="o">and</span> <span class="nx">val</span><span class="p">.</span><span class="nx">medium</span> <span class="o">&gt;</span> <span class="nx">@config</span><span class="p">.</span><span class="nx">mediumFail</span><span class="p">,</span> <span class="o">\</span>
+           <span class="nx">@config</span><span class="p">.</span><span class="nx">longFail</span><span class="o">?</span> <span class="o">and</span> <span class="nx">val</span><span class="p">.</span><span class="nx">long</span> <span class="o">&gt;</span> <span class="nx">@config</span><span class="p">.</span><span class="nx">longFail</span>
+        <span class="s">&#39;fail&#39;</span>
+      <span class="k">when</span> <span class="nx">@config</span><span class="p">.</span><span class="nx">shortWarn</span><span class="o">?</span> <span class="o">and</span> <span class="nx">val</span><span class="p">.</span><span class="nx">short</span> <span class="o">&gt;</span> <span class="nx">@config</span><span class="p">.</span><span class="nx">shortWarn</span><span class="p">,</span> <span class="o">\</span>
+           <span class="nx">@config</span><span class="p">.</span><span class="nx">mediumWarn</span><span class="o">?</span> <span class="o">and</span> <span class="nx">val</span><span class="p">.</span><span class="nx">medium</span> <span class="o">&gt;</span> <span class="nx">@config</span><span class="p">.</span><span class="nx">mediumWarn</span><span class="p">,</span> <span class="o">\</span>
+           <span class="nx">@config</span><span class="p">.</span><span class="nx">longWarn</span><span class="o">?</span> <span class="o">and</span> <span class="nx">val</span><span class="p">.</span><span class="nx">long</span> <span class="o">&gt;</span> <span class="nx">@config</span><span class="p">.</span><span class="nx">longWarn</span>
+        <span class="s">&#39;warn&#39;</span>
+      <span class="k">else</span>
+        <span class="s">&#39;ok&#39;</span>
+    <span class="nv">message = </span><span class="k">switch</span> <span class="nx">status</span>
+      <span class="k">when</span> <span class="s">&#39;fail&#39;</span>
+        <span class="s">&quot;</span><span class="si">#{</span><span class="nx">@constructor</span><span class="p">.</span><span class="nx">meta</span><span class="p">.</span><span class="nx">name</span><span class="si">}</span><span class="s"> exited with status </span><span class="si">#{</span><span class="nx">status</span><span class="si">}</span><span class="s">&quot;</span>
+    <span class="k">if</span> <span class="nx">status</span> <span class="o">is</span> <span class="s">&#39;ok&#39;</span>
+      <span class="k">return</span> <span class="nx">@_end</span> <span class="nx">status</span><span class="p">,</span> <span class="nx">message</span><span class="p">,</span> <span class="nx">cb</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-16" id="section-16">&#182;</a>
+</div>
+<p>get additional information</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+    <span class="nv">cmd = </span><span class="s">&quot;ps axu | awk &#39;NR&gt;1 {print $2, $3, $4, $11}&#39;&quot;</span>
+    <span class="nx">exec</span> <span class="nx">cmd</span><span class="p">,</span> <span class="nf">(err, stdout, stderr) =&gt;</span>
+      <span class="k">unless</span> <span class="nx">err</span>
+        <span class="nv">procs = </span><span class="p">{}</span>
+        <span class="k">for</span> <span class="nx">line</span> <span class="k">in</span> <span class="nx">stdout</span><span class="p">.</span><span class="nx">toString</span><span class="p">().</span><span class="nx">split</span> <span class="sr">/\n/</span>
+          <span class="k">continue</span> <span class="k">unless</span> <span class="nx">line</span>
+          <span class="nv">col = </span><span class="nx">line</span><span class="p">.</span><span class="nx">split</span> <span class="sr">/\s/</span><span class="p">,</span> <span class="mi">4</span>
+          <span class="k">unless</span> <span class="nx">procs</span><span class="p">[</span><span class="nx">col</span><span class="p">[</span><span class="mi">3</span><span class="p">]]</span>
+            <span class="nx">procs</span><span class="p">[</span><span class="nx">col</span><span class="p">[</span><span class="mi">3</span><span class="p">]]</span> <span class="o">=</span> <span class="p">[</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span> <span class="p">]</span>
+          <span class="nx">procs</span><span class="p">[</span><span class="nx">col</span><span class="p">[</span><span class="mi">3</span><span class="p">]][</span><span class="mi">0</span><span class="p">]</span><span class="o">++</span>
+          <span class="nx">procs</span><span class="p">[</span><span class="nx">col</span><span class="p">[</span><span class="mi">3</span><span class="p">]][</span><span class="mi">1</span><span class="p">]</span> <span class="o">+=</span> <span class="nb">parseFloat</span> <span class="nx">col</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+          <span class="nx">procs</span><span class="p">[</span><span class="nx">col</span><span class="p">[</span><span class="mi">3</span><span class="p">]][</span><span class="mi">2</span><span class="p">]</span> <span class="o">+=</span> <span class="nb">parseFloat</span> <span class="nx">col</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+        <span class="nv">keys = </span><span class="nb">Object</span><span class="p">.</span><span class="nx">keys</span><span class="p">(</span><span class="nx">procs</span><span class="p">).</span><span class="nx">sort</span> <span class="nf">(a,b) -&gt;</span>
+          <span class="p">(</span><span class="nx">procs</span><span class="p">[</span><span class="nx">b</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="mi">100</span><span class="o">+</span><span class="nx">procs</span><span class="p">[</span><span class="nx">b</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span> <span class="o">-</span> <span class="p">(</span><span class="nx">procs</span><span class="p">[</span><span class="nx">a</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="mi">100</span><span class="o">+</span><span class="nx">procs</span><span class="p">[</span><span class="nx">a</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span>
+        <span class="vi">@result.analysis = </span><span class="s">&quot;&quot;&quot;</span>
+<span class="s">        Currently the top processes are:</span>
+
+<span class="s">        | COUNT |  %CPU |  %MEM | COMMAND                                            |</span>
+<span class="s">        | ----: | ----: | ----: | -------------------------------------------------- |\n&quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="nx">proc</span> <span class="k">in</span> <span class="nx">keys</span>
+          <span class="nv">value = </span><span class="nx">procs</span><span class="p">[</span><span class="nx">proc</span><span class="p">]</span>
+          <span class="k">continue</span> <span class="k">if</span> <span class="nx">value</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">is</span> <span class="mi">1</span> <span class="o">and</span> <span class="nx">value</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">10</span>
+          <span class="nx">@result</span><span class="p">.</span><span class="nx">analysis</span> <span class="o">+=</span> <span class="s">&quot;| </span><span class="si">#{</span><span class="nx">string</span><span class="p">.</span><span class="nx">lpad</span> <span class="nx">value</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">5</span><span class="si">}</span><span class="s"> | </span><span class="si">#{</span><span class="nx">string</span><span class="p">.</span><span class="nx">lpad</span> <span class="nx">value</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="mi">5</span><span class="si">}</span><span class="s"></span>
+<span class="s">          | </span><span class="si">#{</span><span class="nx">string</span><span class="p">.</span><span class="nx">lpad</span> <span class="nx">value</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="mi">5</span><span class="si">}</span><span class="s"> | </span><span class="si">#{</span><span class="nx">string</span><span class="p">.</span><span class="nx">rpad</span> <span class="nx">proc</span><span class="p">,</span> <span class="mi">50</span><span class="si">}</span><span class="s"> |\n&quot;</span>
+        <span class="nx">debug</span> <span class="nx">@result</span><span class="p">.</span><span class="nx">analysis</span>
+      <span class="nx">@_end</span> <span class="nx">status</span><span class="p">,</span> <span class="nx">message</span><span class="p">,</span> <span class="nx">cb</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap" id="format%20last%20result">
+  <h3>
+    <a href="#format%20last%20result" name="format%20last%20result" class="pilcrow">&#182;</a>
+    Format last result
+  </h3>
+</div>
+
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+  <span class="nv">format: </span><span class="nf">-&gt;</span>
+    <span class="nv">meta = </span><span class="nx">@constructor</span><span class="p">.</span><span class="nx">meta</span>
+    <span class="nv">text = </span><span class="s">&quot;&quot;&quot;</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-18" id="section-18">&#182;</a>
+</div>
+<p>{meta.description}\n\nLast check results are:</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+
+<span class="s">      |       RESULT       |    VALUE     |     WARN     |    ERROR     |</span>
+<span class="s">      | ------------------ | -----------: | -----------: | -----------: |\n&quot;&quot;&quot;</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-19" id="section-19">&#182;</a>
+</div>
+<p>table of values</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+    <span class="k">for</span> <span class="nx">name</span><span class="p">,</span> <span class="nx">set</span> <span class="k">of</span> <span class="nx">meta</span><span class="p">.</span><span class="nx">values</span>
+      <span class="nv">val = </span><span class="s">&#39;&#39;</span>
+      <span class="k">if</span> <span class="nx">@result</span><span class="p">.</span><span class="nx">value</span><span class="p">[</span><span class="nx">name</span><span class="p">]</span><span class="o">?</span>
+        <span class="nv">val = </span><span class="k">switch</span> <span class="nx">set</span><span class="p">.</span><span class="nx">type</span>
+          <span class="k">when</span> <span class="s">&#39;percent&#39;</span>
+            <span class="p">(</span><span class="nb">Math</span><span class="p">.</span><span class="nx">round</span><span class="p">(</span><span class="nx">@result</span><span class="p">.</span><span class="nx">value</span><span class="p">[</span><span class="nx">name</span><span class="p">]</span> <span class="o">*</span> <span class="mi">100</span><span class="p">)</span> <span class="o">/</span> <span class="mi">100</span><span class="p">).</span><span class="nx">toString</span><span class="p">()</span> <span class="o">+</span> <span class="s">&#39; %&#39;</span>
+          <span class="k">else</span>
+            <span class="nv">val = </span><span class="nx">@result</span><span class="p">.</span><span class="nx">value</span><span class="p">[</span><span class="nx">name</span><span class="p">]</span>
+            <span class="nx">val</span> <span class="o">+=</span> <span class="s">&quot; </span><span class="si">#{</span><span class="nx">set</span><span class="p">.</span><span class="nx">unit</span><span class="si">}</span><span class="s">&quot;</span> <span class="k">if</span> <span class="nx">val</span> <span class="o">and</span> <span class="nx">set</span><span class="p">.</span><span class="nx">unit</span>
+            <span class="nx">val</span>
+      <span class="nx">text</span> <span class="o">+=</span> <span class="s">&quot;| </span><span class="si">#{</span><span class="nx">string</span><span class="p">.</span><span class="nx">rpad</span> <span class="nx">set</span><span class="p">.</span><span class="nx">title</span><span class="p">,</span> <span class="mi">18</span><span class="si">}</span><span class="s"> &quot;</span>
+      <span class="k">if</span> <span class="nx">name</span> <span class="o">is</span> <span class="s">&#39;cpu&#39;</span>
+        <span class="nx">text</span> <span class="o">+=</span> <span class="s">&quot;| </span><span class="si">#{</span><span class="nx">string</span><span class="p">.</span><span class="nx">rpad</span> <span class="nx">val</span><span class="p">.</span><span class="nx">toString</span><span class="p">(),</span> <span class="mi">42</span><span class="si">}</span><span class="s"> |\n&quot;</span>
+        <span class="k">continue</span>
+      <span class="nx">text</span> <span class="o">+=</span> <span class="s">&quot;| </span><span class="si">#{</span><span class="nx">string</span><span class="p">.</span><span class="nx">lpad</span> <span class="nx">val</span><span class="p">.</span><span class="nx">toString</span><span class="p">(),</span> <span class="mi">12</span><span class="si">}</span><span class="s"> &quot;</span>
+      <span class="k">if</span> <span class="nx">name</span> <span class="k">in</span> <span class="p">[</span><span class="s">&#39;ashort&#39;</span><span class="p">,</span><span class="s">&#39;medium&#39;</span><span class="p">,</span><span class="s">&#39;long&#39;</span><span class="p">]</span>
+        <span class="nv">warn = </span><span class="k">if</span> <span class="nx">@config</span><span class="p">[</span><span class="s">&quot;</span><span class="si">#{</span><span class="nx">name</span><span class="si">}</span><span class="s">Warn&quot;</span><span class="p">]</span><span class="o">?</span> <span class="k">then</span> <span class="nx">@config</span><span class="p">[</span><span class="s">&quot;</span><span class="si">#{</span><span class="nx">name</span><span class="si">}</span><span class="s">Warn&quot;</span><span class="p">].</span><span class="nx">toString</span><span class="p">()</span><span class="o">+</span><span class="s">&#39; %&#39;</span> <span class="k">else</span> <span class="s">&#39;&#39;</span>
+        <span class="nv">fail = </span><span class="k">if</span> <span class="nx">@config</span><span class="p">[</span><span class="s">&quot;</span><span class="si">#{</span><span class="nx">name</span><span class="si">}</span><span class="s">Fail&quot;</span><span class="p">]</span><span class="o">?</span> <span class="k">then</span> <span class="nx">@config</span><span class="p">[</span><span class="s">&quot;</span><span class="si">#{</span><span class="nx">name</span><span class="si">}</span><span class="s">Fail&quot;</span><span class="p">].</span><span class="nx">toString</span><span class="p">()</span><span class="o">+</span><span class="s">&#39; %&#39;</span> <span class="k">else</span> <span class="s">&#39;&#39;</span>
+        <span class="nx">text</span> <span class="o">+=</span> <span class="s">&quot;| </span><span class="si">#{</span><span class="nx">string</span><span class="p">.</span><span class="nx">lpad</span> <span class="nx">warn</span><span class="p">,</span> <span class="mi">12</span><span class="si">}</span><span class="s"></span>
+<span class="s">        | </span><span class="si">#{</span><span class="nx">string</span><span class="p">.</span><span class="nx">lpad</span> <span class="nx">fail</span><span class="p">,</span> <span class="mi">12</span><span class="si">}</span><span class="s"> |\n&quot;</span>
+      <span class="k">else</span>
+        <span class="nx">text</span> <span class="o">+=</span> <span class="s">&quot;|              |              |\n&quot;</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-20" id="section-20">&#182;</a>
+</div>
+<p>additional information</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+    <span class="nx">text</span> <span class="o">+=</span> <span class="s">&quot;\n</span><span class="si">#{</span><span class="nx">@result</span><span class="p">.</span><span class="nx">analysis</span><span class="si">}</span><span class="s">&quot;</span> <span class="k">if</span> <span class="nx">@result</span><span class="p">.</span><span class="nx">analysis</span><span class="o">?</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-21" id="section-21">&#182;</a>
+</div>
+<p>hint</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+    <span class="nx">text</span> <span class="o">+=</span> <span class="s">&quot;\nHINT: </span><span class="si">#{</span><span class="nx">meta</span><span class="p">.</span><span class="nx">hint</span><span class="si">}</span><span class="s"> &quot;</span> <span class="k">if</span> <span class="nx">meta</span><span class="p">.</span><span class="nx">hint</span>
+    <span class="nx">text</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap" id="export%20class">
+  <h2>
+    <a href="#export%20class" name="export%20class" class="pilcrow">&#182;</a>
+    Export class
+  </h2>
+</div>
+
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+<span class="nv">module.exports = </span><span class="nx">LoadSensor</span>
+</pre></div>
+        </td>
+      </tr>
+  </tbody>
+</table>
+  </div>
+</body>
+</html>
