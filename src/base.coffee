@@ -8,10 +8,10 @@
 chalk = require 'chalk'
 {spawn} = require 'child_process'
 util = require 'util'
+math = require 'mathjs'
 # include other alinex modules
 object = require('alinex-util').object
 string = require('alinex-util').string
-math = require 'mathjs'
 
 # Sensor class
 # -------------------------------------------------
