@@ -1,5 +1,6 @@
-# Check disk space
+# Check package upgrades
 # =================================================
+# This will only work on debian based linux.
 
 # Node Modules
 # -------------------------------------------------
@@ -14,7 +15,6 @@ Sensor = require '../base'
 os = require 'os'
 {exec} = require 'child_process'
 async = require 'async'
-math = require 'mathjs'
 
 # Sensor class
 # -------------------------------------------------
@@ -33,29 +33,59 @@ class UpgradeSensor extends Sensor
     # compatible:
     config:
       title: "Package Upgrade"
+      description: "the configuration to check for possible package upgrades"
       type: 'object'
       allowedKeys: true
       entries:
-        timeWarn:
-          title: "Time Warn"
-          description: "the time for packages to be "
+        timeLowWarn:
+          title: "Low Warn"
+          description: "the time after which a warning is set for low priority upgrades "
           type: 'interval'
           unit: 'd'
-        timeFail:
-        securityTimeWarn:
-        securityTimeFail:
-
-        freeFail:
-          title: "Free Fail"
-          description: "the minimum free space on share"
-          type: 'any'
           optional: true
-          entries: [
-            type: 'byte'
-          ,
-            type: 'percent'
-          ]
-
+        timeLowFail:
+          title: "Low Fail"
+          description: "the time after which a failure is set for low priority upgrades "
+          type: 'interval'
+          unit: 'd'
+          optional: true
+        timeMediumWarn:
+          title: "Medium Warn"
+          description: "the time after which a warning is set for medium priority upgrades "
+          type: 'interval'
+          unit: 'd'
+          optional: true
+        timeMediumFail:
+          title: "Medium Fail"
+          description: "the time after which a failure is set for medium priority upgrades "
+          type: 'interval'
+          unit: 'd'
+          optional: true
+        timeHighWarn:
+          title: "High Warn"
+          description: "the time after which a warning is set for high priority upgrades "
+          type: 'interval'
+          unit: 'd'
+          optional: true
+        timeHighFail:
+          title: "High Fail"
+          description: "the time after which a failure is set for high priority upgrades "
+          type: 'interval'
+          unit: 'd'
+          optional: true
+        timeSecurityWarn:
+          title: "Security Warn"
+          description: "the time after which a warning is set for any security upgrade "
+          type: 'interval'
+          unit: 'd'
+          optional: true
+        timeSecurityFail:
+          title: "Security Fail"
+          description: "the time after which a failure is set for any security upgrade "
+          type: 'interval'
+          unit: 'd'
+          optional: true
+  
     # Definition of response values
     values:
       share:
