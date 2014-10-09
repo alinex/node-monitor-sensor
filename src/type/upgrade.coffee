@@ -85,36 +85,34 @@ class UpgradeSensor extends Sensor
           type: 'interval'
           unit: 'd'
           optional: true
-  
+
     # Definition of response values
     values:
-      share:
-        title: 'Share'
-        description: "path name of the share"
-        type: 'string'
-      type:
-        title: 'Type'
-        description: "type of filesystem"
-        type: 'string'
-      total:
-        title: 'Available'
-        description: "the space, which is available"
-        type: 'byte'
-        unit: 'B'
-      used:
-        title: 'Used'
-        description: "the space, which is already used"
-        type: 'byte'
-        unit: 'B'
-      free:
-        title: 'Free'
-        description: "the space, which is free"
-        type: 'byte'
-        unit: 'B'
-      mount:
-        title: 'Mountpoint'
-        description: "the path this share is mounted to"
-        type: 'string'
+      numSecurity:
+        title: "Security"
+        description: "the number of security updates "
+        type: 'integer'
+      numLow:
+        title: "Low Priority"
+        description: "the number of low priority updates "
+        type: 'integer'
+      numMedium:
+        title: "Medium Priority"
+        description: "the number of medium priority updates "
+        type: 'integer'
+      numHigh:
+        title: "High Priority"
+        description: "the number of high priority updates "
+        type: 'integer'
+      numTotal:
+        title: "Total"
+        description: "the number of total updates "
+        type: 'integer'
+      oldestSecurity:
+      oldestLow:
+      oldestMedium:
+      oldestHigh:
+      oldestTotal:
 
   # ### Create instance
   constructor: (config) -> super config, debug
