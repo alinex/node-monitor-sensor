@@ -40,6 +40,7 @@
     "chalk": "0.5.x",
     "debug": ">=0.8.0 <3.0.0",
     "mathjs": "^1.0.1",
+    "moment": "^2.8.3",
     "request": "2.x"
   },
   "devDependencies": {
@@ -52,5 +53,8 @@
   "engines": {
     "node": ">=0.10"
   },
-  "os": ["!win32", "!win64"]
+  "os": [
+    "!win32",
+    "!win64"
+  ]
 }

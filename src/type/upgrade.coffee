@@ -12,10 +12,9 @@ debug = require('debug')('monitor:sensor:upgrade')
 # include classes and helper
 Sensor = require '../base'
 # specific modules for this check
-os = require 'os'
 {exec} = require 'child_process'
 async = require 'async'
-
+moment = require 'moment'
 # Sensor class
 # -------------------------------------------------
 class UpgradeSensor extends Sensor
@@ -37,6 +36,18 @@ class UpgradeSensor extends Sensor
       type: 'object'
       allowedKeys: true
       entries:
+        timeWarn:
+          title: "Warn"
+          description: "the time after which a warning is set for upgrades "
+          type: 'interval'
+          unit: 'd'
+          optional: true
+        timeFail:
+          title: "Fail"
+          description: "the time after which a failure is set for upgrades "
+          type: 'interval'
+          unit: 'd'
+          optional: true
         timeLowWarn:
           title: "Low Warn"
           description: "the time after which a warning is set for low priority upgrades "
@@ -89,30 +100,50 @@ class UpgradeSensor extends Sensor
     # Definition of response values
     values:
       numSecurity:
-        title: "Security"
+        title: "Num. Security"
         description: "the number of security updates "
         type: 'integer'
       numLow:
-        title: "Low Priority"
+        title: "Num. Low Prio"
         description: "the number of low priority updates "
         type: 'integer'
       numMedium:
-        title: "Medium Priority"
+        title: "Num. Medium Prio"
         description: "the number of medium priority updates "
         type: 'integer'
       numHigh:
-        title: "High Priority"
+        title: "Num. High Prio"
         description: "the number of high priority updates "
         type: 'integer'
       numTotal:
-        title: "Total"
+        title: "Num. Total"
         description: "the number of total updates "
         type: 'integer'
-      oldestSecurity:
-      oldestLow:
-      oldestMedium:
-      oldestHigh:
-      oldestTotal:
+      timeSecurity:
+        title: "Time Security"
+        description: "the max. age of security update "
+        type: 'interval'
+        unit: 'd'
+      timeLow:
+        title: "Time Low Prio"
+        description: "the max. age of low priority update "
+        type: 'interval'
+        unit: 'd'
+      timeMedium:
+        title: "Time Medium Prio"
+        description: "the max. age of medium priority update "
+        type: 'interval'
+        unit: 'd'
+      timeHigh:
+        title: "Time High Prio"
+        description: "the max. age of high priority update "
+        type: 'interval'
+        unit: 'd'
+      timeTotal:
+        title: "Time"
+        description: "the max. age of update "
+        type: 'interval'
+        unit: 'd'
 
   # ### Create instance
   constructor: (config) -> super config, debug
@@ -121,76 +152,93 @@ class UpgradeSensor extends Sensor
   run: (cb = ->) ->
     @_start()
     # comand syntax, os dependent
-    p = os.platform()
-    diskfree = switch p
-      when 'linux', 'darwin'
-        cmd: '/bin/df'
-        args: ['-kT', @config.share]
-      when p.match /^win/
-        # For windows maybe [drivespace](https://github.com/keverw/drivespace)
-        # works, but this is not tested.
-        cmd: '../bin/drivespace.exe'
-        args: ["drive-#{@config.share}"]
-      else
-        throw new Error "Operating system #{p} is not supported in diskfree."
-    # run the diskfree test
-    @_spawn diskfree.cmd, diskfree.args,
-      timeout: @config.timeout
-    , (err, stdout, stderr, code) =>
+    cmd = "apt-get -s upgrade | grep Inst | awk -F '\\]? [\\[(]?' '{print $2,$3,$4}'"
+    exec cmd, (err, stdout, stderr) =>
       return @_end 'fail', err, cb if err
-      # parse results
-      lines = stdout.split /\n/
-      val = @result.value
-      if p.match /^win/
-        [val.total, val.free, status]
-        col = lines[0].split ','
-        val.total = Number(col[0])*1024
-        val.free = Number(col[1])*1024
-        val.used = val.total - val.free
-        val.mount = @config.share
-      else
-        col = lines[1].split /\s+/
-        val.share = col[0]
-        val.type = col[1]
-        val.used = Number(col[3])*1024
-        val.free = Number(col[4])*1024
-        val.total = val.used + val.free
-        val.mount = col[6]
-      # evaluate to check status
-      switch
-        when val.used + val.avail is 0
-          status = 'fail'
-          message = "#{@constructor.meta.name} no space available on share #{@config.share}"
-        when @config.freeFail? and val.free < @config.freeFail
-          status = 'fail'
-          message = "#{@constructor.meta.name} too less space on #{@config.share}"
-        when @config.freeWarn? and val.free < @config.freeWarn
-          status = 'warn'
-        else
-          status = 'ok'
-      if not @config.analysis?.length
-        return @_end status, message, cb
-      # get additional information
-      @result.analysis = """
-        Maybe some files in one of the following directories may be deleted or moved:
-
-        | PATH                                |  FILES  |    SIZE    |   OLDEST   |
-        | ----------------------------------- | ------: | ---------: | :--------- |\n"""
-      async.map @config.analysis, (dir, cb) =>
-        cmd = "find /tmp -type f 2>/dev/null | xargs ls -ltr --time-style=+%Y-%m-%d
-        | awk '{n++;b+=$5;if(d==\"\"){d=$6};if(d>$6){d=$6}} END{print n,b,d}'"
-        exec cmd,
-          timeout: 30000
-        , (err, stdout, stderr) ->
-          unless stdout
-            return cb null, "| #{string.rpad dir, 40} |     ? |          ? | ?          |\n"
-          col = stdout.toString().split /\s+/
-          byte = math.unit parseInt(col[1]), 'B'
-          cb null, "| #{string.rpad dir, 35} | #{string.lpad col[0], 7}
-          | #{string.lpad byte.format(3), 10}
-          | #{string.lpad col[2], 10} |\n"
-      , (err, lines) =>
-        @result.analysis += line for line in lines
+      async.map stdout.toString().split(/\n/), (line, cb) ->
+        return cb() unless line
+        [pack, old, current] = line.split /\s/
+        cmd = "aptitude changelog #{pack} 2>/dev/null| sed '1d;/(#{old})/,$d'"
+        exec cmd, (err, stdout, stderr) =>
+          return cb err if err
+          info = []
+          urgency = null
+          security = false
+          date = null
+          for line in stdout.toString().split /\n/
+            continue unless line # empty line
+            if line.match /^\w/ # upgrade
+              col = line.split /;?\s+/
+              security = ~col[2].toLowerCase().indexOf 'security'
+              prio = col[3].substring 8
+              urgency = prio if not urgency? or urgency is 'low' or prio is 'high'
+            else if line.match /^ --/ # author
+              col = line.split />\s/
+              release = new Date col[1]
+              date = release if not date? or release < date
+            else if line.match /^\s\s\[/ # name only
+              continue
+            else # info
+              info.push line
+          cb null, 
+            pack: pack
+            old: old
+            current: current
+            security: security
+            urgency: urgency
+            time: moment().diff(date, 'days')
+            change: moment(date).fromNow()
+            release: date
+            info: info
+      , (err, results) =>
+        val = @result.value =
+          numSecurity: 0
+          numLow: 0
+          numMedium: 0
+          numHigh: 0
+          numTotal: 0
+          timeSecurity: null
+          timeLow: null
+          timeMedium: null
+          timeHigh: null
+          timeTotal: null
+        sort = {}
+        for entry in results
+          continue unless entry
+          sort["#{entry.security}#{{low: 1, medium:2, high:3}[entry.urgency]}-#{entry.time}"] = entry
+          val.numTotal++
+          val.timeTotal = entry.time if not val.timeTotal or entry.time > val.timeTotal
+          if entry.security
+            val.numSecurity++
+            val.timeSecurity = entry.time if not val.timeSecurity or entry.time > val.timeSecurity
+          if entry.urgency is 'low'
+            val.numLow++
+            val.timeLow = entry.time if not val.timeLow or entry.time > val.timeLow
+          else if entry.urgency is 'medium'
+            val.numMedium++ 
+            val.timeMedium = entry.time if not val.timeMedium or entry.time > val.timeMedium
+          else if entry.urgency is 'high'
+            val.numHigh++ 
+            val.timeHigh = entry.time if not val.timeHigh or entry.time > val.timeHigh
+        # evaluate to check status
+        switch
+          when val.timeTotal? and @config.timeFail? and val.timeTotal >= @config.timeFail
+            status = 'fail'
+            message = "#{@constructor.meta.name} has updates waiting longer than #{@config.timeFail} days"
+          when val.timeTotal? and @config.timeWarn? and val.timeTotal >= @config.timeWarn
+            status = 'warn'
+          else
+            status = 'ok'
+        # done if no problem found
+        if status is 'ok'
+          return @_end status, message, cb
+        # get additional information
+        @result.analysis = "The following packages may be updated:"
+        for name in Object.keys(sort).sort().reverse()          
+          entry = sort[name]
+          security = if entry.security then 'security ' else ''
+          @result.analysis += "\n\n#{entry.pack} #{entry.old} -> #{entry.current} #{security}#{entry.urgency} priority #{entry.change}"
+          @result.analysis += "\n" + entry.info.join '\n' if entry.info
         debug @result.analysis
         @_end status, message, cb
 
