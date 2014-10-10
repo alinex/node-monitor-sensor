@@ -7,7 +7,11 @@
   "keywords": [
     "analyze",
     "ping",
-    "socket"
+    "socket",
+    "cpu",
+    "load",
+    "memory",
+    "upgrade"
   ],
   "homepage": "http://alinex.github.io/node-monitor-sensor/",
   "repository": {
@@ -34,7 +38,7 @@
     "alinex-util": "0.1.x",
     "async": "^0.9.0",
     "chalk": "0.5.x",
-    "debug": "0.8.0 - 2.x",
+    "debug": ">=0.8.0 <3.0.0",
     "mathjs": "^1.0.1",
     "request": "2.x"
   },
@@ -48,5 +52,5 @@
   "engines": {
     "node": ">=0.10"
   },
-  "os": []
+  "os": ["!win32", "!win64"]
 }
