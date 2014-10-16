@@ -4,6 +4,15 @@ Version changes
 The following list gives a short overview about what is changed between
 individual versions:
 
+Version 0.1.1 (2014-10-16)
+-------------------------------------------------
+- Finished check for system upgrades.
+- Fixed package.json version notation.
+- Added value definition.
+- Set up configuration values.
+- Updated script for upgrade sensor.
+- Initial system update sensor.
+
 Version 0.1.0 (2014-10-08)
 -------------------------------------------------
 - Fixed npmignore file.
