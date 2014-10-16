@@ -39,6 +39,7 @@ class SocketSensor extends Sensor
           title: "Hostname or IP"
           description: "the server hostname or ip address to establish connection to"
           type: 'string'
+          default: 'localhost'
         port:
           title: "Port"
           description: "the port number used to connect to"
