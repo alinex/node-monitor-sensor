@@ -180,7 +180,7 @@ class UpgradeSensor extends Sensor
               continue
             else # info
               info.push line
-          cb null, 
+          cb null,
             pack: pack
             old: old
             current: current
@@ -215,10 +215,10 @@ class UpgradeSensor extends Sensor
             val.numLow++
             val.timeLow = entry.time if not val.timeLow or entry.time > val.timeLow
           else if entry.urgency is 'medium'
-            val.numMedium++ 
+            val.numMedium++
             val.timeMedium = entry.time if not val.timeMedium or entry.time > val.timeMedium
           else if entry.urgency is 'high'
-            val.numHigh++ 
+            val.numHigh++
             val.timeHigh = entry.time if not val.timeHigh or entry.time > val.timeHigh
         # evaluate to check status
         switch
@@ -227,6 +227,26 @@ class UpgradeSensor extends Sensor
             message = "#{@constructor.meta.name} has updates waiting longer than #{@config.timeFail} days"
           when val.timeTotal? and @config.timeWarn? and val.timeTotal >= @config.timeWarn
             status = 'warn'
+          when val.timeLow? and @config.timeLowFail? and val.timeLow >= @config.timeLowFail
+            status = 'fail'
+            message = "#{@constructor.meta.name} has updates waiting longer than #{@config.timeLowFail} days"
+          when val.timeLow? and @config.timeLowWarn? and val.timeLow >= @config.timeLowWarn
+            status = 'warn'
+          when val.timeMedium? and @config.timeMediumFail? and val.timeMedium >= @config.timeMediumFail
+            status = 'fail'
+            message = "#{@constructor.meta.name} has updates waiting longer than #{@config.timeMediumFail} days"
+          when val.timeMedium? and @config.timeMediumWarn? and val.timeMedium >= @config.timeMediumWarn
+            status = 'warn'
+          when val.timeHigh? and @config.timeHighFail? and val.timeHigh >= @config.timeHighFail
+            status = 'fail'
+            message = "#{@constructor.meta.name} has updates waiting longer than #{@config.timeHighFail} days"
+          when val.timeHigh? and @config.timeHighWarn? and val.timeHigh >= @config.timeHighWarn
+            status = 'warn'
+          when val.timeSecurity? and @config.timeSecurityFail? and val.timeSecurity >= @config.timeSecurityFail
+            status = 'fail'
+            message = "#{@constructor.meta.name} has updates waiting longer than #{@config.timeSecurityFail} days"
+          when val.timeSecurity? and @config.timeSecurityWarn? and val.timeSecurity >= @config.timeSecurityWarn
+            status = 'warn'
           else
             status = 'ok'
         # done if no problem found
@@ -234,7 +254,7 @@ class UpgradeSensor extends Sensor
           return @_end status, message, cb
         # get additional information
         @result.analysis = "The following packages may be updated:"
-        for name in Object.keys(sort).sort().reverse()          
+        for name in Object.keys(sort).sort().reverse()
           entry = sort[name]
           security = if entry.security then 'security ' else ''
           @result.analysis += "\n\n#{entry.pack} #{entry.old} -> #{entry.current} #{security}#{entry.urgency} priority #{entry.change}"
