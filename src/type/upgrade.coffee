@@ -26,8 +26,9 @@ class UpgradeSensor extends Sensor
     description: "Check for possible package upgrades."
     category: 'sys'
     level: 1
-    hint: "Maybe there are some updates to the installed packages. This may
-    also be a security update. "
+    hint: "If there are some packages to be upgraded, please call `sudo aptitude upgrade`
+    on the command line. This will interactively install all the neccessary
+    package upgrades."
     # Check for configuration settings [alinex-validator](http://alinex.githhub.io/node-validator)
     # compatible:
     config:
@@ -152,7 +153,7 @@ class UpgradeSensor extends Sensor
   run: (cb = ->) ->
     @_start()
     # comand syntax, os dependent
-    cmd = "apt-get -s upgrade | grep Inst | awk -F '\\]? [\\[(]?' '{print $2,$3,$4}'"
+    cmd = "apt-get update; apt-get -s upgrade | grep Inst | awk -F '\\]? [\\[(]?' '{print $2,$3,$4}'"
     exec cmd, (err, stdout, stderr) =>
       return @_end 'fail', err, cb if err
       async.map stdout.toString().split(/\n/), (line, cb) ->
@@ -260,6 +261,7 @@ class UpgradeSensor extends Sensor
           @result.analysis += "\n\n#{entry.pack} #{entry.old} -> #{entry.current} #{security}#{entry.urgency} priority #{entry.change}"
           @result.analysis += "\n" + entry.info.join '\n' if entry.info
         debug @result.analysis
+        @result.analysis += '\n'
         @_end status, message, cb
 
 # Export class
