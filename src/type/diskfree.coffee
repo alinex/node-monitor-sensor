@@ -42,39 +42,46 @@ class DiskfreeSensor extends Sensor
           description: "the disk share's path or mount point to check"
           type: 'string'
         timeout:
-          title: "Overall Timeout"
+          title: "Measurement Time"
           description: "the time in milliseconds the whole test may take before
             stopping and failing it"
           type: 'interval'
           unit: 'ms'
           min: 500
           default: 1000
+        analysisTimeout:
+          title: "Analysis Timeout"
+          description: "the time in milliseconds each path analyzation may take"
+          type: 'interval'
+          unit: 'ms'
+          min: 1000
+          default: 30000
         freeWarn:
           title: "Free Warn"
           description: "the minimum free space on share"
-          type: 'any'
           optional: true
-          entries: [
-            type: 'byte'
-            min:
-              reference: 'relative'
-              source: '<freeFail'
-          ,
-            type: 'percent'
-            min:
-              reference: 'relative'
-              source: '<freeFail'
-          ]
+          type: 'byte'
+          min:
+            reference: 'relative'
+            source: '<freeFail'
         freeFail:
           title: "Free Fail"
           description: "the minimum free space on share"
-          type: 'any'
+          type: 'byte'
           optional: true
-          entries: [
-            type: 'byte'
-          ,
-            type: 'percent'
-          ]
+        percentWarn:
+          title: "Free Warn %"
+          description: "the minimum free space on share"
+          type: 'percent'
+          optional: true
+          min:
+            reference: 'relative'
+            source: '<percentFail'
+        percentFail:
+          title: "Free Fail %"
+          description: "the minimum free space on share"
+          optional: true
+          type: 'percent'
         analysis:
           title: "Analysis Paths"
           description: "list of directories to monitor their volume on warning"
@@ -110,6 +117,10 @@ class DiskfreeSensor extends Sensor
         description: "the space, which is free"
         type: 'byte'
         unit: 'B'
+      freePercent:
+        title: '% Free'
+        description: "the space, which is free"
+        type: 'percent'
       mount:
         title: 'Mountpoint'
         description: "the path this share is mounted to"
@@ -157,6 +168,7 @@ class DiskfreeSensor extends Sensor
         val.free = Number(col[4])*1024
         val.total = val.used + val.free
         val.mount = col[6]
+      val.freePercent = val.free / val.total
       # evaluate to check status
       switch
         when val.used + val.avail is 0
@@ -181,7 +193,7 @@ class DiskfreeSensor extends Sensor
         cmd = "find #{dir} -type f -exec ls -ltr --time-style=+%Y-%m-%d '{}' \\; 2>/dev/null
         | awk '{n++;b+=$5;if(d==\"\"){d=$6};if(d>$6){d=$6}} END{print n,b,d}'"
         exec cmd,
-          timeout: 30000
+          timeout: @config.analysisTimeout
         , (err, stdout, stderr) ->
           unless stdout
             return cb null, "| #{string.rpad dir, 35} |       ? |          ? | ?          |\n"
