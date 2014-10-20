@@ -178,17 +178,17 @@ class DiskfreeSensor extends Sensor
         | PATH                                |  FILES  |    SIZE    |   OLDEST   |
         | ----------------------------------- | ------: | ---------: | :--------- |\n"""
       async.map @config.analysis, (dir, cb) =>
-        cmd = "find /tmp -type f 2>/dev/null | xargs ls -ltr --time-style=+%Y-%m-%d 
+        cmd = "find #{dir} -type f -exec ls -ltr --time-style=+%Y-%m-%d '{}' \\; 2>/dev/null
         | awk '{n++;b+=$5;if(d==\"\"){d=$6};if(d>$6){d=$6}} END{print n,b,d}'"
         exec cmd,
           timeout: 30000
         , (err, stdout, stderr) ->
           unless stdout
-            return cb null, "| #{string.rpad dir, 40} |     ? |          ? | ?          |\n"
+            return cb null, "| #{string.rpad dir, 35} |       ? |          ? | ?          |\n"
           col = stdout.toString().split /\s+/
           byte = math.unit parseInt(col[1]), 'B'
-          cb null, "| #{string.rpad dir, 35} | #{string.lpad col[0], 7} 
-          | #{string.lpad byte.format(3), 10} 
+          cb null, "| #{string.rpad dir, 35} | #{string.lpad col[0], 7}
+          | #{string.lpad byte.format(3), 10}
           | #{string.lpad col[2], 10} |\n"
       , (err, lines) =>
         @result.analysis += line for line in lines
