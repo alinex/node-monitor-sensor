@@ -91,6 +91,9 @@ class Sensor
           when 'byte'
             byte = math.unit @result.value[name], (set.unit ? 'B')
             byte.format 3
+          when 'interval'
+            interval = math.unit @config[name], set.unit
+            interval.format 3
           else
             val = @result.value[name]
             val += " #{set.unit}" if val and set.unit
@@ -112,6 +115,9 @@ class Sensor
         when 'byte'
           byte = math.unit @config[name], 'B'
           byte.format 3
+        when 'interval'
+          interval = math.unit @config[name], set.unit
+          interval.format 3
         else
           val = @config[name]
           val += " #{set.unit}" if val and set.unit
