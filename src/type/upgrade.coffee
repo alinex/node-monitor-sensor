@@ -13,6 +13,7 @@ debug = require('debug')('monitor:sensor:upgrade')
 Sensor = require '../base'
 # specific modules for this check
 {exec} = require 'child_process'
+os = require 'os'
 async = require 'async'
 moment = require 'moment'
 # Sensor class
@@ -156,7 +157,7 @@ class UpgradeSensor extends Sensor
     cmd = "apt-get update; apt-get -s upgrade | grep Inst | awk -F '\\]? [\\[(]?' '{print $2,$3,$4}'"
     exec cmd, (err, stdout, stderr) =>
       return @_end 'fail', err, cb if err
-      async.map stdout.toString().split(/\n/), (line, cb) ->
+      async.mapLimit stdout.toString().split(/\n/), os.cpus().length, (line, cb) ->
         return cb() unless line
         [pack, old, current] = line.split /\s/
         cmd = "aptitude changelog #{pack} 2>/dev/null| sed '1d;/(#{old})/,$d'"
