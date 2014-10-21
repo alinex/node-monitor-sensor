@@ -85,19 +85,7 @@ class Sensor
     for name, set of meta.values
       val = ''
       if @result.value[name]?
-        val = switch set.type
-          when 'percent'
-            (Math.round(@result.value[name] * 100) / 100).toString() + ' %'
-          when 'byte'
-            byte = math.unit @result.value[name], (set.unit ? 'B')
-            byte.format 3
-          when 'interval'
-            interval = math.unit @config[name], set.unit
-            interval.format 3
-          else
-            val = @result.value[name]
-            val += " #{set.unit}" if val and set.unit
-            val
+        val = formatValue @result.value[name], set
       text += "| #{string.rpad set.title, 18}
       | #{string.lpad val.toString(), 50} |\n"
     # configuration settings
@@ -107,27 +95,33 @@ class Sensor
       |       CONFIG       |  VALUE                                             |
       | ------------------ | -------------------------------------------------: |\n"""
     for name, set of meta.config.entries
-      val = ''
       continue unless @config[name]?
-      val = switch set.type
-        when 'percent'
-          (Math.round(@config[name] * 100) / 100).toString() + ' %'
-        when 'byte'
-          byte = math.unit @config[name], 'B'
-          byte.format 3
-        when 'interval'
-          interval = math.unit @config[name], set.unit
-          interval.format 3
-        else
-          val = @config[name]
-          val += " #{set.unit}" if val and set.unit
-          val
+      val = formatValue @config[name], set
       text += "| #{string.rpad set.title, 18}
       | #{string.lpad val.toString(), 50} |\n"
     # additional information
     text += "\n#{@result.analysis}" if @result.analysis?
     # hint
     text += "\n#{meta.hint} " if meta.hint
+
+formatValue = (value, config) ->
+  switch config.type
+    when 'percent'
+      (Math.round(value * 100) / 100).toString() + ' %'
+    when 'byte'
+      byte = math.unit value, 'B'
+      byte.format 3
+    when 'interval'
+      long =
+        d: 'day'
+        m: 'minute'
+      unit = long[config.unit] ? config.unit
+      interval = math.unit value, unit
+      interval.format 3
+    else
+      val = value
+      val += " #{set.unit}" if val and config.unit
+      val
 
 # Export class
 # -------------------------------------------------
