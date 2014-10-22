@@ -7,15 +7,11 @@
 # include base modules
 debug = require('debug')('monitor:sensor:io')
 # include alinex packages
-{object,number,string} = require 'alinex-util'
 fs = require 'fs'
 # include classes and helper
 Sensor = require '../base'
 # specific modules for this check
 os = require 'os'
-{exec} = require 'child_process'
-async = require 'async'
-math = require 'mathjs'
 
 # Sensor class
 # -------------------------------------------------
@@ -24,7 +20,7 @@ class IoSensor extends Sensor
   # ### General information
   # This information may be used later for display and explanation.
   @meta =
-    name: 'IO'
+    name: 'Disk IO'
     description: "Check the io traffic using the additional `iostat` program."
     category: 'sys'
     level: 1
@@ -33,7 +29,7 @@ class IoSensor extends Sensor
     # Check for configuration settings [alinex-validator](http://alinex.githhub.io/node-validator)
     # compatible:
     config:
-      title: "IO Test"
+      title: "Disk IO Test"
       type: 'object'
       allowedKeys: true
       entries:
@@ -73,7 +69,6 @@ class IoSensor extends Sensor
           min:
             reference: 'relative'
             source: '<readFail'
-          max: 1
         readFail:
           title: "Read/s Fail"
           description: "the read limit per second on the device"
@@ -81,7 +76,6 @@ class IoSensor extends Sensor
           type: 'byte'
           unit: 'B'
           min: 0
-          max: 1
         writeWarn:
           title: "Write/s Warn"
           description: "the write limit per second on the device"
@@ -91,7 +85,6 @@ class IoSensor extends Sensor
           min:
             reference: 'relative'
             source: '<writeFail'
-          max: 1
         writeFail:
           title: "Write/s Fail"
           description: "the write limit per second on the device"
@@ -99,7 +92,6 @@ class IoSensor extends Sensor
           type: 'byte'
           unit: 'B'
           min: 0
-          max: 1
 
     # Definition of response values
     values:
@@ -153,7 +145,7 @@ class IoSensor extends Sensor
         throw new Error "missing the `iostat` command, install through
         `sudo apt-get install sysstat`"
       # run the iostat test
-      @_spawn iostat, ['-yk', @config.time, 1], null, (err, stdout, stderr, code) =>
+      @_spawn iostat, ['-k', @config.time, 1], null, (err, stdout, stderr, code) =>
         return @_end 'fail', err, cb if err
         # parse results
         val = @result.value
@@ -170,20 +162,20 @@ class IoSensor extends Sensor
           val.writeTotal = parseFloat col[5]
         # evaluate to check status
         switch
-          when @config.waitFail? and val.wait < @config.waitFail
+          when @config.waitFail? and val.wait > @config.waitFail
             status = 'fail'
-            message = "#{@constructor.meta.name} too high IO wait for #{@config.device}"
-          when @config.readFail? and val.read < @config.readFail
+            message = "#{@constructor.meta.name} too high cpu wait for #{@config.device}"
+          when @config.readFail? and val.read > @config.readFail
             status = 'fail'
             message = "#{@constructor.meta.name} too much read on #{@config.device}"
-          when @config.writeFail? and val.write < @config.writeFail
+          when @config.writeFail? and val.write > @config.writeFail
             status = 'fail'
             message = "#{@constructor.meta.name} too much written on #{@config.device}"
-          when @config.waitWarn? and val.wait < @config.waitWarn
+          when @config.waitWarn? and val.wait > @config.waitWarn
             status = 'warn'
-          when @config.readWarn? and val.read < @config.readWarn
+          when @config.readWarn? and val.read > @config.readWarn
             status = 'warn'
-          when @config.writeWarn? and val.write < @config.writeWarn
+          when @config.writeWarn? and val.write > @config.writeWarn
             status = 'warn'
           else
             status = 'ok'
