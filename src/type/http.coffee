@@ -64,7 +64,7 @@ class HttpSensor extends Sensor
           description: "the password used for basic authentication"
           type: 'string'
           optional: true
-        bodycheck:
+        body:
           title: "Body Check"
           description: "the substring or regular expression which have to match"
           type: 'any'
@@ -150,11 +150,11 @@ class HttpSensor extends Sensor
       val.server = response.headers.server
       val.contenttype = response.headers['content-type']
       val.length = response.connection.bytesRead
-      if @config.bodycheck?
-        if @config.bodycheck instanceof RegExp
-          val.bodycheck = (body.match @config.bodycheck)?
+      if @config.body?
+        if @config.bod instanceof RegExp
+          val.bodycheck = (body.match @config.body)?
         else
-          val.bodycheck = (~body.indexOf @config.bodycheck)?
+          val.bodycheck = (~body.indexOf @config.body)?
       # evaluate to check status
       status = switch
         when not val.success
