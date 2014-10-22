@@ -83,6 +83,7 @@ class Sensor
       | ------------------ | -------------------------------------------------: |\n"""
     # table of values
     for name, set of meta.values
+      console.log name, set, @result.value[name]
       val = ''
       if @result.value[name]?
         val = formatValue @result.value[name], set
@@ -120,7 +121,7 @@ formatValue = (value, config) ->
       interval.format 3
     else
       val = value
-      val += " #{set.unit}" if val and config.unit
+      val += " #{config.unit}" if val and config.unit
       val
 
 # Export class

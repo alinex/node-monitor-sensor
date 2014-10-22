@@ -66,7 +66,7 @@ class HttpSensor extends Sensor
           optional: true
         bodycheck:
           title: "Body Check"
-          description: "substring or regular expression"
+          description: "the substring or regular expression which have to match"
           type: 'any'
           optional: true
           entries: [
@@ -90,8 +90,23 @@ class HttpSensor extends Sensor
       statuscode:
         title: "Status Code"
         description: "http status code"
-        type: 'values'
-      bodytype:
+        type: 'integer'
+      statusmessage:
+        title: "Status Message"
+        description: "http status message from server"
+        type: 'string'
+      server:
+        title: "Server"
+        description: "application name of the server (if given)"
+        type: 'string'
+      contenttype:
+        title: "Content Type"
+        description: "the content mimetype"
+      length:
+        title: "Content Length"
+        description: "size of the content"
+        type: 'byte'
+      bodycheck:
         title: "Body Check OK"
         description: "success of check for content"
         type: 'boolean'
@@ -131,6 +146,10 @@ class HttpSensor extends Sensor
       val.success = 200 <= response.statusCode < 300
       val.responsetime = end-start
       val.statuscode = response.statusCode
+      val.statusmessage = response.statusMessage
+      val.server = response.headers.server
+      val.contenttype = response.headers['content-type']
+      val.length = response.connection.bytesRead
       if @config.bodycheck?
         if @config.bodycheck instanceof RegExp
           val.bodycheck = (body.match @config.bodycheck)?
