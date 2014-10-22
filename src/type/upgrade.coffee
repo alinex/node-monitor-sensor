@@ -154,14 +154,15 @@ class UpgradeSensor extends Sensor
   run: (cb = ->) ->
     @_start()
     # comand syntax, os dependent
-    cmd = "apt-get update; apt-get -s upgrade | grep Inst | awk -F '\\]? [\\[(]?' '{print $2,$3,$4}'"
+    cmd = "apt-get update; apt-get -s upgrade | grep Inst
+    | awk -F '\\]? [\\[(]?' '{print $2,$3,$4}'"
     exec cmd, (err, stdout, stderr) =>
       return @_end 'fail', err, cb if err
       async.mapLimit stdout.toString().split(/\n/), os.cpus().length, (line, cb) ->
         return cb() unless line
         [pack, old, current] = line.split /\s/
         cmd = "aptitude changelog #{pack} 2>/dev/null| sed '1d;/(#{old})/,$d'"
-        exec cmd, (err, stdout, stderr) =>
+        exec cmd, (err, stdout, stderr) ->
           return cb err if err
           info = []
           urgency = null
@@ -207,7 +208,7 @@ class UpgradeSensor extends Sensor
         sort = {}
         for entry in results
           continue unless entry
-          sort["#{entry.security}#{{low: 1, medium:2, high:3}[entry.urgency]}-#{entry.time}"] = entry
+          sort["#{entry.security}#{{low:1,medium:2,high:3}[entry.urgency]}-#{entry.time}"] = entry
           val.numTotal++
           val.timeTotal = entry.time if not val.timeTotal or entry.time > val.timeTotal
           if entry.security
@@ -224,30 +225,45 @@ class UpgradeSensor extends Sensor
             val.timeHigh = entry.time if not val.timeHigh or entry.time > val.timeHigh
         # evaluate to check status
         switch
-          when val.timeTotal? and @config.timeFail? and val.timeTotal >= @config.timeFail
+          when val.timeTotal? and @config.timeFail? \
+          and val.timeTotal >= @config.timeFail
             status = 'fail'
-            message = "#{@constructor.meta.name} has updates waiting longer than #{@config.timeFail} days"
-          when val.timeTotal? and @config.timeWarn? and val.timeTotal >= @config.timeWarn
+            message = "#{@constructor.meta.name} has updates waiting longer than
+            #{@config.timeFail} days"
+          when val.timeLow? and @config.timeLowFail? \
+          and val.timeLow >= @config.timeLowFail
+            status = 'fail'
+            message = "#{@constructor.meta.name} has low priority updates waiting
+            longer than #{@config.timeLowFail} days"
+          when val.timeMedium? and @config.timeMediumFail? \
+          and val.timeMedium >= @config.timeMediumFail
+            status = 'fail'
+            message = "#{@constructor.meta.name} has medium priority updates waiting
+            longer than #{@config.timeMediumFail} days"
+          when val.timeHigh? and @config.timeHighFail? \
+          and val.timeHigh >= @config.timeHighFail
+            status = 'fail'
+            message = "#{@constructor.meta.name} has high priority updates waiting
+            longer than #{@config.timeHighFail} days"
+          when val.timeSecurity? and @config.timeSecurityFail? \
+          and val.timeSecurity >= @config.timeSecurityFail
+            status = 'fail'
+            message = "#{@constructor.meta.name} has security updates waiting longer
+            than #{@config.timeSecurityFail} days"
+          when val.timeTotal? and @config.timeWarn? \
+          and val.timeTotal >= @config.timeWarn
             status = 'warn'
-          when val.timeLow? and @config.timeLowFail? and val.timeLow >= @config.timeLowFail
-            status = 'fail'
-            message = "#{@constructor.meta.name} has updates waiting longer than #{@config.timeLowFail} days"
-          when val.timeLow? and @config.timeLowWarn? and val.timeLow >= @config.timeLowWarn
+          when val.timeLow? and @config.timeLowWarn? \
+          and val.timeLow >= @config.timeLowWarn
             status = 'warn'
-          when val.timeMedium? and @config.timeMediumFail? and val.timeMedium >= @config.timeMediumFail
-            status = 'fail'
-            message = "#{@constructor.meta.name} has updates waiting longer than #{@config.timeMediumFail} days"
-          when val.timeMedium? and @config.timeMediumWarn? and val.timeMedium >= @config.timeMediumWarn
+          when val.timeMedium? and @config.timeMediumWarn? \
+          and val.timeMedium >= @config.timeMediumWarn
             status = 'warn'
-          when val.timeHigh? and @config.timeHighFail? and val.timeHigh >= @config.timeHighFail
-            status = 'fail'
-            message = "#{@constructor.meta.name} has updates waiting longer than #{@config.timeHighFail} days"
-          when val.timeHigh? and @config.timeHighWarn? and val.timeHigh >= @config.timeHighWarn
+          when val.timeHigh? and @config.timeHighWarn? \
+          and val.timeHigh >= @config.timeHighWarn
             status = 'warn'
-          when val.timeSecurity? and @config.timeSecurityFail? and val.timeSecurity >= @config.timeSecurityFail
-            status = 'fail'
-            message = "#{@constructor.meta.name} has updates waiting longer than #{@config.timeSecurityFail} days"
-          when val.timeSecurity? and @config.timeSecurityWarn? and val.timeSecurity >= @config.timeSecurityWarn
+          when val.timeSecurity? and @config.timeSecurityWarn? \
+          and val.timeSecurity >= @config.timeSecurityWarn
             status = 'warn'
           else
             status = 'ok'
@@ -259,7 +275,8 @@ class UpgradeSensor extends Sensor
         for name in Object.keys(sort).sort().reverse()
           entry = sort[name]
           security = if entry.security then 'security ' else ''
-          @result.analysis += "\n\n#{entry.pack} #{entry.old} -> #{entry.current} #{security}#{entry.urgency} priority #{entry.change}"
+          @result.analysis += "\n\n#{entry.pack} #{entry.old} -> #{entry.current}
+          #{security}#{entry.urgency} priority #{entry.change}"
           @result.analysis += "\n" + entry.info.join '\n' if entry.info
         debug @result.analysis
         @result.analysis += '\n'

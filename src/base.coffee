@@ -83,7 +83,6 @@ class Sensor
       | ------------------ | -------------------------------------------------: |\n"""
     # table of values
     for name, set of meta.values
-      console.log name, set, @result.value[name]
       val = ''
       if @result.value[name]?
         val = formatValue @result.value[name], set

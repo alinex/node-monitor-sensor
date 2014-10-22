@@ -5,7 +5,7 @@ validator = require 'alinex-validator'
 
 UpgradeSensor = require '../../lib/type/upgrade'
 
-describe.only "Upgrade", ->
+describe "Upgrade", ->
 
   describe "run", ->
 

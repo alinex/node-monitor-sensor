@@ -66,7 +66,7 @@ describe "Http request sensor", ->
     it "should check the body part", (done) ->
       http = new HttpSensor validator.check 'config', HttpSensor.meta.config,
         url: 'http://heise.de'
-        bodycheck: 'Newsticker'
+        body: 'Newsticker'
       http.run (err) ->
         expect(err).to.not.exist
         expect(http.result).to.exist
@@ -79,7 +79,7 @@ describe "Http request sensor", ->
     it "should check the body part with RegExp", (done) ->
       http = new HttpSensor validator.check 'config', HttpSensor.meta.config,
         url: 'http://heise.de'
-        bodycheck: /heise Developer|iX Magazin/
+        body: /heise Developer|iX Magazin/
       http.run (err) ->
         expect(err).to.not.exist
         expect(http.result).to.exist
@@ -98,7 +98,7 @@ describe "Http request sensor", ->
         responsetime: 500
         username: 'alex'
         password: 'alex'
-        bodycheck: 'Login'
+        body: 'Login'
       , (err) ->
         expect(err).to.not.exist
         done()

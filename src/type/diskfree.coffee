@@ -94,6 +94,10 @@ class DiskfreeSensor extends Sensor
 
     # Definition of response values
     values:
+      success:
+        title: 'Success'
+        description: "true if external command runs successfully"
+        type: 'boolean'
       share:
         title: 'Share'
         description: "path name of the share"
@@ -189,7 +193,7 @@ class DiskfreeSensor extends Sensor
 
         | PATH                                |  FILES  |    SIZE    |   OLDEST   |
         | ----------------------------------- | ------: | ---------: | :--------- |\n"""
-      async.map @config.analysis, (dir, cb) =>
+      async.mapLimit @config.analysis, os.cpus().length, (dir, cb) =>
         cmd = "find #{dir} -type f -exec ls -ltr --time-style=+%Y-%m-%d '{}' \\; 2>/dev/null
         | awk '{n++;b+=$5;if(d==\"\"){d=$6};if(d>$6){d=$6}} END{print n,b,d}'"
         exec cmd,
