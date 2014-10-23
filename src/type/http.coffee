@@ -85,7 +85,7 @@ class HttpSensor extends Sensor
       responsetime:
         title: "Response Time"
         description: "time till connection could be established"
-        type: 'integer'
+        type: 'interval'
         unit: 'ms'
       statuscode:
         title: "Status Code"
