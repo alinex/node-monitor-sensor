@@ -99,15 +99,15 @@ API
 ### Sensor classes
 
 - [Cpu](src/type/cpu.coffee) - cpu activity check
-- [Diskfree](src/type/diskfree.coffee) - free disk space
-- [Http](src/type/http.coffee) - try requesting an url
 - [Load](src/type/load.coffee) - cpu load check
-- [IO](src/type/io.coffee) - disk io check
 - [Memory](src/type/memory.coffee) - check free memory
-- [Ping](src/type/ping.coffee) - network ping test
-- [Socket](src/type/socket.coffee) - test port connectivity
+- [IO](src/type/io.coffee) - disk io check
+- [Diskfree](src/type/diskfree.coffee) - free disk space
 - [Time](src/type/time.coffee) - check local time
 - [Upgrade](src/type/upgrade.coffee) - check for package upgrades
+- [Ping](src/type/ping.coffee) - network ping test
+- [Socket](src/type/socket.coffee) - test port connectivity
+- [Http](src/type/http.coffee) - try requesting an url
 
 #### Methods
 
