@@ -11,9 +11,9 @@ too.
 
 - it has multiple sensors
 - runs completely asynchronous
-- analyses the process
 - collects all the data
 - supports verbose mode and debugging
+- calculates the status
 
 It is one of the modules of the [Alinex Universe](http://alinex.github.io/node-alinex)
 following the code standards defined there.
@@ -112,6 +112,7 @@ API
 #### Methods
 
 - `run(cb)` - start a new analyzation with optional callback
+- `format()` - give a human readable output in markdown syntax
 
 #### Events
 
@@ -142,7 +143,7 @@ API
   - `date` - start date of last or current run
   - `status` - status of the last or current run (ok, warn, fail)
   - `message` - error message of the last or current run
-  - `value` - map of measured values
+  - `values` - map of measured values
   - `analysis` - additional analysis data
 
 

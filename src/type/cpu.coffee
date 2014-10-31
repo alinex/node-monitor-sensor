@@ -34,25 +34,13 @@ class CpuSensor extends Sensor
     # Check for configuration settings [alinex-validator](http://alinex.githhub.io/node-validator)
     # compatible:
     config:
-      title: "CPU check"
+      title: "CPU check configuration"
       type: 'object'
       allowedKeys: true
       entries:
-        fail:
-          title: "%CPU Fail"
-          description: "the activity level for all cpus to be considered as fail"
-          type: 'percent'
-          optional: true
-          min: 0
-        warn:
-          title: "%CPU Warn"
-          description: "the activity level for all cpus to be considered as ok"
-          type: 'percent'
-          optional: true
-          min: 0
-          max:
-            reference: 'relative'
-            source: '<fail'
+        verbose: @check.verbose
+        warn: @check.warn
+        fail: @check.fail
     # Definition of response values
     values:
       cpu:
@@ -60,24 +48,24 @@ class CpuSensor extends Sensor
         description: "cpu model name with brand"
         type: 'string'
       cpus:
-        title: "cpu cores"
+        title: "CPU Cores"
         description: "number of cpu cores"
         type: 'integer'
       speed:
-        title: "cpu speed"
+        title: "CPU Speed"
         description: "speed in MHz"
         type: 'integer'
         unit: 'MHz'
       user:
-        title: "User time"
+        title: "User Time"
         description: "percentage of user time over all cpu cores"
         type: 'percent'
       system:
-        title: "System time"
+        title: "System Time"
         description: "percentage of system time over all cpu cores"
         type: 'percent'
       idle:
-        title: "Idle time"
+        title: "Idle Time"
         description: "percentage of idle time over all cpu cores"
         type: 'percent'
       active:
@@ -95,7 +83,7 @@ class CpuSensor extends Sensor
     load = os.loadavg()
     cpus = os.cpus()
     # calculate values
-    val = @result.value
+    val = @result.values
     val.cpus = cpus.length
     val.cpu = cpus[0].model.replace /\s+/g, ' '
     val.speed = cpus[0].speed
@@ -112,18 +100,10 @@ class CpuSensor extends Sensor
     val.idle = times.idle / total
     val.active = val.user + val.system
     # evaluate to check status
-    status = switch
-      when @config.fail? and val.active > @config.fail
-        'fail'
-      when @config.warn? and val.active > @config.warn
-        'warn'
-      else
-        'ok'
-    message = switch status
-      when 'fail'
-        "too high activity on cpu"
+    status = @rules()
+    message = @config[status] unless status is 'ok'
     # done if no problem found
-    if status is 'ok'
+    if status is 'ok' and not @config.verbose
       return @_end status, message, cb
     # get additional information
     cmd = "ps axu | awk '{print $2, $3, $4, $11}' | sort -k2 -nr | head -5"
@@ -141,43 +121,6 @@ class CpuSensor extends Sensor
             | #{string.lpad col[2], 5} | #{string.rpad col[3], 50} |\n"
         debug @result.analysis
       @_end status, message, cb
-
-  # ### Format last result
-  format: ->
-    meta = @constructor.meta
-    text = """
-      #{meta.description}\n\nLast check results are:
-
-      |       RESULT       |    VALUE     |     WARN     |    ERROR     |
-      | ------------------ | -----------: | -----------: | -----------: |\n"""
-    # table of values
-    for name, set of meta.values
-      val = ''
-      if @result.value[name]?
-        val = switch set.type
-          when 'percent'
-            (Math.round(@result.value[name] * 100) / 100).toString() + ' %'
-          else
-            val = @result.value[name]
-            val += " #{set.unit}" if val and set.unit
-            val
-      text += "| #{string.rpad set.title, 18} "
-      if name is 'cpu'
-        text += "| #{string.rpad val.toString(), 42} |\n"
-        continue
-      text += "| #{string.lpad val.toString(), 12} "
-      if name is 'active'
-        warn = if @config.warn? then @config.warn.toString()+' %' else ''
-        fail = if @config.fail? then @config.fail.toString()+' %' else ''
-        text += "| #{string.lpad warn, 12}
-        | #{string.lpad fail, 12} |\n"
-      else
-        text += "|              |              |\n"
-    # additional information
-    text += "\n#{@result.analysis}" if @result.analysis?
-    # hint
-    text += "\nHINT: #{meta.hint} " if meta.hint
-    text
 
 # Export class
 # -------------------------------------------------

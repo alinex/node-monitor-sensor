@@ -20,7 +20,7 @@ class TimeSensor extends Sensor
   # This information may be used later for display and explanation.
   @meta =
     name: 'Time Check'
-    description: "Check thy system time against the internet."
+    description: "Check the system time against the internet."
     category: 'sys'
     level: 1
     hint: "If the time is not correct it may influence some processes which gives

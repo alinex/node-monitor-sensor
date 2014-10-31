@@ -5,7 +5,7 @@ validator = require 'alinex-validator'
 
 TimeSensor = require '../../lib/type/time'
 
-describe.only "Time", ->
+describe "Time", ->
 
   describe "run", ->
 
