@@ -50,6 +50,8 @@ class Sensor
   # - debug (function)
   # - result (object) - resulting data
   constructor: (@config, @debug) ->
+    unless @debug
+      @debug = require('debug')('monitor:sensor')
     unless @config
       throw new Error "Could not initialize sensor without configuration."
 
@@ -109,10 +111,14 @@ class Sensor
     for status in ['fail', 'warn']
       continue unless @config[status]
       # replace percent values
-      rule = @config[status].replace /(\d+(\.\d+)?)%/g, '($1/100)'
+      rule = @config[status].replace /\b(\d+(\.\d+)?)%/g, '($1/100)'
+      # replace binary values
+      rule = rule.replace /\b(\d+(\.\d+)?)([kMGTPEYZ]?B)/g, '($1/100)'
+      @debug "check rule: #{rule}"
       # run the code in sandbox
       sandbox = object.clone @result.values
       vm.runInNewContext "result = #{rule}", sandbox, 'monitor-sensor-rule.vm'
+      @debug "result: #{sandbox.result}"
       return status if sandbox.result
     return 'ok'
 
