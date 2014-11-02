@@ -93,6 +93,17 @@ __warn__ if the sensor reached the warning level, know you have to keep an eye o
 __fail__ if the sensor failed and there is a problem
 
 
+Status
+-------------------------------------------------
+Most checks will collect different values which may be used to specify the status.
+Therefore you may write a rule for `fail` or `warn` status in logical form, use
+a simple expression syntax:
+
+    fail: 'free < 5%'
+    warn: 'free < 20% && cpu > 50%'
+
+You may use different mathematical and logical operators together with braces.
+
 API
 -------------------------------------------------
 

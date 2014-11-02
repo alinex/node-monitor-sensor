@@ -36,3 +36,19 @@ describe.only "Sensor", ->
       sensor = new Sensor { fail: 'active >= 50%' }
       sensor.result = { values: { active: 0.5 } }
       expect(sensor.rules(), 'fail').to.equal 'fail'
+
+    it "should work with binary values", ->
+      sensor = new Sensor { fail: 'free < 1MB' }
+      sensor.result = { values: { free: 2048*1024 } }
+      expect(sensor.rules(), 'ok').to.equal 'ok'
+      sensor = new Sensor { fail: 'free < 1MB' }
+      sensor.result = { values: { free: 768*1024 } }
+      expect(sensor.rules(), 'fail').to.equal 'fail'
+
+    it "should work with interval values", ->
+      sensor = new Sensor { fail: 'time < 1h' }
+      sensor.result = { values: { time: 3800000 } }
+      expect(sensor.rules(), 'ok').to.equal 'ok'
+      sensor = new Sensor { fail: 'time < 1h' }
+      sensor.result = { values: { time: 1800000 } }
+      expect(sensor.rules(), 'fail').to.equal 'fail'

@@ -13,6 +13,7 @@ vm = require 'vm'
 # include other alinex modules
 object = require('alinex-util').object
 string = require('alinex-util').string
+number = require('alinex-util').number
 
 # Sensor class
 # -------------------------------------------------
@@ -110,11 +111,18 @@ class Sensor
     return 'undefined' unless @result
     for status in ['fail', 'warn']
       continue unless @config[status]
-      # replace percent values
-      rule = @config[status].replace /\b(\d+(\.\d+)?)%/g, '($1/100)'
-      # replace binary values
-      rule = rule.replace /\b(\d+(\.\d+)?)([kMGTPEYZ]?B)/g, '($1/100)'
+      rule = @config[status]
       @debug "check rule: #{rule}"
+      # replace percent values
+      rule = rule.replace /\b(\d+(\.\d+)?)%/g, (str, value) ->
+        value / 100
+      # replace binary values
+      rule = rule.replace /\b(\d+(\.\d+)?)([kMGTPEYZ]?B)/g, (str) ->
+        math.unit(str).toNumber('B')
+      # replace interval values
+      rule = rule.replace /\b(\d+(\.\d+)?)(ms|s|m|h|d)/g, (str) ->
+        number.parseMSeconds str
+      @debug "optimized: #{rule}"
       # run the code in sandbox
       sandbox = object.clone @result.values
       vm.runInNewContext "result = #{rule}", sandbox, 'monitor-sensor-rule.vm'
