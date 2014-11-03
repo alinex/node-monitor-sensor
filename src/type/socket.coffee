@@ -53,14 +53,8 @@ class SocketSensor extends Sensor
           unit: 'ms'
           min: 500
           default: 2000
-        responsetime:
-          title: "Response Time"
-          description: "the maximum time in milliseconds till the connection
-            can be established without setting the state to warning"
-          type: 'interval'
-          unit: 'ms'
-          min: 0
-          default: 1000
+        warn: @check.warn
+        fail: object.extend {}, @check.fail, { default: 'not success' }
     # Definition of response values
     values:
       success:
@@ -90,21 +84,13 @@ class SocketSensor extends Sensor
       socket.destroy()
 
       # get the values
-      val = @result.value
+      val = @result.values
       val.success = true
       val.responsetime = end-start
 
       # evaluate to check status
-      status = switch
-        when not val.success
-          'fail'
-        when @config.responsetime? and val.responsetime > @config.responsetime
-          'warn'
-        else
-          'ok'
-      message = switch status
-        when 'fail'
-          "#{@constructor.meta.name} exited with status #{status}"
+      status = @rules()
+      message = @config[status] unless status is 'ok'
       @_end status, message, cb
 
     # Timeout occurred

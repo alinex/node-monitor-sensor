@@ -23,6 +23,10 @@ describe "IO", ->
       io.run (err) ->
         expect(err).to.not.exist
         expect(io.result).to.exist
+        expect(io.result.values.read).to.exist
+        expect(io.result.values.write).to.exist
+        expect(io.result.values.readTotal).to.exist
+        expect(io.result.values.writeTotal).to.exist
         expect(io.result.message).to.not.exist
         done()
 

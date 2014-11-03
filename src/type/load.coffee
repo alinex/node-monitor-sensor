@@ -41,51 +41,9 @@ class LoadSensor extends Sensor
       type: 'object'
       allowedKeys: true
       entries:
-        shortFail:
-          title: "1min load fail"
-          description: "the minimum level for the one minute load average to fail"
-          type: 'percent'
-          optional: true
-          min: 0
-        shortWarn:
-          title: "1min load warn"
-          description: "the minimum level for the one minute load average to warn"
-          type: 'percent'
-          optional: true
-          min: 0
-          max:
-            reference: 'relative'
-            source: '<shortFail'
-        mediumFail:
-          title: "5min load fail"
-          description: "the minimum level for the 5 minute load average to fail"
-          type: 'percent'
-          optional: true
-          min: 0
-        mediumWarn:
-          title: "5min load warn"
-          description: "the minimum level for the 5 minute load average to warn"
-          type: 'percent'
-          optional: true
-          min: 0
-          max:
-            reference: 'relative'
-            source: '<mediumFail'
-        longFail:
-          title: "15min load fail"
-          description: "the minimum level for the 15 minute load average to fail"
-          type: 'percent'
-          optional: true
-          min: 0
-        longWarn:
-          title: "15min load warn"
-          description: "the minimum level for the 15 minute load average to warn"
-          type: 'percent'
-          optional: true
-          min: 0
-          max:
-            reference: 'relative'
-            source: '<longFail'
+        verbose: @check.verbose
+        warn: @check.warn
+        fail: @check.fail
     # Definition of response values
     values:
       cpu:
@@ -119,28 +77,16 @@ class LoadSensor extends Sensor
     load = os.loadavg()
     cpus = os.cpus()
     # calculate values
-    val = @result.value
+    val = @result.values
     val.cpus = cpus.length
     val.cpu = cpus[0].model.replace /\s+/g, ' '
     val.short = load[0] / val.cpus
     val.medium = load[1] / val.cpus
     val.long = load[2] / val.cpus
     # evaluate to check status
-    status = switch
-      when @config.shortFail? and val.short > @config.shortFail, \
-           @config.mediumFail? and val.medium > @config.mediumFail, \
-           @config.longFail? and val.long > @config.longFail
-        'fail'
-      when @config.shortWarn? and val.short > @config.shortWarn, \
-           @config.mediumWarn? and val.medium > @config.mediumWarn, \
-           @config.longWarn? and val.long > @config.longWarn
-        'warn'
-      else
-        'ok'
-    message = switch status
-      when 'fail'
-        "#{@constructor.meta.name} exited with status #{status}"
-    if status is 'ok'
+    status = @rules()
+    message = @config[status] unless status is 'ok'
+    if status is 'ok' and not @config.verbose
       return @_end status, message, cb
     # get additional information
     cmd = "ps axu | awk 'NR>1 {print $2, $3, $4, $11}'"
@@ -169,43 +115,6 @@ class LoadSensor extends Sensor
           | #{string.lpad value[2], 5} | #{string.rpad proc, 50} |\n"
         debug @result.analysis
       @_end status, message, cb
-
-  # ### Format last result
-  format: ->
-    meta = @constructor.meta
-    text = """
-      #{meta.description}\n\nLast check results are:
-
-      |       RESULT       |    VALUE     |     WARN     |    ERROR     |
-      | ------------------ | -----------: | -----------: | -----------: |\n"""
-    # table of values
-    for name, set of meta.values
-      val = ''
-      if @result.value[name]?
-        val = switch set.type
-          when 'percent'
-            (Math.round(@result.value[name] * 100) / 100).toString() + ' %'
-          else
-            val = @result.value[name]
-            val += " #{set.unit}" if val and set.unit
-            val
-      text += "| #{string.rpad set.title, 18} "
-      if name is 'cpu'
-        text += "| #{string.rpad val.toString(), 42} |\n"
-        continue
-      text += "| #{string.lpad val.toString(), 12} "
-      if name in ['ashort','medium','long']
-        warn = if @config["#{name}Warn"]? then @config["#{name}Warn"].toString()+' %' else ''
-        fail = if @config["#{name}Fail"]? then @config["#{name}Fail"].toString()+' %' else ''
-        text += "| #{string.lpad warn, 12}
-        | #{string.lpad fail, 12} |\n"
-      else
-        text += "|              |              |\n"
-    # additional information
-    text += "\n#{@result.analysis}" if @result.analysis?
-    # hint
-    text += "\nHINT: #{meta.hint} " if meta.hint
-    text
 
 # Export class
 # -------------------------------------------------

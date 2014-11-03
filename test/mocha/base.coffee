@@ -5,7 +5,7 @@ validator = require 'alinex-validator'
 
 Sensor = require '../../lib/base'
 
-describe.only "Sensor", ->
+describe "Sensor", ->
 
   describe "init", ->
 

@@ -41,6 +41,7 @@
     "debug": ">=0.8.0 <3.0.0",
     "mathjs": "1.0.x",
     "moment": "2.8.x",
+    "named-regexp": "^0.1.1",
     "ntp-client": "0.5.x",
     "request": "2.x"
   },

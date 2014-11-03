@@ -49,39 +49,6 @@ class DiskfreeSensor extends Sensor
           unit: 'ms'
           min: 500
           default: 1000
-        analysisTimeout:
-          title: "Analysis Timeout"
-          description: "the time in milliseconds each path analyzation may take"
-          type: 'interval'
-          unit: 'ms'
-          min: 1000
-          default: 30000
-        freeWarn:
-          title: "Free Warn"
-          description: "the minimum free space on share"
-          optional: true
-          type: 'byte'
-          min:
-            reference: 'relative'
-            source: '<freeFail'
-        freeFail:
-          title: "Free Fail"
-          description: "the minimum free space on share"
-          type: 'byte'
-          optional: true
-        percentWarn:
-          title: "Free Warn %"
-          description: "the minimum free space on share"
-          type: 'percent'
-          optional: true
-          min:
-            reference: 'relative'
-            source: '<percentFail'
-        percentFail:
-          title: "Free Fail %"
-          description: "the minimum free space on share"
-          optional: true
-          type: 'percent'
         analysis:
           title: "Analysis Paths"
           description: "list of directories to monitor their volume on warning"
@@ -91,6 +58,9 @@ class DiskfreeSensor extends Sensor
           entries:
             title: "Directory"
             type: 'string'
+        verbose: @check.verbose
+        warn: @check.warn
+        fail: @check.fail
 
     # Definition of response values
     values:
@@ -116,6 +86,10 @@ class DiskfreeSensor extends Sensor
         description: "the space, which is already used"
         type: 'byte'
         unit: 'B'
+      usedPercent:
+        title: '% Used'
+        description: "the space, which is already used"
+        type: 'percent'
       free:
         title: 'Free'
         description: "the space, which is free"
@@ -156,7 +130,7 @@ class DiskfreeSensor extends Sensor
       return @_end 'fail', err, cb if err
       # parse results
       lines = stdout.split /\n/
-      val = @result.value
+      val = @result.values
       if p.match /^win/
         [val.total, val.free, status]
         col = lines[0].split ','
@@ -172,19 +146,14 @@ class DiskfreeSensor extends Sensor
         val.free = Number(col[4])*1024
         val.total = val.used + val.free
         val.mount = col[6]
+      val.usedPercent = val.used / val.total
       val.freePercent = val.free / val.total
       # evaluate to check status
-      switch
-        when val.used + val.avail is 0
-          status = 'fail'
-          message = "#{@constructor.meta.name} no space available on share #{@config.share}"
-        when @config.freeFail? and val.free < @config.freeFail
-          status = 'fail'
-          message = "#{@constructor.meta.name} too less space on #{@config.share}"
-        when @config.freeWarn? and val.free < @config.freeWarn
-          status = 'warn'
-        else
-          status = 'ok'
+      status = @rules()
+      message = @config[status] + " on share #{@config.share}" unless status is 'ok'
+      # check if analysis have to be done
+      if status is 'ok' and not @config.verbose
+        return @_end status, message, cb
       if not @config.analysis?.length
         return @_end status, message, cb
       # get additional information

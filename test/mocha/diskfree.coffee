@@ -23,22 +23,22 @@ describe "Diskfree", ->
       df.run (err) ->
         expect(err).to.not.exist
         expect(df.result).to.exist
-        expect(df.result.value.total).to.be.above 0
-        expect(df.result.value.used).to.be.above 0
-        expect(df.result.value.free).to.be.above 0
+        expect(df.result.values.total).to.be.above 0
+        expect(df.result.values.used).to.be.above 0
+        expect(df.result.values.free).to.be.above 0
         expect(df.result.message).to.not.exist
         done()
 
     it "should work with binary values", (done) ->
       df = new DiskfreeSensor validator.check 'config', DiskfreeSensor.meta.config,
         share: '/'
-        freeWarn: '1GB'
+        warn: 'free < 1GB'
       df.run (err) ->
         expect(err).to.not.exist
         expect(df.result).to.exist
-        expect(df.result.value.total).to.be.above 0
-        expect(df.result.value.used).to.be.above 0
-        expect(df.result.value.free).to.be.above 0
+        expect(df.result.values.total).to.be.above 0
+        expect(df.result.values.used).to.be.above 0
+        expect(df.result.values.free).to.be.above 0
         expect(df.result.message).to.not.exist
         done()
 
@@ -46,6 +46,7 @@ describe "Diskfree", ->
       df = new DiskfreeSensor validator.check 'config', DiskfreeSensor.meta.config,
         share: '/'
         analysis: ['/tmp']
+        verbose: true
       df.run (err) ->
         expect(err).to.not.exist
         text = df.format()

@@ -5,7 +5,7 @@ validator = require 'alinex-validator'
 
 HttpSensor = require '../../lib/type/http'
 
-describe "Http request sensor", ->
+describe.only "Http request sensor", ->
 
   describe "check", ->
 
@@ -63,7 +63,7 @@ describe "Http request sensor", ->
         expect(http.result.message).to.exist
         done()
 
-    it "should check the body part", (done) ->
+    it.skip "should check the body part", (done) ->
       http = new HttpSensor validator.check 'config', HttpSensor.meta.config,
         url: 'http://heise.de'
         body: 'Newsticker'
@@ -76,7 +76,7 @@ describe "Http request sensor", ->
         expect(http.result.value.bodycheck).to.equal true
         done()
 
-    it "should check the body part with RegExp", (done) ->
+    it.skip "should check the body part with RegExp", (done) ->
       http = new HttpSensor validator.check 'config', HttpSensor.meta.config,
         url: 'http://heise.de'
         body: /heise Developer|iX Magazin/
@@ -95,10 +95,9 @@ describe "Http request sensor", ->
       validator.check 'test', HttpSensor.meta.config,
         url: 'heise.de'
         timeout: 5000
-        responsetime: 500
         username: 'alex'
         password: 'alex'
-        body: 'Login'
+        match: 'Login'
       , (err) ->
         expect(err).to.not.exist
         done()

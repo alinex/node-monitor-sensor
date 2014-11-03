@@ -105,10 +105,10 @@ a simple expression syntax:
 You may use different mathematical and logical operators together with braces.
 Allowed are:
 
-- <, >, <=, >=, ==, !=
-- +, -, *, /
-- and, or, is, isnt
-- (, )
+- comparison: <, >, <=, >=, ==, !=
+- calculation: +, -, *, /
+- logic: and, or, is, isnt
+- braces: (, )
 - all the data value names of the sensor
 
 API

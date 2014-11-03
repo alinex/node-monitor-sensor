@@ -69,24 +69,8 @@ class PingSensor extends Sensor
           unit: 'ms'
           default: 1000
           min: 500
-        responsetime:
-          title: "Average Ping Time"
-          description: "the average time in milliseconds the pings may take to
-            not be marked as warning"
-          type: 'interval'
-          unit: 'ms'
-          default: 500
-          min: 0
-        responsemax:
-          title: "Maximum Ping Time"
-          description: "the maximum time in milliseconds any ping may take to
-            not be marked as warning"
-          type: 'interval'
-          unit: 'ms'
-          default: 1000
-          min:
-            reference: 'relative'
-            source: '<responsetime'
+        warn: @check.warn
+        fail: object.extend {}, @check.fail, { default: 'not success or quality < 100%' }
 
     # Definition of response values
     values:
@@ -139,7 +123,7 @@ class PingSensor extends Sensor
     @_spawn ping.cmd, ping.args, null, (err, stdout, stderr, code) =>
       return @_end 'fail', err, cb if err
       # parse results
-      val = @result.value
+      val = @result.values
       num = 0
       sum = 0
       re = /time=(\d+.?\d*) ms/g
@@ -154,18 +138,10 @@ class PingSensor extends Sensor
       val.responsetime = Math.round(sum/num*10)/10.0
       match = /\s(\d+)% packet loss/.exec stdout
       val.quality = 100-match?[1]
+      val.quality = val.quality/100 if val.quality
       # evaluate to check status
-      status = switch
-        when not val.success or val.quality < 100
-          'fail'
-        when @config.responsetime? and val.responsetime > @config.responsetime, \
-             @config.responsemax? and val.responsemax > @config.responsemax
-          'warn'
-        else
-          'ok'
-      message = switch status
-        when 'fail'
-          "#{@constructor.meta.name} exited with status #{status}"
+      status = @rules()
+      message = @config[status] unless status is 'ok'
       @_end status, message, cb
 
 # Export class

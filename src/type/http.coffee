@@ -14,6 +14,7 @@ object = require('alinex-util').object
 Sensor = require '../base'
 # specific modules for this check
 request = require 'request'
+named = require('named-regexp').named
 
 # Sensor class
 # -------------------------------------------------
@@ -46,14 +47,6 @@ class HttpSensor extends Sensor
           unit: 'ms'
           min: 500
           default: 10000
-        responsetime:
-          title: "Response Time"
-          description: "the maximum time in milliseconds till the server
-            responded after that the state is set to warning"
-          type: 'interval'
-          unit: 'ms'
-          min: 0
-          default: 3000
         username:
           title: "Username"
           description: "the name used for basic authentication"
@@ -64,8 +57,8 @@ class HttpSensor extends Sensor
           description: "the password used for basic authentication"
           type: 'string'
           optional: true
-        body:
-          title: "Body Check"
+        match:
+          title: "Match body"
           description: "the substring or regular expression which have to match"
           type: 'any'
           optional: true
@@ -76,6 +69,9 @@ class HttpSensor extends Sensor
             type: 'object'
             instanceOf: RegExp
           ]
+        verbose: @check.verbose
+        warn: @check.warn
+        fail: object.extend {}, @check.fail, { default: 'statuscode isnt 200' }
     # Definition of response values
     values:
       success:
@@ -106,9 +102,12 @@ class HttpSensor extends Sensor
         title: "Content Length"
         description: "size of the content"
         type: 'byte'
-      bodycheck:
-        title: "Body Check OK"
+      matched:
+        title: "Body Match"
         description: "success of check for content"
+        type: 'boolean'
+      matches:
+        title: "Named"
         type: 'boolean'
 
   # ### Create instance
@@ -135,14 +134,12 @@ class HttpSensor extends Sensor
       if response?
         for key, value of response.headers
           debug chalk.grey "#{key}: #{value}"
-      if body?
-        debug chalk.grey body
       # error checking
       if err
         debug chalk.red err.toString()
         return @_end 'fail', err, cb
       # get the values
-      val = @result.value
+      val = @result.values
       val.success = 200 <= response.statusCode < 300
       val.responsetime = end-start
       val.statuscode = response.statusCode
@@ -150,22 +147,21 @@ class HttpSensor extends Sensor
       val.server = response.headers.server
       val.contenttype = response.headers['content-type']
       val.length = response.connection.bytesRead
-      if @config.body?
-        if @config.bod instanceof RegExp
-          val.bodycheck = (body.match @config.body)?
+      if @config.match?
+        if @config.match instanceof RegExp
+          if ~@config.match.indexOf '(:<'
+            re = named @config.match
+            if matched = re.exec body
+              val.matches = {}
+              for name of matched.captures()
+                val.matches = matched.captures(name)
+          else
+            val.matches = re.exec body
         else
-          val.bodycheck = (~body.indexOf @config.body)?
+          val.matched = (~body.indexOf @config.match)?
       # evaluate to check status
-      status = switch
-        when not val.success
-          'fail'
-        when  @config.responsetime? and val.responsetime > @config.responsetime
-          'warn'
-        else
-          'ok'
-      message = switch status
-        when 'fail'
-          "#{@constructor.meta.name} exited with status code #{response.statusCode}"
+      status = @rules()
+      message = @config[status] unless status is 'ok'
       @_end status, message, cb
 
 # Export class

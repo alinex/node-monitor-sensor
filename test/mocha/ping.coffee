@@ -22,6 +22,8 @@ describe "Ping sensor", ->
       ping.run (err) ->
         expect(err).to.not.exist
         expect(ping.result).to.exist
+        expect(ping.result.values.success).to.exist
+        expect(ping.result.values.responsetime).to.exist
         expect(ping.result.date).to.exist
         expect(ping.result.status).to.equal 'ok'
         expect(ping.result.message).to.not.exist
@@ -69,8 +71,7 @@ describe "Ping sensor", ->
         host: '193.99.144.80'
         count: 10
         timeout: 5000
-        responsetime: 500
-        responsemax: 1000
+        warn: 'responsetime > 500ms or responsemax > 1s'
       , (err) ->
         expect(err).to.not.exist
         done()
@@ -80,8 +81,7 @@ describe "Ping sensor", ->
         host: '193.99.144.80'
         count: 10
         timeout: '5s'
-        responsetime: 500
-        responsemax: '1s'
+        warn: 'responsetime > 500ms or responsemax > 1s'
       , (err) ->
         expect(err).to.not.exist
         done()

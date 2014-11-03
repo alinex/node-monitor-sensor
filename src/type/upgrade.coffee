@@ -16,6 +16,7 @@ Sensor = require '../base'
 os = require 'os'
 async = require 'async'
 moment = require 'moment'
+
 # Sensor class
 # -------------------------------------------------
 class UpgradeSensor extends Sensor
@@ -38,66 +39,9 @@ class UpgradeSensor extends Sensor
       type: 'object'
       allowedKeys: true
       entries:
-        timeWarn:
-          title: "Warn"
-          description: "the time after which a warning is set for upgrades "
-          type: 'interval'
-          unit: 'd'
-          optional: true
-        timeFail:
-          title: "Fail"
-          description: "the time after which a failure is set for upgrades "
-          type: 'interval'
-          unit: 'd'
-          optional: true
-        timeLowWarn:
-          title: "Low Warn"
-          description: "the time after which a warning is set for low priority upgrades "
-          type: 'interval'
-          unit: 'd'
-          optional: true
-        timeLowFail:
-          title: "Low Fail"
-          description: "the time after which a failure is set for low priority upgrades "
-          type: 'interval'
-          unit: 'd'
-          optional: true
-        timeMediumWarn:
-          title: "Medium Warn"
-          description: "the time after which a warning is set for medium priority upgrades "
-          type: 'interval'
-          unit: 'd'
-          optional: true
-        timeMediumFail:
-          title: "Medium Fail"
-          description: "the time after which a failure is set for medium priority upgrades "
-          type: 'interval'
-          unit: 'd'
-          optional: true
-        timeHighWarn:
-          title: "High Warn"
-          description: "the time after which a warning is set for high priority upgrades "
-          type: 'interval'
-          unit: 'd'
-          optional: true
-        timeHighFail:
-          title: "High Fail"
-          description: "the time after which a failure is set for high priority upgrades "
-          type: 'interval'
-          unit: 'd'
-          optional: true
-        timeSecurityWarn:
-          title: "Security Warn"
-          description: "the time after which a warning is set for any security upgrade "
-          type: 'interval'
-          unit: 'd'
-          optional: true
-        timeSecurityFail:
-          title: "Security Fail"
-          description: "the time after which a failure is set for any security upgrade "
-          type: 'interval'
-          unit: 'd'
-          optional: true
+        verbose: @check.verbose
+        warn: @check.warn
+        fail: @check.fail
 
     # Definition of response values
     values:
@@ -117,7 +61,7 @@ class UpgradeSensor extends Sensor
         title: "Num. High Prio"
         description: "the number of high priority updates "
         type: 'integer'
-      numTotal:
+      num:
         title: "Num. Total"
         description: "the number of total updates "
         type: 'integer'
@@ -141,7 +85,7 @@ class UpgradeSensor extends Sensor
         description: "the max. age of high priority update "
         type: 'interval'
         unit: 'd'
-      timeTotal:
+      time:
         title: "Time"
         description: "the max. age of update "
         type: 'interval'
@@ -194,23 +138,23 @@ class UpgradeSensor extends Sensor
             release: date
             info: info
       , (err, results) =>
-        val = @result.value =
+        val = @result.values =
           numSecurity: 0
           numLow: 0
           numMedium: 0
           numHigh: 0
-          numTotal: 0
+          num: 0
           timeSecurity: null
           timeLow: null
           timeMedium: null
           timeHigh: null
-          timeTotal: null
+          time: null
         sort = {}
         for entry in results
           continue unless entry
           sort["#{entry.security}#{{low:1,medium:2,high:3}[entry.urgency]}-#{entry.time}"] = entry
-          val.numTotal++
-          val.timeTotal = entry.time if not val.timeTotal or entry.time > val.timeTotal
+          val.num++
+          val.time = entry.time if not val.time or entry.time > val.time
           if entry.security
             val.numSecurity++
             val.timeSecurity = entry.time if not val.timeSecurity or entry.time > val.timeSecurity
@@ -223,52 +167,12 @@ class UpgradeSensor extends Sensor
           else if entry.urgency is 'high'
             val.numHigh++
             val.timeHigh = entry.time if not val.timeHigh or entry.time > val.timeHigh
+
         # evaluate to check status
-        switch
-          when val.timeTotal? and @config.timeFail? \
-          and val.timeTotal >= @config.timeFail
-            status = 'fail'
-            message = "#{@constructor.meta.name} has updates waiting longer than
-            #{@config.timeFail} days"
-          when val.timeLow? and @config.timeLowFail? \
-          and val.timeLow >= @config.timeLowFail
-            status = 'fail'
-            message = "#{@constructor.meta.name} has low priority updates waiting
-            longer than #{@config.timeLowFail} days"
-          when val.timeMedium? and @config.timeMediumFail? \
-          and val.timeMedium >= @config.timeMediumFail
-            status = 'fail'
-            message = "#{@constructor.meta.name} has medium priority updates waiting
-            longer than #{@config.timeMediumFail} days"
-          when val.timeHigh? and @config.timeHighFail? \
-          and val.timeHigh >= @config.timeHighFail
-            status = 'fail'
-            message = "#{@constructor.meta.name} has high priority updates waiting
-            longer than #{@config.timeHighFail} days"
-          when val.timeSecurity? and @config.timeSecurityFail? \
-          and val.timeSecurity >= @config.timeSecurityFail
-            status = 'fail'
-            message = "#{@constructor.meta.name} has security updates waiting longer
-            than #{@config.timeSecurityFail} days"
-          when val.timeTotal? and @config.timeWarn? \
-          and val.timeTotal >= @config.timeWarn
-            status = 'warn'
-          when val.timeLow? and @config.timeLowWarn? \
-          and val.timeLow >= @config.timeLowWarn
-            status = 'warn'
-          when val.timeMedium? and @config.timeMediumWarn? \
-          and val.timeMedium >= @config.timeMediumWarn
-            status = 'warn'
-          when val.timeHigh? and @config.timeHighWarn? \
-          and val.timeHigh >= @config.timeHighWarn
-            status = 'warn'
-          when val.timeSecurity? and @config.timeSecurityWarn? \
-          and val.timeSecurity >= @config.timeSecurityWarn
-            status = 'warn'
-          else
-            status = 'ok'
+        status = @rules()
+        message = @config[status] unless status is 'ok'
         # done if no problem found
-        if status is 'ok'
+        if status is 'ok' and not @config.verbose
           return @_end status, message, cb
         # get additional information
         @result.analysis = "The following packages may be updated:"

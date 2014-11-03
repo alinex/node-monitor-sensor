@@ -14,27 +14,28 @@ describe "Load", ->
 
     it "should be initialized", ->
       load = new LoadSensor validator.check 'config', LoadSensor.meta.config,
-        longWarn: 15
+        warn: 'long > 15'
       expect(load).to.have.property 'config'
 
     it "should return success", (done) ->
       load = new LoadSensor validator.check 'config', LoadSensor.meta.config,
-        longWarn: 15
+        warn: 'long > 15'
       load.run (err) ->
         expect(err).to.not.exist
         expect(load.result).to.exist
-        expect(load.result.value.cpu).to.exist
-        expect(load.result.value.cpus).to.be.above 0
-        expect(load.result.value.short).to.be.above 0
-        expect(load.result.value.medium).to.be.above 0
-        expect(load.result.value.long).to.be.above 0
+        expect(load.result.values.cpu).to.exist
+        expect(load.result.values.cpus).to.be.above 0
+        expect(load.result.values.short).to.be.above 0
+        expect(load.result.values.medium).to.be.above 0
+        expect(load.result.values.long).to.be.above 0
         expect(load.result.status).to.equal 'ok'
         expect(load.result.message).to.not.exist
         done()
 
     it "should format result", (done) ->
       load = new LoadSensor validator.check 'config', LoadSensor.meta.config,
-        longWarn: 15
+        warn: 'long > 15'
+        verbose: true
       load.run (err) ->
         expect(err).to.not.exist
         text = load.format()

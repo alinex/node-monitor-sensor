@@ -14,34 +14,34 @@ describe "Memory", ->
 
     it "should be initialized", ->
       memory = new MemorySensor validator.check 'config', MemorySensor.meta.config,
-        freeFail: '1M'
+        fail: 'free < 1MB'
       expect(memory).to.have.property 'config'
 
     it "should return success", (done) ->
       memory = new MemorySensor validator.check 'config', MemorySensor.meta.config,
-        freeFail: '100k'
+        fail: 'free < 100kB'
       memory.run (err) ->
         console.log err, memory.result unless memory.result.status is 'ok'
         expect(err).to.not.exist
         expect(memory.result).to.exist
-        expect(memory.result.value.success).to.equal true
-        expect(memory.result.value.total).to.be.above 0
-        expect(memory.result.value.used).to.be.above 0
-        expect(memory.result.value.free).to.be.above 0
-        expect(memory.result.value.shared).to.exist
-        expect(memory.result.value.buffers).to.exist
-        expect(memory.result.value.cached).to.exist
-        expect(memory.result.value.swapTotal).to.exist
-        expect(memory.result.value.swapUsed).to.exist
-        expect(memory.result.value.swapFree).to.exist
-        expect(memory.result.value.actualFree).to.be.above 0
+        expect(memory.result.values.success).to.equal true
+        expect(memory.result.values.total).to.be.above 0
+        expect(memory.result.values.used).to.be.above 0
+        expect(memory.result.values.free).to.be.above 0
+        expect(memory.result.values.shared).to.exist
+        expect(memory.result.values.buffers).to.exist
+        expect(memory.result.values.cached).to.exist
+        expect(memory.result.values.swapTotal).to.exist
+        expect(memory.result.values.swapUsed).to.exist
+        expect(memory.result.values.swapFree).to.exist
+        expect(memory.result.values.actualFree).to.be.above 0
         expect(memory.result.status).to.equal 'ok'
         expect(memory.result.message).to.not.exist
         done()
 
     it "should format result", (done) ->
       memory = new MemorySensor validator.check 'config', MemorySensor.meta.config,
-        freeFail: '1M'
+        fail: 'free < 1MB'
       memory.run (err) ->
         expect(err).to.not.exist
         text = memory.format()

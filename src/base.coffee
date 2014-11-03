@@ -73,8 +73,8 @@ class Sensor
     out = {}
     for key, val of @config
       out[key] = val if val?
+    @debug 'used config', chalk.grey util.inspect(out).replace(/\s+/g, ' ')
     @debug 'result values', chalk.grey util.inspect(@result.values).replace(/\s+/g, ' ')
-    @debug 'check config', chalk.grey util.inspect(out).replace(/\s+/g, ' ')
     # return
     cb null, @
 
@@ -113,11 +113,22 @@ class Sensor
       continue unless @config[status]
       rule = @config[status]
       @debug "check rule: #{rule}"
-      # replace values
+      # replace data values
       for name, value of @result.values
-        re = new RegExp "\\b#{name}\\b", 'g'
-        rule = rule.replace re, (str, name) ->
-          value
+        if Array.isArray value
+          for i, val in value
+            re = new RegExp "\\b#{name}\\[#{i}\\]\\b", 'g'
+            rule = rule.replace re, (str, name) ->
+              value[i]
+        else if typeof value is 'object'
+          for i, val of value
+            re = new RegExp "\\b#{name}\\.#{i}\\b", 'g'
+            rule = rule.replace re, (str, name) ->
+              value[i]
+        else
+          re = new RegExp "\\b#{name}\\b", 'g'
+          rule = rule.replace re, (str, name) ->
+            value
       # replace percent values
       rule = rule.replace /\b(\d+(\.\d+)?)%/g, (str, value) ->
         value / 100
@@ -128,7 +139,7 @@ class Sensor
       rule = rule.replace /\b(\d+(\.\d+)?)(ms|s|m|h|d)/g, (str) ->
         number.parseMSeconds str
       # replace operators
-      for name, value in { and: '&&', or: '||', is: '==', not: '!' }
+      for name, value of { and: '&&', or: '||', is: '==', isnt: '!=', not: '!' }
         re = new RegExp "\\b#{name}\\b", 'g'
         rule = rule.replace re, value
       @debug "optimized: #{rule}"
@@ -163,12 +174,19 @@ class Sensor
     for name, set of meta.config.entries
       continue unless @config[name]?
       val = formatValue @config[name], set
+      if name in ['fail', 'warn']
+        # replace values
+        for vname, value of @result.values
+          re = new RegExp "\\b#{vname}\\b", 'g'
+          val = val.replace re, (str) ->
+            meta.values[vname]?.title ? vname
       text += "| #{string.rpad set.title, 18}
       | #{string.lpad val.toString(), 53} |\n"
     # hint
     text += "\n#{meta.hint}\n" if meta.hint
     # additional information
     text += "\n#{@result.analysis}" if @result.analysis?
+    text
 
 # ### Format a value for better human readable display
 formatValue = (value, config) ->

@@ -20,11 +20,11 @@ class TimeSensor extends Sensor
   # This information may be used later for display and explanation.
   @meta =
     name: 'Time Check'
-    description: "Check the system time against the internet."
+    description: "Check the system time against the Internet."
     category: 'sys'
     level: 1
-    hint: "If the time is not correct it may influence some processes which gives
-    over mutliple hosts. Therefore install and configure `ntpd` on the machine."
+    hint: "If the time is not correct it may influence some processes which goes
+    over multiple hosts. Therefore install and configure `ntpd` on the machine."
     # Check for configuration settings [alinex-validator](http://alinex.githhub.io/node-validator)
     # compatible:
     config:
@@ -42,21 +42,8 @@ class TimeSensor extends Sensor
           description: "the port to use for NTP calls"
           type: 'integer'
           default: 123
-        warn:
-          title: "Warn"
-          description: "the maximum interval which is allowed"
-          optional: true
-          type: 'interval'
-          unit: 's'
-          min:
-            reference: 'relative'
-            source: '<fail'
-        fail:
-          title: "Fail"
-          description: "the maximum interval which is allowed"
-          type: 'interval'
-          unit: 's'
-          optional: true
+        warn: @check.warn
+        fail: @check.fail
 
     # Definition of response values
     values:
@@ -73,7 +60,7 @@ class TimeSensor extends Sensor
         description: "the time on an internet time server"
         type: 'date'
       diff:
-        title: 'Differenz'
+        title: 'Difference'
         description: "the difference between both times"
         type: 'interval'
         unit: 'ms'
@@ -88,20 +75,14 @@ class TimeSensor extends Sensor
     ntp.getNetworkTime @config.ntphost, @config.ntpport, (err, remote) =>
       return @_end 'fail', err, cb if err
       local = new Date
-      val = @result.value
+      val = @result.values
       val.success = true
       val.remote = remote
       val.local = local
       val.diff = Math.abs local-remote
       # evaluate to check status
-      switch
-        when @config.fail? and val.diff > @config.fail
-          status = 'fail'
-          message = "#{@constructor.meta.name} time not synchronized"
-        when @config.warn? and val.diff > @config.warn
-          status = 'warn'
-        else
-          status = 'ok'
+      status = @rules()
+      message = @config[status] unless status is 'ok'
       return @_end status, message, cb
 
 # Export class

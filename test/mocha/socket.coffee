@@ -25,6 +25,8 @@ describe "Socket connection sensor", ->
       socket.run (err) ->
         expect(err).to.not.exist
         expect(socket.result).to.exist
+        expect(socket.result.values.success).to.exist
+        expect(socket.result.values.responsetime).to.exist
         expect(socket.result.date).to.exist
         expect(socket.result.status).to.equal 'ok'
         expect(socket.result.message).to.not.exist
@@ -76,7 +78,7 @@ describe "Socket connection sensor", ->
         host: '193.99.144.80'
         port: 80
         timeout: 5000
-        responsetime: 500
+        warn: 'responsetime > 500ms'
       , (err) ->
         expect(err).to.not.exist
         done()
