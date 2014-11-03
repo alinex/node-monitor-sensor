@@ -113,6 +113,11 @@ class Sensor
       continue unless @config[status]
       rule = @config[status]
       @debug "check rule: #{rule}"
+      # replace values
+      for name, value of @result.values
+        re = new RegExp "\\b#{name}\\b", 'g'
+        rule = rule.replace re, (str, name) ->
+          value
       # replace percent values
       rule = rule.replace /\b(\d+(\.\d+)?)%/g, (str, value) ->
         value / 100
@@ -122,9 +127,13 @@ class Sensor
       # replace interval values
       rule = rule.replace /\b(\d+(\.\d+)?)(ms|s|m|h|d)/g, (str) ->
         number.parseMSeconds str
+      # replace operators
+      for name, value in { and: '&&', or: '||', is: '==', not: '!' }
+        re = new RegExp "\\b#{name}\\b", 'g'
+        rule = rule.replace re, value
       @debug "optimized: #{rule}"
       # run the code in sandbox
-      sandbox = object.clone @result.values
+      sandbox = {}
       vm.runInNewContext "result = #{rule}", sandbox, 'monitor-sensor-rule.vm'
       @debug "result: #{sandbox.result}"
       return status if sandbox.result

@@ -100,9 +100,16 @@ Therefore you may write a rule for `fail` or `warn` status in logical form, use
 a simple expression syntax:
 
     fail: 'free < 5%'
-    warn: 'free < 20% && cpu > 50%'
+    warn: 'free < 20% and cpu > 50%'
 
 You may use different mathematical and logical operators together with braces.
+Allowed are:
+
+- <, >, <=, >=, ==, !=
+- +, -, *, /
+- and, or, is, isnt
+- (, )
+- all the data value names of the sensor
 
 API
 -------------------------------------------------
