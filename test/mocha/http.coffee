@@ -5,9 +5,9 @@ validator = require 'alinex-validator'
 
 HttpSensor = require '../../lib/type/http'
 
-describe.only "Http request sensor", ->
+describe "Http request sensor", ->
 
-  describe "check", ->
+  describe "init", ->
 
     it "should has correct validator rules", ->
       validator.selfcheck 'meta.config', HttpSensor.meta.config
@@ -16,6 +16,8 @@ describe.only "Http request sensor", ->
       http = new HttpSensor validator.check 'config', HttpSensor.meta.config,
         url: 'http://heise.de'
       expect(http).to.have.property 'config'
+
+  describe "check", ->
 
     it "should connect to webserver", (done) ->
       @timeout 10000
@@ -28,6 +30,13 @@ describe.only "Http request sensor", ->
         expect(http.result.date).to.exist
         expect(http.result.status).to.equal 'ok'
         expect(http.result.message).to.not.exist
+        expect(http.result.values.success).to.equal true
+        expect(http.result.values.responsetime).to.exist
+        expect(http.result.values.statuscode).to.exist
+        expect(http.result.values.statusmessage).to.exist
+        expect(http.result.values.server).to.exist
+        expect(http.result.values.contenttype).to.exist
+        expect(http.result.values.length).to.exist
         done()
 
     it "should fail for non-existent webserver", (done) ->
@@ -63,33 +72,62 @@ describe.only "Http request sensor", ->
         expect(http.result.message).to.exist
         done()
 
-    it.skip "should check the body part", (done) ->
+  describe "match body", ->
+
+    it "should work with simple substring", (done) ->
       http = new HttpSensor validator.check 'config', HttpSensor.meta.config,
         url: 'http://heise.de'
-        body: 'Newsticker'
+        match: 'Newsticker'
+        fail: 'not matched'
       http.run (err) ->
         expect(err).to.not.exist
         expect(http.result).to.exist
         expect(http.result.date).to.exist
         expect(http.result.status).to.equal 'ok'
-        expect(http.result.value.bodycheck).to.exist
-        expect(http.result.value.bodycheck).to.equal true
+        expect(http.result.values.matched).to.exist
+        expect(http.result.values.matched).to.equal true
         done()
 
-    it.skip "should check the body part with RegExp", (done) ->
+    it "should fail with simple substring", (done) ->
       http = new HttpSensor validator.check 'config', HttpSensor.meta.config,
         url: 'http://heise.de'
-        body: /heise Developer|iX Magazin/
+        match: 'GODCHA nOt INCLUDED'
+        fail: 'not matched'
+      http.run (err) ->
+        expect(err).to.not.exist
+        expect(http.result.date).to.exist
+        expect(http.result.status).to.equal 'fail'
+        expect(http.result.message).to.exist
+        done()
+
+    it "should work with simple RegExp", (done) ->
+      http = new HttpSensor validator.check 'config', HttpSensor.meta.config,
+        url: 'http://heise.de'
+        match: /heise Developer|iX Magazin/
+        fail: 'not matched'
       http.run (err) ->
         expect(err).to.not.exist
         expect(http.result).to.exist
         expect(http.result.date).to.exist
         expect(http.result.status).to.equal 'ok'
-        expect(http.result.value.bodycheck).to.exist
-        expect(http.result.value.bodycheck).to.equal true
+        expect(http.result.values.matched).to.exist
+        expect(http.result.values.matched).to.equal true
         done()
 
-  describe "check", ->
+    it.only "should fail with simple RegExp", (done) ->
+      http = new HttpSensor validator.check 'config', HttpSensor.meta.config,
+        url: 'http://heise.de'
+        match: /heise Alinex Developer/
+        fail: 'not matched'
+      http.run (err) ->
+        expect(err).to.not.exist
+        expect(http.result).to.exist
+        expect(http.result.date).to.exist
+        expect(http.result.status).to.equal 'fail'
+        expect(http.result.message).to.exist
+        done()
+
+  describe "meta", ->
 
     it "should succeed for complete configuration", (done) ->
       validator.check 'test', HttpSensor.meta.config,

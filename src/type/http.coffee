@@ -149,16 +149,22 @@ class HttpSensor extends Sensor
       val.length = response.connection.bytesRead
       if @config.match?
         if @config.match instanceof RegExp
-          if ~@config.match.indexOf '(:<'
+          if ~@config.match.toString().indexOf '(:<'
+            console.log '---------------', 'named regexp match'
             re = named @config.match
             if matched = re.exec body
               val.matches = {}
               for name of matched.captures()
                 val.matches = matched.captures(name)
           else
-            val.matches = re.exec body
+            console.log '---------------', 'regexp match'
+            matched = @config.match.exec body
+            val.matched = matched?
+            if matched?
+              val.matches = matched[0..matched.length]
         else
-          val.matched = (~body.indexOf @config.match)?
+          console.log '---------------', 'indexof match'
+          val.matched = Boolean ~body.indexOf @config.match
       # evaluate to check status
       status = @rules()
       message = @config[status] unless status is 'ok'
