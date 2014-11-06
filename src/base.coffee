@@ -67,6 +67,8 @@ class Sensor
 
   # ### Protocol end of sensor run
   _end: (status, message, cb) ->
+    return if cbCalled
+    cbCalled = true
     # store overall status
     @result.status = status
     @result.message = message if message

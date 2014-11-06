@@ -45,6 +45,11 @@ class UpgradeSensor extends Sensor
 
     # Definition of response values
     values:
+      platform:
+        title: "Platform"
+        description: "the platform you're running on: 'darwin', 'freebsd', 'linux',
+        'sunos' or 'win32'"
+        type: 'string'
       numSecurity:
         title: "Num. Security"
         description: "the number of security updates "
@@ -139,6 +144,7 @@ class UpgradeSensor extends Sensor
             info: info
       , (err, results) =>
         val = @result.values =
+          platform: process.platform
           numSecurity: 0
           numLow: 0
           numMedium: 0

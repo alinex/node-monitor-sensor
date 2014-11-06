@@ -97,7 +97,9 @@ class IoSensor extends Sensor
         throw new Error "missing the `iostat` command, install through
         `sudo apt-get install sysstat`"
       # run the iostat test
+      @result.range = [new Date]
       @_spawn iostat, ['-k', @config.time, 1], null, (err, stdout, stderr, code) =>
+        @result.range.push new Date
         return @_end 'fail', err, cb if err
         # parse results
         val = @result.values
