@@ -33,19 +33,25 @@ class TimeSensor extends Sensor
       type: 'object'
       allowedKeys: true
       entries:
-        ntphost:
+        host:
           title: "NTP Hostname"
           description: "the name of an NTP server to call"
           type: 'string'
           default: 'pool.ntp.org'
-        ntpport:
+        port:
           title: "NTP Port"
           description: "the port to use for NTP calls"
           type: 'integer'
           default: 123
+        timeout:
+          title: "Timeout"
+          description: "the time in milliseconds tto retrieve time"
+          type: 'interval'
+          unit: 'ms'
+          default: 10000
+          min: 500
         warn: @check.warn
         fail: @check.fail
-
     # Definition of response values
     values:
       local:
@@ -69,7 +75,8 @@ class TimeSensor extends Sensor
   # ### Run the check
   run: (cb = ->) ->
     @_start()
-    ntp.getNetworkTime @config.ntphost, @config.ntpport, (err, remote) =>
+    ntp.ntpReplyTimeout = @config.timeout
+    ntp.getNetworkTime @config.host, @config.port, (err, remote) =>
       return @_end 'fail', err, cb if err
       local = new Date
       val = @result.values
