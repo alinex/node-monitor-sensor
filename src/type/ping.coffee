@@ -61,6 +61,23 @@ class PingSensor extends Sensor
           type: 'integer'
           default: 1
           min: 1
+          max: 10000
+        interval:
+          title: "Wait Interval"
+          description: "the time to wait between sending each packet"
+          type: 'interval'
+          unit: 'ms'
+          default: 1000
+          min: 200
+        size:
+          title: "Packetsize"
+          description: "the number of bytes to be send, keep in mind that 8 bytes
+          for the ICMP header are added"
+          type: 'byte'
+          unit: 'B'
+          default: 56
+          min: 24
+          max: 65507
         timeout:
           title: "Overall Timeout"
           description: "the time in milliseconds the whole test may take before
@@ -105,18 +122,34 @@ class PingSensor extends Sensor
     ping = switch
       when p is 'linux'
         cmd: '/bin/ping'
-        args: ['-c', @config.count, '-W', Math.ceil @config.timeout/1000]
+        args: [
+          '-c', @config.count
+          '-W', Math.ceil @config.timeout/1000
+          '-i', @config.interval/1000
+          '-s', @config.size
+        ]
       when p.match /^win/
         cmd: 'C:/windows/system32/ping.exe'
-        args: ['-n', @config.count, '-w', @config.timeout]
+        args: [
+          '-n', @config.count
+          '-w', @config.timeout
+          '-l', @config.size
+        ]
       when p is 'darwin'
         cmd: '/sbin/ping'
-        args: ['-c', @config.count, '-t', Math.ceil @config.timeout/1000]
+        args: [
+          '-c', @config.count
+          '-t', Math.ceil @config.timeout/1000
+          '-i', @config.interval/1000
+          '-s', @config.size
+        ]
       else
         throw new Error "Operating system #{p} is not supported in ping."
     ping.args.push @config.host
     # run the ping test
+    @result.range = [ new Date ]
     @_spawn ping.cmd, ping.args, null, (err, stdout, stderr, code) =>
+      @result.range.push new Date
       return @_end 'fail', err, cb if err
       # parse results
       val = @result.values
