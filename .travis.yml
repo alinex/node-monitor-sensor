@@ -2,5 +2,8 @@ language: node_js
 node_js:
    - "0.11"
    - "0.10"
-after_success:
+before_install:
+ - sudo apt-get update -qq
+ - sudo apt-get install -qq sysstat
+ after_success:
    - COVERALLS_SERVICE_NAME=travis-ci COVERALLS_REPO_TOKEN=wXjH9NqirtEthptfSrqNg5jBnYRqk7Ecc node_modules/.bin/alinex-make -c test --coverage --coveralls
