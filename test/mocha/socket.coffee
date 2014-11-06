@@ -56,7 +56,7 @@ describe "Socket connection sensor", ->
         expect(socket.result.message).to.exist
         done()
 
-    it.only "should fail to connect to wrong host", (done) ->
+    it "should fail to connect to wrong host", (done) ->
       @timeout 5000
       socket = new SocketSensor validator.check 'config', SocketSensor.meta.config,
         host: 'unknownsubdomain.nonexisting.host'

@@ -55,6 +55,10 @@ class CpuSensor extends Sensor
         description: "speed in MHz"
         type: 'integer'
         unit: 'MHz'
+      arch:
+        title: "Architecture"
+        description: "the processor architecture you're running on: 'arm', 'ia32', or 'x64'"
+        type: 'string'
       user:
         title: "User Time"
         description: "percentage of user time over all cpu cores"
@@ -83,6 +87,7 @@ class CpuSensor extends Sensor
     cpus = os.cpus()
     # calculate values
     val = @result.values
+    val.arch = process.arch
     val.cpus = cpus.length
     val.cpu = cpus[0].model.replace /\s+/g, ' '
     val.speed = cpus[0].speed
