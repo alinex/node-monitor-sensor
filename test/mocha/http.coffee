@@ -78,21 +78,21 @@ describe "Http request sensor", ->
       http = new HttpSensor validator.check 'config', HttpSensor.meta.config,
         url: 'http://heise.de'
         match: 'Newsticker'
-        fail: 'not matched'
+        fail: 'not match'
       http.run (err) ->
         expect(err).to.not.exist
         expect(http.result).to.exist
         expect(http.result.date).to.exist
         expect(http.result.status).to.equal 'ok'
-        expect(http.result.values.matched).to.exist
-        expect(http.result.values.matched).to.equal true
+        expect(http.result.values.match).to.exist
+        expect(http.result.values.match).to.deep.equal ['Newsticker']
         done()
 
     it "should fail with simple substring", (done) ->
       http = new HttpSensor validator.check 'config', HttpSensor.meta.config,
         url: 'http://heise.de'
         match: 'GODCHA nOt INCLUDED'
-        fail: 'not matched'
+        fail: 'not match'
       http.run (err) ->
         expect(err).to.not.exist
         expect(http.result.date).to.exist
@@ -104,27 +104,68 @@ describe "Http request sensor", ->
       http = new HttpSensor validator.check 'config', HttpSensor.meta.config,
         url: 'http://heise.de'
         match: /heise Developer|iX Magazin/
-        fail: 'not matched'
+        fail: 'not match'
       http.run (err) ->
         expect(err).to.not.exist
         expect(http.result).to.exist
         expect(http.result.date).to.exist
         expect(http.result.status).to.equal 'ok'
-        expect(http.result.values.matched).to.exist
-        expect(http.result.values.matched).to.equal true
+        expect(http.result.values.match).to.exist
+        expect(http.result.values.match).to.deep.equal ['heise Developer']
         done()
 
-    it.only "should fail with simple RegExp", (done) ->
+    it "should fail with simple RegExp", (done) ->
       http = new HttpSensor validator.check 'config', HttpSensor.meta.config,
         url: 'http://heise.de'
         match: /heise Alinex Developer/
-        fail: 'not matched'
+        fail: 'not match'
       http.run (err) ->
         expect(err).to.not.exist
         expect(http.result).to.exist
         expect(http.result.date).to.exist
         expect(http.result.status).to.equal 'fail'
         expect(http.result.message).to.exist
+        done()
+
+    it "should work with named RegExp", (done) ->
+      http = new HttpSensor validator.check 'config', HttpSensor.meta.config,
+        url: 'http://heise.de'
+        match: /(:<title>heise Developer|iX Magazin)/
+        fail: 'not match'
+      http.run (err) ->
+        expect(err).to.not.exist
+        expect(http.result).to.exist
+        expect(http.result.date).to.exist
+        expect(http.result.status).to.equal 'ok'
+        expect(http.result.values.match).to.exist
+        expect(Boolean http.result.values.match).to.equal true
+        done()
+
+    it "should fail with named RegExp", (done) ->
+      http = new HttpSensor validator.check 'config', HttpSensor.meta.config,
+        url: 'http://heise.de'
+        match: /(:<title>Alinex Developer|Alinex Magazin)/
+        fail: 'not match'
+      http.run (err) ->
+        expect(err).to.not.exist
+        expect(http.result).to.exist
+        expect(http.result.date).to.exist
+        expect(http.result.status).to.equal 'fail'
+        expect(http.result.message).to.exist
+        done()
+
+    it "should work with named RegExp and value check", (done) ->
+      http = new HttpSensor validator.check 'config', HttpSensor.meta.config,
+        url: 'http://heise.de'
+        match: /(:<title>heise Developer|iX Magazin)/
+        fail: 'match.title isnt \'heise Developer\''
+      http.run (err) ->
+        expect(err).to.not.exist
+        expect(http.result).to.exist
+        expect(http.result.date).to.exist
+        expect(http.result.status).to.equal 'ok'
+        expect(http.result.values.match).to.exist
+        expect(Boolean http.result.values.match).to.equal true
         done()
 
   describe "meta", ->

@@ -14,7 +14,6 @@ object = require('alinex-util').object
 Sensor = require '../base'
 # specific modules for this check
 request = require 'request'
-named = require('named-regexp').named
 
 # Sensor class
 # -------------------------------------------------
@@ -102,13 +101,10 @@ class HttpSensor extends Sensor
         title: "Content Length"
         description: "size of the content"
         type: 'byte'
-      matched:
+      match:
         title: "Body Match"
-        description: "success of check for content"
-        type: 'boolean'
-      matches:
-        title: "Named"
-        type: 'boolean'
+        description: "success of check for content with containing results"
+        type: 'object'
 
   # ### Create instance
   constructor: (config) -> super config, debug
@@ -147,24 +143,7 @@ class HttpSensor extends Sensor
       val.server = response.headers.server
       val.contenttype = response.headers['content-type']
       val.length = response.connection.bytesRead
-      if @config.match?
-        if @config.match instanceof RegExp
-          if ~@config.match.toString().indexOf '(:<'
-            console.log '---------------', 'named regexp match'
-            re = named @config.match
-            if matched = re.exec body
-              val.matches = {}
-              for name of matched.captures()
-                val.matches = matched.captures(name)
-          else
-            console.log '---------------', 'regexp match'
-            matched = @config.match.exec body
-            val.matched = matched?
-            if matched?
-              val.matches = matched[0..matched.length]
-        else
-          console.log '---------------', 'indexof match'
-          val.matched = Boolean ~body.indexOf @config.match
+      val.match = @match body, @config.match
       # evaluate to check status
       status = @rules()
       message = @config[status] unless status is 'ok'

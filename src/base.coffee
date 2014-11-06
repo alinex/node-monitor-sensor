@@ -10,6 +10,7 @@ chalk = require 'chalk'
 util = require 'util'
 math = require 'mathjs'
 vm = require 'vm'
+named = require('named-regexp').named
 # include other alinex modules
 object = require('alinex-util').object
 string = require('alinex-util').string
@@ -106,6 +107,27 @@ class Sensor
       @result.values.success = code is 0
       cb error, stdout, stderr, code
 
+  # ### Check expression against string
+  #
+  # It will will try to match the given expression once and return the matched
+  # groups or false if not matched. The groups are a array with the full match as
+  # first element or in case of named regexp an object with key 'match' containing
+  # the full match.
+  match: (text, re) ->
+    return false unless re?
+    unless re instanceof RegExp
+      return if Boolean ~text.indexOf re then [re] else false
+    # it's an regular expression
+    useNamed = ~re.toString().indexOf '(:<'
+    re = named re if useNamed
+    return false unless match = re.exec text
+    if useNamed
+      matches = {}
+      matches[name] = match.capture name for name of match.captures
+    else
+      matches = match[0..match.length]
+    return matches
+
   # ### Check the rules and return status
   rules: ->
     return 'undefined' unless @result
@@ -119,12 +141,18 @@ class Sensor
           for i, val in value
             re = new RegExp "\\b#{name}\\[#{i}\\]\\b", 'g'
             rule = rule.replace re, (str, name) ->
-              value[i]
+              "'#{value[i].toString()}'"
+          re = new RegExp "\\b#{name}\\b", 'g'
+          rule = rule.replace re, (str, name) ->
+            "'#{value.toString()}'"
         else if typeof value is 'object'
           for i, val of value
             re = new RegExp "\\b#{name}\\.#{i}\\b", 'g'
             rule = rule.replace re, (str, name) ->
-              value[i]
+              "'#{value[i].toString()}'"
+          re = new RegExp "\\b#{name}\\b", 'g'
+          rule = rule.replace re, (str, name) ->
+            "'#{value.toString()}'"
         else
           re = new RegExp "\\b#{name}\\b", 'g'
           rule = rule.replace re, (str, name) ->
