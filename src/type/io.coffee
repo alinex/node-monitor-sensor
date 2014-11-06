@@ -6,8 +6,9 @@
 
 # include base modules
 debug = require('debug')('monitor:sensor:io')
-# include alinex packages
 fs = require 'fs'
+# include alinex packages
+object = require('alinex-util').object
 # include classes and helper
 Sensor = require '../base'
 # specific modules for this check
@@ -46,14 +47,10 @@ class IoSensor extends Sensor
           default: 1
           min: 1
         warn: @check.warn
-        fail: @check.fail
+        fail: object.extend { default: 'wait >= 100%' }, @check.fail
 
     # Definition of response values
     values:
-      success:
-        title: 'Success'
-        description: "true if external command runs successfully"
-        type: 'boolean'
       wait:
         title: "IO Wait"
         description: "the time spent by the CPU waiting for IO operations to complete"

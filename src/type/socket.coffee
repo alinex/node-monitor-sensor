@@ -54,13 +54,9 @@ class SocketSensor extends Sensor
           min: 500
           default: 2000
         warn: @check.warn
-        fail: object.extend {}, @check.fail, { default: 'not success' }
+        fail: @check.fail
     # Definition of response values
     values:
-      success:
-        title: "Successful"
-        description: "true if connecting is possible"
-        type: 'boolean'
       responsetime:
         title: "Response Time"
         description: "time in milliseconds till connection could be established"
@@ -85,7 +81,6 @@ class SocketSensor extends Sensor
 
       # get the values
       val = @result.values
-      val.success = true
       val.responsetime = end-start
 
       # evaluate to check status

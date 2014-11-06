@@ -1,6 +1,5 @@
 chai = require 'chai'
 expect = chai.expect
-require('alinex-error').install()
 validator = require 'alinex-validator'
 
 MemorySensor = require '../../lib/type/memory'
@@ -24,7 +23,6 @@ describe "Memory", ->
         console.log err, memory.result unless memory.result.status is 'ok'
         expect(err).to.not.exist
         expect(memory.result).to.exist
-        expect(memory.result.values.success).to.equal true
         expect(memory.result.values.total).to.be.above 0
         expect(memory.result.values.used).to.be.above 0
         expect(memory.result.values.free).to.be.above 0

@@ -70,13 +70,9 @@ class HttpSensor extends Sensor
           ]
         verbose: @check.verbose
         warn: @check.warn
-        fail: object.extend {}, @check.fail, { default: 'statuscode isnt 200' }
+        fail: object.extend { default: 'statuscode < 200 or statuscode >= 400' }, @check.fail
     # Definition of response values
     values:
-      success:
-        title: "Success"
-        description: "true if server responded with correct http code"
-        type: 'boolean'
       responsetime:
         title: "Response Time"
         description: "time till connection could be established"
@@ -136,7 +132,6 @@ class HttpSensor extends Sensor
         return @_end 'fail', err, cb
       # get the values
       val = @result.values
-      val.success = 200 <= response.statusCode < 300
       val.responsetime = end-start
       val.statuscode = response.statusCode
       val.statusmessage = response.statusMessage

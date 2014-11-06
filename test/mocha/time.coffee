@@ -1,6 +1,5 @@
 chai = require 'chai'
 expect = chai.expect
-require('alinex-error').install()
 validator = require 'alinex-validator'
 
 TimeSensor = require '../../lib/type/time'

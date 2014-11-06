@@ -11,8 +11,7 @@
 # include base modules
 debug = require('debug')('monitor:sensor:load')
 # include alinex packages
-object = require('alinex-util').object
-string = require('alinex-util').string
+{object,string} = require 'alinex-util'
 # include classes and helper modules
 Sensor = require '../base'
 # specific modules for this check

@@ -8,8 +8,7 @@
 # include base modules
 debug = require('debug')('monitor:sensor:cpu')
 # include alinex packages
-object = require('alinex-util').object
-string = require('alinex-util').string
+{object,string} = require 'alinex-util'
 # include classes and helper modules
 Sensor = require '../base'
 # specific modules for this check
@@ -39,7 +38,7 @@ class CpuSensor extends Sensor
       allowedKeys: true
       entries:
         verbose: @check.verbose
-        warn: @check.warn
+        warn: object.extend { default: 'active >= 100%' }, @check.warn
         fail: @check.fail
     # Definition of response values
     values:

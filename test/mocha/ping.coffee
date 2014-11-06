@@ -1,6 +1,5 @@
 chai = require 'chai'
 expect = chai.expect
-require('alinex-error').install()
 validator = require 'alinex-validator'
 
 PingSensor = require '../../lib/type/ping'
@@ -22,7 +21,6 @@ describe "Ping sensor", ->
       ping.run (err) ->
         expect(err).to.not.exist
         expect(ping.result).to.exist
-        expect(ping.result.values.success).to.exist
         expect(ping.result.values.responsetime).to.exist
         expect(ping.result.date).to.exist
         expect(ping.result.status).to.equal 'ok'

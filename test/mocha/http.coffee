@@ -1,6 +1,5 @@
 chai = require 'chai'
 expect = chai.expect
-require('alinex-error').install()
 validator = require 'alinex-validator'
 
 HttpSensor = require '../../lib/type/http'
@@ -30,7 +29,6 @@ describe "Http request sensor", ->
         expect(http.result.date).to.exist
         expect(http.result.status).to.equal 'ok'
         expect(http.result.message).to.not.exist
-        expect(http.result.values.success).to.equal true
         expect(http.result.values.responsetime).to.exist
         expect(http.result.values.statuscode).to.exist
         expect(http.result.values.statusmessage).to.exist

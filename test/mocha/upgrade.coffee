@@ -1,6 +1,5 @@
 chai = require 'chai'
 expect = chai.expect
-require('alinex-error').install()
 validator = require 'alinex-validator'
 
 UpgradeSensor = require '../../lib/type/upgrade'

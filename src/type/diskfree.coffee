@@ -60,14 +60,10 @@ class DiskfreeSensor extends Sensor
             type: 'string'
         verbose: @check.verbose
         warn: @check.warn
-        fail: @check.fail
+        fail: object.extend { default: 'free is 0' }, @check.fail
 
     # Definition of response values
     values:
-      success:
-        title: 'Success'
-        description: "true if external command runs successfully"
-        type: 'boolean'
       share:
         title: 'Share'
         description: "path name of the share"

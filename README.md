@@ -95,6 +95,9 @@ __fail__ if the sensor failed and there is a problem
 
 Status
 -------------------------------------------------
+Each sensor will automatically fail if an timeout occurred. Else the defined
+checks will be used.
+
 Most checks will collect different values which may be used to specify the status.
 Therefore you may write a rule for `fail` or `warn` status in logical form, use
 a simple expression syntax:

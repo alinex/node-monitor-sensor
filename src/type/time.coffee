@@ -7,6 +7,7 @@
 # include base modules
 debug = require('debug')('monitor:sensor:time')
 # include alinex packages
+object = require('alinex-util').object
 # include classes and helper
 Sensor = require '../base'
 # specific modules for this check
@@ -47,10 +48,6 @@ class TimeSensor extends Sensor
 
     # Definition of response values
     values:
-      success:
-        title: 'Success'
-        description: "both times could be retrieved"
-        type: 'boolean'
       local:
         title: 'Local Time'
         description: "the time on the local host"
@@ -76,7 +73,6 @@ class TimeSensor extends Sensor
       return @_end 'fail', err, cb if err
       local = new Date
       val = @result.values
-      val.success = true
       val.remote = remote
       val.local = local
       val.diff = Math.abs local-remote

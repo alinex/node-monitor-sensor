@@ -1,6 +1,5 @@
 chai = require 'chai'
 expect = chai.expect
-require('alinex-error').install()
 validator = require 'alinex-validator'
 
 SocketSensor = require '../../lib/type/socket'
@@ -25,7 +24,6 @@ describe "Socket connection sensor", ->
       socket.run (err) ->
         expect(err).to.not.exist
         expect(socket.result).to.exist
-        expect(socket.result.values.success).to.exist
         expect(socket.result.values.responsetime).to.exist
         expect(socket.result.date).to.exist
         expect(socket.result.status).to.equal 'ok'

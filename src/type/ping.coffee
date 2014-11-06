@@ -69,15 +69,11 @@ class PingSensor extends Sensor
           unit: 'ms'
           default: 1000
           min: 500
-        warn: @check.warn
-        fail: object.extend {}, @check.fail, { default: 'not success or quality < 100%' }
+        warn: object.extend { default: 'quality < 100%' }, @check.warn
+        fail: object.extend { default: 'quality is 0' }, @check.fail
 
     # Definition of response values
     values:
-      success:
-        title: 'Success'
-        description: "true if packets were echoed back"
-        type: 'boolean'
       responsetime:
         title: 'Avg. Response Time'
         description: "average round-trip time of packets"

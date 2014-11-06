@@ -8,8 +8,7 @@
 # include base modules
 debug = require('debug')('monitor:sensor:memory')
 # include alinex packages
-object = require('alinex-util').object
-string = require('alinex-util').string
+{object,string} = require 'alinex-util'
 # include classes and helper modules
 Sensor = require '../base'
 # specific modules for this check
@@ -39,13 +38,9 @@ class MemorySensor extends Sensor
       entries:
         verbose: @check.verbose
         warn: @check.warn
-        fail: @check.fail
+        fail: object.extend { default: 'percentFree is 0 and swapPercentFree is 0' }, @check.fail
     # Definition of response values
     values:
-      success:
-        title: 'Success'
-        description: "true if external command runs successfully"
-        type: 'boolean'
       total:
         title: "Total"
         description: "total system memory"

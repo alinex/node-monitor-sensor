@@ -131,6 +131,7 @@ class Sensor
   # ### Check the rules and return status
   rules: ->
     return 'undefined' unless @result
+    meta = @constructor.meta
     for status in ['fail', 'warn']
       continue unless @config[status]
       rule = @config[status]
@@ -141,7 +142,7 @@ class Sensor
           for i, val in value
             re = new RegExp "\\b#{name}\\[#{i}\\]\\b", 'g'
             rule = rule.replace re, (str, name) ->
-              "'#{value[i].toString()}'"
+              "'#{value[i]?.toString()}'"
           re = new RegExp "\\b#{name}\\b", 'g'
           rule = rule.replace re, (str, name) ->
             "'#{value.toString()}'"
@@ -149,7 +150,7 @@ class Sensor
           for i, val of value
             re = new RegExp "\\b#{name}\\.#{i}\\b", 'g'
             rule = rule.replace re, (str, name) ->
-              "'#{value[i].toString()}'"
+              "'#{value[i]?.toString()}'"
           re = new RegExp "\\b#{name}\\b", 'g'
           rule = rule.replace re, (str, name) ->
             "'#{value.toString()}'"
@@ -157,6 +158,11 @@ class Sensor
           re = new RegExp "\\b#{name}\\b", 'g'
           rule = rule.replace re, (str, name) ->
             value
+      # replace not existing data values
+      if meta?.values?
+        for name of meta.values
+          re = new RegExp "\\b#{name}(\\.\\w+|\\[\\d+\\])?\\b", 'g'
+          rule = rule.replace re, 'null'
       # replace percent values
       rule = rule.replace /\b(\d+(\.\d+)?)%/g, (str, value) ->
         value / 100
