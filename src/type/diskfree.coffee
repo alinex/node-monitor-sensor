@@ -1,6 +1,10 @@
 # Check disk space
 # =================================================
 
+# Find the description of the possible configuration values and the returned
+# values in the code below.
+# But the analysis part currently only works on linux.
+
 # Node Modules
 # -------------------------------------------------
 
@@ -21,6 +25,7 @@ math = require 'mathjs'
 class DiskfreeSensor extends Sensor
 
   # ### General information
+  #
   # This information may be used later for display and explanation.
   @meta =
     name: 'Diskfree'
@@ -30,8 +35,12 @@ class DiskfreeSensor extends Sensor
     hint: "If a share is full it will make I/O problems in the system or applications
     in case of the root partition it may also neither be possible to log errors.
     Maybe some old files like temp or logs can be removed or compressed. "
-    # Check for configuration settings [alinex-validator](http://alinex.githhub.io/node-validator)
-    # compatible:
+
+    # ### Configuration
+    #
+    # Definition of all possible configuration settings (defaults included).
+    # It's a n[alinex-validator](http://alinex.githhub.io/node-validator)
+    # compatible schema definition:
     config:
       title: "Disk free Test"
       type: 'object'
@@ -62,7 +71,10 @@ class DiskfreeSensor extends Sensor
         warn: @check.warn
         fail: object.extend { default: 'free is 0' }, @check.fail
 
-    # Definition of response values
+    # ### Result values
+    #
+    # This are possible values which may be given if the check runs normally.
+    # You may use any of these in your warn/fail expressions.
     values:
       share:
         title: 'Share'
@@ -118,7 +130,7 @@ class DiskfreeSensor extends Sensor
         cmd: '../bin/drivespace.exe'
         args: ["drive-#{@config.share}"]
       else
-        throw new Error "Operating system #{p} is not supported in diskfree."
+        throw new Error "Operating system #{p} is not supported in diskfree sensor."
     # run the diskfree test
     @_spawn diskfree.cmd, diskfree.args,
       timeout: @config.timeout
@@ -148,9 +160,10 @@ class DiskfreeSensor extends Sensor
       status = @rules()
       message = @config[status] + " on share #{@config.share}" unless status is 'ok'
       # check if analysis have to be done
-      if status is 'ok' and not @config.verbose
+      if (status is 'ok' and not @config.verbose) or not @config.analysis?.length
         return @_end status, message, cb
-      if not @config.analysis?.length
+      # analysis currently only works on linux
+      if os.platform().match /^win/
         return @_end status, message, cb
       # get additional information
       @result.analysis = """

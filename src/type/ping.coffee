@@ -17,6 +17,8 @@
 #     300-400 ms  UMTS
 #     700–1000 ms GPRS
 
+# Find the description of the possible configuration values and the returned
+# values in the code below.
 
 # Node Modules
 # -------------------------------------------------
@@ -35,6 +37,7 @@ os = require 'os'
 class PingSensor extends Sensor
 
   # ### General information
+  #
   # This information may be used later for display and explanation.
   @meta =
     name: 'Ping'
@@ -44,8 +47,12 @@ class PingSensor extends Sensor
     level: 1
     hint: "Check the network card configuration if local ping won't work or the
     network connection for external pings. "
-    # Check for configuration settings [alinex-validator](http://alinex.githhub.io/node-validator)
-    # compatible:
+
+    # ### Configuration
+    #
+    # Definition of all possible configuration settings (defaults included).
+    # It's a n[alinex-validator](http://alinex.githhub.io/node-validator)
+    # compatible schema definition:
     config:
       title: "Ping test"
       type: 'object'
@@ -89,7 +96,10 @@ class PingSensor extends Sensor
         warn: object.extend { default: 'quality < 100%' }, @check.warn
         fail: object.extend { default: 'quality is 0' }, @check.fail
 
-    # Definition of response values
+    # ### Result values
+    #
+    # This are possible values which may be given if the check runs normally.
+    # You may use any of these in your warn/fail expressions.
     values:
       responsetime:
         title: 'Avg. Response Time'

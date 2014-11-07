@@ -1,5 +1,9 @@
-# Check disk space
+# Check the time
 # =================================================
+# This will compare the local time with the time of a time server in the internet.
+
+# Find the description of the possible configuration values and the returned
+# values in the code below.
 
 # Node Modules
 # -------------------------------------------------
@@ -18,6 +22,7 @@ ntp = require 'ntp-client'
 class TimeSensor extends Sensor
 
   # ### General information
+  #
   # This information may be used later for display and explanation.
   @meta =
     name: 'Time Check'
@@ -26,8 +31,12 @@ class TimeSensor extends Sensor
     level: 1
     hint: "If the time is not correct it may influence some processes which goes
     over multiple hosts. Therefore install and configure `ntpd` on the machine."
-    # Check for configuration settings [alinex-validator](http://alinex.githhub.io/node-validator)
-    # compatible:
+
+    # ### Configuration
+    #
+    # Definition of all possible configuration settings (defaults included).
+    # It's a n[alinex-validator](http://alinex.githhub.io/node-validator)
+    # compatible schema definition:
     config:
       title: "Time Check"
       type: 'object'
@@ -52,7 +61,11 @@ class TimeSensor extends Sensor
           min: 500
         warn: @check.warn
         fail: @check.fail
-    # Definition of response values
+
+    # ### Result values
+    #
+    # This are possible values which may be given if the check runs normally.
+    # You may use any of these in your warn/fail expressions.
     values:
       local:
         title: 'Local Time'

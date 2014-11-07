@@ -5,6 +5,9 @@
 # The load values will be normalized, meaning the load per single cpu core will
 # be calculated.
 
+# Find the description of the possible configuration values and the returned
+# values in the code below.
+
 # Node Modules
 # -------------------------------------------------
 
@@ -23,6 +26,7 @@ os = require 'os'
 class LoadSensor extends Sensor
 
   # ### General information
+  #
   # This information may be used later for display and explanation.
   @meta =
     name: 'Load'
@@ -33,8 +37,11 @@ class LoadSensor extends Sensor
     Mostly this is CPU-bound load, load caused by out of memory issues or I/O-bound
     load problems. "
 
-    # Check for configuration settings [alinex-validator](http://alinex.githhub.io/node-validator)
-    # compatible:
+    # ### Configuration
+    #
+    # Definition of all possible configuration settings (defaults included).
+    # It's a n[alinex-validator](http://alinex.githhub.io/node-validator)
+    # compatible schema definition:
     config:
       title: "CPU load check"
       type: 'object'
@@ -43,7 +50,11 @@ class LoadSensor extends Sensor
         verbose: @check.verbose
         warn: @check.warn
         fail: @check.fail
-    # Definition of response values
+
+    # ### Result values
+    #
+    # This are possible values which may be given if the check runs normally.
+    # You may use any of these in your warn/fail expressions.
     values:
       cpu:
         title: "CPU"

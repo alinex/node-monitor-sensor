@@ -1,6 +1,10 @@
 # Cpu test class
 # =================================================
 # This may be used to check the overall memory use of a host.
+# But the analysis part currently only works on linux.
+
+# Find the description of the possible configuration values and the returned
+# values in the code below.
 
 # Node Modules
 # -------------------------------------------------
@@ -30,17 +34,31 @@ class CpuSensor extends Sensor
     hint: "A high cpu usage means that the server may not start another task immediately.
     If the load is also very high the system is overloaded check if any application
     goes evil."
-    # Check for configuration settings [alinex-validator](http://alinex.githhub.io/node-validator)
-    # compatible:
+
+    # ### Configuration
+    #
+    # Definition of all possible configuration settings (defaults included).
+    # It's a n[alinex-validator](http://alinex.githhub.io/node-validator)
+    # compatible schema definition:
     config:
       title: "CPU check configuration"
       type: 'object'
       allowedKeys: true
       entries:
+        analysis:
+          title: "Top X"
+          description: "the number of top cpu heavy processes for analysis"
+          type: 'integer'
+          min: 1
+          default: 5
         verbose: @check.verbose
         warn: object.extend { default: 'active >= 100%' }, @check.warn
         fail: @check.fail
-    # Definition of response values
+
+    # ### Result values
+    #
+    # This are possible values which may be given if the check runs normally.
+    # You may use any of these in your warn/fail expressions.
     values:
       cpu:
         title: "CPU Model"
@@ -85,7 +103,7 @@ class CpuSensor extends Sensor
     # get data
     load = os.loadavg()
     cpus = os.cpus()
-    # calculate values
+    # store the results
     val = @result.values
     val.arch = process.arch
     val.cpus = cpus.length
@@ -109,12 +127,15 @@ class CpuSensor extends Sensor
     # done if no problem found
     if status is 'ok' and not @config.verbose
       return @_end status, message, cb
-    # get additional information
-    cmd = "ps axu | awk '{print $2, $3, $4, $11}' | sort -k2 -nr | head -5"
+    # analysis currently only works on linux
+    if os.platform().match /^win/
+      return @_end status, message, cb
+    # get additional information (top processes)
+    cmd = "ps axu | awk '{print $2, $3, $4, $11}' | sort -k2 -nr | head -#{@config.analysis}"
     exec cmd, (err, stdout, stderr) =>
       unless err
         @result.analysis = """
-        Currently the top cpu consuming processes are:
+        Currently the top #{@config.analysis} cpu consuming processes are:
 
         |  PID  |  %CPU |  %MEM | COMMAND                                            |
         | ----: | ----: | ----: | -------------------------------------------------- |\n"""

@@ -1,6 +1,9 @@
-# Socket test class
+# HTTP access check
 # =================================================
-# This may be used to check the response of a web server.
+# This may be used to check the response of a web server using HTTP or HTTPS.
+
+# Find the description of the possible configuration values and the returned
+# values in the code below.
 
 # Node Modules
 # -------------------------------------------------
@@ -20,6 +23,7 @@ request = require 'request'
 class HttpSensor extends Sensor
 
   # ### General information
+  #
   # This information may be used later for display and explanation.
   @meta =
     name: 'HTTP Request'
@@ -27,8 +31,12 @@ class HttpSensor extends Sensor
     category: 'net'
     level: 2
     hint: "If the server didn't respond it also may be a network problem. "
-    # Check for configuration settings [alinex-validator](http://alinex.githhub.io/node-validator)
-    # compatible:
+
+    # ### Configuration
+    #
+    # Definition of all possible configuration settings (defaults included).
+    # It's a n[alinex-validator](http://alinex.githhub.io/node-validator)
+    # compatible schema definition:
     config:
       title: "Webserver response check"
       type: 'object'
@@ -68,10 +76,20 @@ class HttpSensor extends Sensor
             type: 'object'
             instanceOf: RegExp
           ]
+        analysis:
+          title: "Analysis Length"
+          description: "the maximum body display length in analyzation report"
+          type: 'integer'
+          min: 1
+          default: 256
         verbose: @check.verbose
         warn: @check.warn
         fail: object.extend { default: 'statuscode < 200 or statuscode >= 400' }, @check.fail
-    # Definition of response values
+
+    # ### Result values
+    #
+    # This are possible values which may be given if the check runs normally.
+    # You may use any of these in your warn/fail expressions.
     values:
       responsetime:
         title: "Response Time"
@@ -122,10 +140,6 @@ class HttpSensor extends Sensor
     request option, (err, response, body) =>
       # request finished
       end = new Date().getTime()
-      # collecting data
-      if response?
-        for key, value of response.headers
-          debug chalk.grey "#{key}: #{value}"
       # error checking
       if err
         debug chalk.red err.toString()
@@ -142,6 +156,25 @@ class HttpSensor extends Sensor
       # evaluate to check status
       status = @rules()
       message = @config[status] unless status is 'ok'
+      # done if no problem found
+      if status is 'ok' and not @config.verbose
+        return @_end status, message, cb
+      # get additional information (top processes)
+      @result.analysis = """
+      See the following details of the check.
+
+      __GET #{@config.url}__\n
+      """
+      if response?
+        @result.analysis += "\nResponse:\n\n"
+        for key, value of response.headers
+          @result.analysis += "    #{key}: #{value}\n"
+      if body?
+        body = body[0..@config.analysis] + '...' if body.length > @config.analysis
+        body = body.replace /\n/g, '\n    '
+        @result.analysis += "\nContent:\n\n"
+        @result.analysis += "    #{body}\n"
+      debug @result.analysis
       @_end status, message, cb
 
 # Export class

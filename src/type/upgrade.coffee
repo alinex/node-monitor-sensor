@@ -1,6 +1,10 @@
 # Check package upgrades
 # =================================================
-# This will only work on debian based linux.
+# This will at the moment only work on denian and debian based linux like Mint,
+# Ubuntu.
+
+# Find the description of the possible configuration values and the returned
+# values in the code below.
 
 # Node Modules
 # -------------------------------------------------
@@ -22,6 +26,7 @@ moment = require 'moment'
 class UpgradeSensor extends Sensor
 
   # ### General information
+  #
   # This information may be used later for display and explanation.
   @meta =
     name: 'Upgrade'
@@ -31,8 +36,12 @@ class UpgradeSensor extends Sensor
     hint: "If there are some packages to be upgraded, please call `sudo aptitude upgrade`
     on the command line. This will interactively install all the neccessary
     package upgrades."
-    # Check for configuration settings [alinex-validator](http://alinex.githhub.io/node-validator)
-    # compatible:
+
+    # ### Configuration
+    #
+    # Definition of all possible configuration settings (defaults included).
+    # It's a n[alinex-validator](http://alinex.githhub.io/node-validator)
+    # compatible schema definition:
     config:
       title: "Package Upgrade"
       description: "the configuration to check for possible package upgrades"
@@ -43,7 +52,10 @@ class UpgradeSensor extends Sensor
         warn: @check.warn
         fail: @check.fail
 
-    # Definition of response values
+    # ### Result values
+    #
+    # This are possible values which may be given if the check runs normally.
+    # You may use any of these in your warn/fail expressions.
     values:
       platform:
         title: "Platform"

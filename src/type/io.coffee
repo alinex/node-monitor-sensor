@@ -1,5 +1,11 @@
-# Check disk space
+# Check io traffic to disks
 # =================================================
+# Mostly this is used for local disks, but may be also used for network disks.
+# This sensor only works on unix like systems using an additional package
+# called `iostat`.
+
+# Find the description of the possible configuration values and the returned
+# values in the code below.
 
 # Node Modules
 # -------------------------------------------------
@@ -20,6 +26,7 @@ math = require 'mathjs'
 class IoSensor extends Sensor
 
   # ### General information
+  #
   # This information may be used later for display and explanation.
   @meta =
     name: 'Disk IO'
@@ -28,8 +35,12 @@ class IoSensor extends Sensor
     level: 1
     hint: "If there are any problems here check the device for hardware or
     network problems."
-    # Check for configuration settings [alinex-validator](http://alinex.githhub.io/node-validator)
-    # compatible:
+
+    # ### Configuration
+    #
+    # Definition of all possible configuration settings (defaults included).
+    # It's a n[alinex-validator](http://alinex.githhub.io/node-validator)
+    # compatible schema definition:
     config:
       title: "Disk IO Test"
       type: 'object'
@@ -49,7 +60,10 @@ class IoSensor extends Sensor
         warn: @check.warn
         fail: object.extend { default: 'wait >= 100%' }, @check.fail
 
-    # Definition of response values
+    # ### Result values
+    #
+    # This are possible values which may be given if the check runs normally.
+    # You may use any of these in your warn/fail expressions.
     values:
       wait:
         title: "IO Wait"

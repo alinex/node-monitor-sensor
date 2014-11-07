@@ -15,6 +15,9 @@ too.
 - supports verbose mode and debugging
 - calculates the status
 
+Some sensors and parts of it are specifically for Linux/Unix/OSX systems. If you
+have windows you may help to improve this.
+
 It is one of the modules of the [Alinex Universe](http://alinex.github.io/node-alinex)
 following the code standards defined there.
 
@@ -111,6 +114,13 @@ Allowed are:
 - all the data value names of the sensor
 - array access on some data values: `match[1]`
 - object access on some data values: `match.title`
+
+More complexer examples are:
+
+    fail: "match.title isnt 'heise Developer'"
+    warn: "free < 10% or swapFree < 50%"
+    fail: "statuscode < 200 or statuscode >= 400"
+
 
 Public API
 -------------------------------------------------
