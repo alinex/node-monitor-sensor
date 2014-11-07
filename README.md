@@ -84,17 +84,11 @@ Status
 -------------------------------------------------
 The sensors uses the following status:
 
-__running__ if the sensor is already analyzing, you have to wait
+- __running__ if the sensor is already analyzing, you have to wait
+- __ok__ if everything is perfect, there nothing have to be done
+- __warn__ if the sensor reached the warning level, know you have to keep an eye on it
+- __fail__ if the sensor failed and there is a problem
 
-__ok__ if everything is perfect, there nothing have to be done
-
-__warn__ if the sensor reached the warning level, know you have to keep an eye on it
-
-__fail__ if the sensor failed and there is a problem
-
-
-Status
--------------------------------------------------
 Each sensor will automatically fail if an timeout occurred. Else the defined
 checks will be used.
 
@@ -105,19 +99,26 @@ a simple expression syntax:
     fail: 'free < 5%'
     warn: 'free < 20% and cpu > 50%'
 
+### Warn/Fail rules
+
 You may use different mathematical and logical operators together with braces.
 Allowed are:
 
 - comparison: <, >, <=, >=, ==, !=
 - calculation: +, -, *, /
-- logic: and, or, is, isnt
+- logic: and, or, is, isnt, not
 - braces: (, )
 - all the data value names of the sensor
+- array access on some data values: `match[1]`
+- object access on some data values: `match.title`
 
-API
+Public API
 -------------------------------------------------
 
 ### Sensor classes
+
+The following list contains the possible sensors, look into each other to get
+all the specific information:
 
 - [Cpu](src/type/cpu.coffee) - cpu activity check
 - [Load](src/type/load.coffee) - cpu load check
@@ -162,6 +163,8 @@ API
 - `config` - configuration (given combined with defaults)
 - `result` - the results:
   - `date` - start date of last or current run
+  - `range` - if set this will give the time range (start/end date in an array)
+    this measurement includes
   - `status` - status of the last or current run (ok, warn, fail)
   - `message` - error message of the last or current run
   - `values` - map of measured values
