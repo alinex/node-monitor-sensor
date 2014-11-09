@@ -132,7 +132,7 @@ class Sensor
 
   # ### Check the rules and return status
   rules: ->
-    return 'undefined' unless @result
+    return 'fail' unless @result
     meta = @constructor.meta
     for status in ['fail', 'warn']
       continue unless @config[status]

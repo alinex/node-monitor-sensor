@@ -14,7 +14,7 @@ chalk = require 'chalk'
 {exec} = require 'child_process'
 # include alinex packages
 fs = require 'alinex-fs'
-object = require('alinex-util').object
+{object,string} = require 'alinex-util'
 # include classes and helper
 Sensor = require '../base'
 # specific modules for this check
@@ -174,7 +174,7 @@ class NetSensor extends Sensor
           # evaluate to check status
           status = @rules()
           message = @config[status] unless status is 'ok'
-          @more => return @_end status, message, cb
+          @more status, => return @_end status, message, cb
       , @config.time
       # parse start results while waiting for end measurement
       for line in data.split /\n/
@@ -185,9 +185,9 @@ class NetSensor extends Sensor
         else
           debug chalk.grey line
 
-  more: (cb) ->
-    cmd = "ip addr show #{@config.interface}"
+  more: (status, cb) ->
     # get interface settings
+    cmd = "ip addr show #{@config.interface}"
     exec cmd,
       timeout: @config.analysisTimeout
     , (err, stdout, stderr) =>
@@ -203,10 +203,29 @@ class NetSensor extends Sensor
             @result.values.ipv4 = match[1]
           else if match = /^inet6 (([0-9a-f]{0,4}:){5}[0-9a-f]{0,4})/.exec line
             @result.values.ipv6 = match[1]
-#      re = new RegExp "#{@config.interface}:.*?state ([A-Z]+) .*\n.*?(#{mac})"
-#      match = re.exec stdout.toString()
-#      console.log '-------------------', re, match
-      cb()
+      # check if analysis have to be done
+      if status is 'ok' and not @config.verbose
+        return cb()
+      # analysis currently only works on linux
+      exec 'netstat --ip -p', (err, stdout, stderr) =>
+        return cb() unless stdout
+        @result.analysis = """
+          Active internet connections (without server):
+
+          | CON |  RX  |  TX  | SERVER               | PROTO |   PID  |     PROGRAM    |
+          | :-- | ---: | ---: | :------------------- | :---- | -----: | :------------- |\n"""
+        re = /^(\w+)\s+(\d+)\s+(\d+)\s+\S+\s+([^:]+):(\S+)\s+\w+\s+(\d+)\/(\S+)/
+        for line in stdout.toString().split /\n/
+          if match = re.exec line
+            @result.analysis += "| #{string.rpad match[1] , 3}
+              | #{string.lpad match[2], 4}
+              | #{string.lpad match[3], 4}
+              | #{string.rpad match[4], 20}
+              | #{string.rpad match[5], 5}
+              | #{string.lpad match[6], 6}
+              | #{string.rpad match[7], 14} |\n"
+            console.log match[1..6]
+        cb()
 
 # Export class
 # -------------------------------------------------

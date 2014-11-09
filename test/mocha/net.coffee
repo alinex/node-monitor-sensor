@@ -12,6 +12,7 @@ describe "Net", ->
       validator.selfcheck 'meta.config', NetSensor.meta.config
 
     it "should be initialized", ->
+      @timeout 5000
       net = new NetSensor validator.check 'config', NetSensor.meta.config,
         interface: 'eth0'
         time: 1000
@@ -31,10 +32,12 @@ describe "Net", ->
         expect(net.result.message).to.not.exist
         done()
 
-    it.only "should format result", (done) ->
+    it "should format result", (done) ->
+      @timeout 5000
       net = new NetSensor validator.check 'config', NetSensor.meta.config,
         interface: 'wlan0'
         time: 1000
+        verbose: true
       net.run (err) ->
         expect(err).to.not.exist
         text = net.format()
