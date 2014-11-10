@@ -207,24 +207,57 @@ class NetSensor extends Sensor
       if status is 'ok' and not @config.verbose
         return cb()
       # analysis currently only works on linux
-      exec 'netstat --ip -p', (err, stdout, stderr) =>
+      exec 'netstat -plnta',
+        env:
+          LANG: 'DE'
+      , (err, stdout, stderr) =>
         return cb() unless stdout
+        # 0 Protocol
+        # 1 Recv-Q
+        # 2 Send-Q
+        # 3 Local Address, Port
+        # 4 Foreign Address, Port
+        # 5 State
+        # 6 PID, Program name
+        server = ''
+        conn = ''
+        head = true
+        for line in stdout.toString().trim().split /\n/
+          cols = line.split /\s+/
+          continue if cols[0] isnt 'Proto' and head
+          if cols[0] is 'Proto'
+            head = false
+            continue
+          if cols[5] is 'LISTEN'
+            split = cols[3].lastIndexOf ':'
+            ip = cols[3].substring 0, split
+            port = cols[3].substring split+1
+            server += "| #{string.rpad cols[0] , 5}
+              | #{string.rpad ip, 20}
+              | #{string.rpad port, 5} |\n"
+          else
+            split = cols[4].lastIndexOf ':'
+            ip = cols[4].substring 0, split
+            port = cols[4].substring split+1
+            [pid,cmd] = cols[6].split '/', 2
+            continue unless cmd?
+            conn += "| #{string.rpad cols[0] , 5}
+              | #{string.rpad ip, 20}
+              | #{string.rpad port, 5}
+              | #{string.lpad pid, 6}
+              | #{string.rpad (cmd ? ''), 14} |\n"
         @result.analysis = """
-          Active internet connections (without server):
+          Listening servers:
 
-          | CON |  RX  |  TX  | SERVER               | PROTO |   PID  |     PROGRAM    |
-          | :-- | ---: | ---: | :------------------- | :---- | -----: | :------------- |\n"""
-        re = /^(\w+)\s+(\d+)\s+(\d+)\s+\S+\s+([^:]+):(\S+)\s+\w+\s+(\d+)\/(\S+)/
-        for line in stdout.toString().split /\n/
-          if match = re.exec line
-            @result.analysis += "| #{string.rpad match[1] , 3}
-              | #{string.lpad match[2], 4}
-              | #{string.lpad match[3], 4}
-              | #{string.rpad match[4], 20}
-              | #{string.rpad match[5], 5}
-              | #{string.lpad match[6], 6}
-              | #{string.rpad match[7], 14} |\n"
-            console.log match[1..6]
+          | PROTO | LOCAL IP             | PORT  |
+          | :---- | :------------------- | :---- |
+          #{server}
+
+          Active internet connections:
+
+          | PROTO | FOREIGN IP           | PORT  |   PID  |     PROGRAM    |
+          | :---- | :------------------- | ----: | -----: | :------------- |
+          #{conn}"""
         cb()
 
 # Export class
