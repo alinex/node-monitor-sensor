@@ -134,6 +134,7 @@ all the specific information:
 - [Load](src/type/load.coffee) - cpu load check
 - [Memory](src/type/memory.coffee) - check free memory
 - [IO](src/type/io.coffee) - disk io check
+- [Net](src/type/net.coffee) - network io check
 - [Diskfree](src/type/diskfree.coffee) - free disk space
 - [Time](src/type/time.coffee) - check local time
 - [Upgrade](src/type/upgrade.coffee) - check for package upgrades

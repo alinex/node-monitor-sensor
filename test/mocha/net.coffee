@@ -25,17 +25,25 @@ describe "Net", ->
       net.run (err) ->
         expect(err).to.not.exist
         expect(net.result).to.exist
-#        expect(net.result.values.read).to.exist
-#        expect(net.result.values.write).to.exist
-#        expect(net.result.values.readTotal).to.exist
-#        expect(net.result.values.writeTotal).to.exist
+        expect(net.result.values.bytes).to.exist
+        expect(net.result.values.packets).to.exist
+        expect(net.result.values.errors).to.exist
+        expect(net.result.values.drops).to.exist
+        expect(net.result.values.fifo).to.exist
+        expect(net.result.values.frame).to.exist
+        expect(net.result.values.collisions).to.exist
+        expect(net.result.values.compressed).to.exist
+        expect(net.result.values.carrier).to.exist
+        expect(net.result.values.multicast).to.exist
+        expect(net.result.values.state).to.exist
+        expect(net.result.values.mac).to.exist
         expect(net.result.message).to.not.exist
         done()
 
-    it.only "should format result", (done) ->
+    it "should format result", (done) ->
       @timeout 5000
       net = new NetSensor validator.check 'config', NetSensor.meta.config,
-        interface: 'wlan0'
+        interface: 'eth0'
         time: 1000
         verbose: true
       net.run (err) ->

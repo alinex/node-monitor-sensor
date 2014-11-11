@@ -239,25 +239,28 @@ class NetSensor extends Sensor
             split = cols[4].lastIndexOf ':'
             ip = cols[4].substring 0, split
             port = cols[4].substring split+1
+            continue if not cols[6] or cols[6] is '-'
             [pid,cmd] = cols[6].split '/', 2
-            continue unless cmd?
             conn += "| #{string.rpad cols[0] , 5}
               | #{string.rpad ip, 20}
               | #{string.rpad port, 5}
               | #{string.lpad pid, 6}
               | #{string.rpad (cmd ? ''), 14} |\n"
-        @result.analysis = """
-          Listening servers:
+        @result.analysis = ''
+        if server
+          @result.analysis += """
+            Listening servers:
 
-          | PROTO | LOCAL IP             | PORT  |
-          | :---- | :------------------- | :---- |
-          #{server}
+            | PROTO | LOCAL IP             | PORT  |
+            | :---- | :------------------- | :---- |
+            #{server}\n"""
+        if conn
+          @result.analysis += """
+            Active internet connections:
 
-          Active internet connections:
-
-          | PROTO | FOREIGN IP           | PORT  |   PID  |     PROGRAM    |
-          | :---- | :------------------- | ----: | -----: | :------------- |
-          #{conn}"""
+            | PROTO | FOREIGN IP           | PORT  |   PID  |     PROGRAM    |
+            | :---- | :------------------- | ----: | -----: | :------------- |
+            #{conn}\n"""
         cb()
 
 # Export class
