@@ -82,7 +82,7 @@ class Sensor
     cb null, @
 
   # ### Helper to work with local commands
-  _spawn: (cmd, args = [], options = [], cb) ->
+  _spawn: (cmd, args = [], options = {}, cb) ->
     # create new subprocess
     @debug "exec> #{cmd} #{args.join ' '}"
     proc = spawn cmd, args, options
