@@ -4,6 +4,43 @@ Version changes
 The following list gives a short overview about what is changed between
 individual versions:
 
+Version 0.1.2 (2014-11-19)
+-------------------------------------------------
+- Fixed option handling in internal spawn call.
+- Finished net sensor.
+- Added server list to net analysis.
+- Added analysis for net sensor.
+- Added network sensor.
+- Updated documentation of all sensors.
+- Updated status description.
+- Test case fix.
+- Small fixes and some new values in sensors.
+- Added timeout option to time sensor.
+- Added more options for ping.
+- Added travis install command for additional packages.
+- Removed success entry from values.
+- Moved match function from http to base and finished http tests.
+- Succeeded first body match tests.
+- Reorganized sensors to work with new rules.
+- Add support for logical operators.
+- Added binary and interval support to check expressions.
+- Add unit test for new base methods.
+- Replaced hardcoded rules with defined ones.
+- Small changes on documentation.
+- Small fix in result display for http.
+- Added time sensor.
+- Added iostats sensor.
+- Rename bodycheck config into body.
+- Added more values to the http sensor.
+- Limited parallel aptitude calls to number of system cores.
+- Fixed bug in display of days in tables.
+- Added support for percent measurement in diskfree.
+- Add support for automatical  calculation of best interval unit.
+- Fixed bug in diskfree with file analyzation (whitespace in names).
+- Added upgrade command to hint.
+- Added Low/mEdium/high/Security checks.
+- Use localhost as default in socket sensor.
+
 Version 0.1.1 (2014-10-16)
 -------------------------------------------------
 - Finished check for system upgrades.
