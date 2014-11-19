@@ -35,6 +35,12 @@
         <a href="#general%20information">General information</a>
       </div>
       <div class="heading h3">
+        <a href="#configuration">Configuration</a>
+      </div>
+      <div class="heading h3">
+        <a href="#result%20values">Result values</a>
+      </div>
+      <div class="heading h3">
         <a href="#create%20instance">Create instance</a>
       </div>
       <div class="heading h3">
@@ -59,9 +65,24 @@
 </div>
 
 
-<p>This will only work on debian based linux.</p>
+<p>This will at the moment only work on denian and debian based linux like Mint,
+Ubuntu.</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre></pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-2" id="section-2">&#182;</a>
+</div>
+<p>Find the description of the possible configuration values and the returned
+values in the code below.</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+
+
+</pre></div>
         </td>
       </tr>
       <tr>
@@ -83,7 +104,7 @@
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-3" id="section-3">&#182;</a>
+  <a class="pilcrow" href="#section-4" id="section-4">&#182;</a>
 </div>
 <p>include base modules</p>
         </td>
@@ -96,7 +117,7 @@
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-4" id="section-4">&#182;</a>
+  <a class="pilcrow" href="#section-5" id="section-5">&#182;</a>
 </div>
 <p>include alinex packages</p>
         </td>
@@ -109,7 +130,7 @@
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-5" id="section-5">&#182;</a>
+  <a class="pilcrow" href="#section-6" id="section-6">&#182;</a>
 </div>
 <p>include classes and helper</p>
         </td>
@@ -122,14 +143,16 @@
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-6" id="section-6">&#182;</a>
+  <a class="pilcrow" href="#section-7" id="section-7">&#182;</a>
 </div>
 <p>specific modules for this check</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
 <span class="p">{</span><span class="nx">exec</span><span class="p">}</span> <span class="o">=</span> <span class="nx">require</span> <span class="s">&#39;child_process&#39;</span>
+<span class="nv">os = </span><span class="nx">require</span> <span class="s">&#39;os&#39;</span>
 <span class="nv">async = </span><span class="nx">require</span> <span class="s">&#39;async&#39;</span>
 <span class="nv">moment = </span><span class="nx">require</span> <span class="s">&#39;moment&#39;</span>
+
 
 </pre></div>
         </td>
@@ -169,19 +192,27 @@
     <span class="nv">description: </span><span class="s">&quot;Check for possible package upgrades.&quot;</span>
     <span class="nv">category: </span><span class="s">&#39;sys&#39;</span>
     <span class="nv">level: </span><span class="mi">1</span>
-    <span class="nv">hint: </span><span class="s">&quot;Maybe there are some updates to the installed packages. This may</span>
-<span class="s">    also be a security update. &quot;</span>
+    <span class="nv">hint: </span><span class="s">&quot;If there are some packages to be upgraded, please call `sudo aptitude upgrade`</span>
+<span class="s">    on the command line. This will interactively install all the neccessary</span>
+<span class="s">    package upgrades.&quot;</span>
+
 
 </pre></div>
         </td>
       </tr>
       <tr>
         <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-9" id="section-9">&#182;</a>
+<div class="pilwrap" id="configuration">
+  <h3>
+    <a href="#configuration" name="configuration" class="pilcrow">&#182;</a>
+    Configuration
+  </h3>
 </div>
-<p>Check for configuration settings <a href="http://alinex.githhub.io/node-validator">alinex-validator</a>
-compatible:</p>
+
+
+<p>Definition of all possible configuration settings (defaults included).
+It's a n<a href="http://alinex.githhub.io/node-validator">alinex-validator</a>
+compatible schema definition:</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
     <span class="nv">config:</span>
@@ -190,66 +221,9 @@ compatible:</p>
       <span class="nv">type: </span><span class="s">&#39;object&#39;</span>
       <span class="nv">allowedKeys: </span><span class="kc">true</span>
       <span class="nv">entries:</span>
-        <span class="nv">timeWarn:</span>
-          <span class="nv">title: </span><span class="s">&quot;Warn&quot;</span>
-          <span class="nv">description: </span><span class="s">&quot;the time after which a warning is set for upgrades &quot;</span>
-          <span class="nv">type: </span><span class="s">&#39;interval&#39;</span>
-          <span class="nv">unit: </span><span class="s">&#39;d&#39;</span>
-          <span class="nv">optional: </span><span class="kc">true</span>
-        <span class="nv">timeFail:</span>
-          <span class="nv">title: </span><span class="s">&quot;Fail&quot;</span>
-          <span class="nv">description: </span><span class="s">&quot;the time after which a failure is set for upgrades &quot;</span>
-          <span class="nv">type: </span><span class="s">&#39;interval&#39;</span>
-          <span class="nv">unit: </span><span class="s">&#39;d&#39;</span>
-          <span class="nv">optional: </span><span class="kc">true</span>
-        <span class="nv">timeLowWarn:</span>
-          <span class="nv">title: </span><span class="s">&quot;Low Warn&quot;</span>
-          <span class="nv">description: </span><span class="s">&quot;the time after which a warning is set for low priority upgrades &quot;</span>
-          <span class="nv">type: </span><span class="s">&#39;interval&#39;</span>
-          <span class="nv">unit: </span><span class="s">&#39;d&#39;</span>
-          <span class="nv">optional: </span><span class="kc">true</span>
-        <span class="nv">timeLowFail:</span>
-          <span class="nv">title: </span><span class="s">&quot;Low Fail&quot;</span>
-          <span class="nv">description: </span><span class="s">&quot;the time after which a failure is set for low priority upgrades &quot;</span>
-          <span class="nv">type: </span><span class="s">&#39;interval&#39;</span>
-          <span class="nv">unit: </span><span class="s">&#39;d&#39;</span>
-          <span class="nv">optional: </span><span class="kc">true</span>
-        <span class="nv">timeMediumWarn:</span>
-          <span class="nv">title: </span><span class="s">&quot;Medium Warn&quot;</span>
-          <span class="nv">description: </span><span class="s">&quot;the time after which a warning is set for medium priority upgrades &quot;</span>
-          <span class="nv">type: </span><span class="s">&#39;interval&#39;</span>
-          <span class="nv">unit: </span><span class="s">&#39;d&#39;</span>
-          <span class="nv">optional: </span><span class="kc">true</span>
-        <span class="nv">timeMediumFail:</span>
-          <span class="nv">title: </span><span class="s">&quot;Medium Fail&quot;</span>
-          <span class="nv">description: </span><span class="s">&quot;the time after which a failure is set for medium priority upgrades &quot;</span>
-          <span class="nv">type: </span><span class="s">&#39;interval&#39;</span>
-          <span class="nv">unit: </span><span class="s">&#39;d&#39;</span>
-          <span class="nv">optional: </span><span class="kc">true</span>
-        <span class="nv">timeHighWarn:</span>
-          <span class="nv">title: </span><span class="s">&quot;High Warn&quot;</span>
-          <span class="nv">description: </span><span class="s">&quot;the time after which a warning is set for high priority upgrades &quot;</span>
-          <span class="nv">type: </span><span class="s">&#39;interval&#39;</span>
-          <span class="nv">unit: </span><span class="s">&#39;d&#39;</span>
-          <span class="nv">optional: </span><span class="kc">true</span>
-        <span class="nv">timeHighFail:</span>
-          <span class="nv">title: </span><span class="s">&quot;High Fail&quot;</span>
-          <span class="nv">description: </span><span class="s">&quot;the time after which a failure is set for high priority upgrades &quot;</span>
-          <span class="nv">type: </span><span class="s">&#39;interval&#39;</span>
-          <span class="nv">unit: </span><span class="s">&#39;d&#39;</span>
-          <span class="nv">optional: </span><span class="kc">true</span>
-        <span class="nv">timeSecurityWarn:</span>
-          <span class="nv">title: </span><span class="s">&quot;Security Warn&quot;</span>
-          <span class="nv">description: </span><span class="s">&quot;the time after which a warning is set for any security upgrade &quot;</span>
-          <span class="nv">type: </span><span class="s">&#39;interval&#39;</span>
-          <span class="nv">unit: </span><span class="s">&#39;d&#39;</span>
-          <span class="nv">optional: </span><span class="kc">true</span>
-        <span class="nv">timeSecurityFail:</span>
-          <span class="nv">title: </span><span class="s">&quot;Security Fail&quot;</span>
-          <span class="nv">description: </span><span class="s">&quot;the time after which a failure is set for any security upgrade &quot;</span>
-          <span class="nv">type: </span><span class="s">&#39;interval&#39;</span>
-          <span class="nv">unit: </span><span class="s">&#39;d&#39;</span>
-          <span class="nv">optional: </span><span class="kc">true</span>
+        <span class="nv">verbose: </span><span class="nx">@check</span><span class="p">.</span><span class="nx">verbose</span>
+        <span class="nv">warn: </span><span class="nx">@check</span><span class="p">.</span><span class="nx">warn</span>
+        <span class="nv">fail: </span><span class="nx">@check</span><span class="p">.</span><span class="nx">fail</span>
 
 
 </pre></div>
@@ -257,13 +231,24 @@ compatible:</p>
       </tr>
       <tr>
         <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-10" id="section-10">&#182;</a>
+<div class="pilwrap" id="result%20values">
+  <h3>
+    <a href="#result%20values" name="result%20values" class="pilcrow">&#182;</a>
+    Result values
+  </h3>
 </div>
-<p>Definition of response values</p>
+
+
+<p>This are possible values which may be given if the check runs normally.
+You may use any of these in your warn/fail expressions.</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
     <span class="nv">values:</span>
+      <span class="nv">platform:</span>
+        <span class="nv">title: </span><span class="s">&quot;Platform&quot;</span>
+        <span class="nv">description: </span><span class="s">&quot;the platform you&#39;re running on: &#39;darwin&#39;, &#39;freebsd&#39;, &#39;linux&#39;,</span>
+<span class="s">        &#39;sunos&#39; or &#39;win32&#39;&quot;</span>
+        <span class="nv">type: </span><span class="s">&#39;string&#39;</span>
       <span class="nv">numSecurity:</span>
         <span class="nv">title: </span><span class="s">&quot;Num. Security&quot;</span>
         <span class="nv">description: </span><span class="s">&quot;the number of security updates &quot;</span>
@@ -280,7 +265,7 @@ compatible:</p>
         <span class="nv">title: </span><span class="s">&quot;Num. High Prio&quot;</span>
         <span class="nv">description: </span><span class="s">&quot;the number of high priority updates &quot;</span>
         <span class="nv">type: </span><span class="s">&#39;integer&#39;</span>
-      <span class="nv">numTotal:</span>
+      <span class="nv">num:</span>
         <span class="nv">title: </span><span class="s">&quot;Num. Total&quot;</span>
         <span class="nv">description: </span><span class="s">&quot;the number of total updates &quot;</span>
         <span class="nv">type: </span><span class="s">&#39;integer&#39;</span>
@@ -304,7 +289,7 @@ compatible:</p>
         <span class="nv">description: </span><span class="s">&quot;the max. age of high priority update &quot;</span>
         <span class="nv">type: </span><span class="s">&#39;interval&#39;</span>
         <span class="nv">unit: </span><span class="s">&#39;d&#39;</span>
-      <span class="nv">timeTotal:</span>
+      <span class="nv">time:</span>
         <span class="nv">title: </span><span class="s">&quot;Time&quot;</span>
         <span class="nv">description: </span><span class="s">&quot;the max. age of update &quot;</span>
         <span class="nv">type: </span><span class="s">&#39;interval&#39;</span>
@@ -351,19 +336,20 @@ compatible:</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-13" id="section-13">&#182;</a>
+  <a class="pilcrow" href="#section-14" id="section-14">&#182;</a>
 </div>
 <p>comand syntax, os dependent</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-    <span class="nv">cmd = </span><span class="s">&quot;apt-get -s upgrade | grep Inst | awk -F &#39;\\]? [\\[(]?&#39; &#39;{print $2,$3,$4}&#39;&quot;</span>
+    <span class="nv">cmd = </span><span class="s">&quot;apt-get update; apt-get -s upgrade | grep Inst</span>
+<span class="s">    | awk -F &#39;\\]? [\\[(]?&#39; &#39;{print $2,$3,$4}&#39;&quot;</span>
     <span class="nx">exec</span> <span class="nx">cmd</span><span class="p">,</span> <span class="nf">(err, stdout, stderr) =&gt;</span>
       <span class="k">return</span> <span class="nx">@_end</span> <span class="s">&#39;fail&#39;</span><span class="p">,</span> <span class="nx">err</span><span class="p">,</span> <span class="nx">cb</span> <span class="k">if</span> <span class="nx">err</span>
-      <span class="nx">async</span><span class="p">.</span><span class="nx">map</span> <span class="nx">stdout</span><span class="p">.</span><span class="nx">toString</span><span class="p">().</span><span class="nx">split</span><span class="p">(</span><span class="sr">/\n/</span><span class="p">),</span> <span class="nf">(line, cb) -&gt;</span>
+      <span class="nx">async</span><span class="p">.</span><span class="nx">mapLimit</span> <span class="nx">stdout</span><span class="p">.</span><span class="nx">toString</span><span class="p">().</span><span class="nx">split</span><span class="p">(</span><span class="sr">/\n/</span><span class="p">),</span> <span class="nx">os</span><span class="p">.</span><span class="nx">cpus</span><span class="p">().</span><span class="nx">length</span><span class="p">,</span> <span class="nf">(line, cb) -&gt;</span>
         <span class="k">return</span> <span class="nx">cb</span><span class="p">()</span> <span class="k">unless</span> <span class="nx">line</span>
         <span class="p">[</span><span class="nx">pack</span><span class="p">,</span> <span class="nx">old</span><span class="p">,</span> <span class="nx">current</span><span class="p">]</span> <span class="o">=</span> <span class="nx">line</span><span class="p">.</span><span class="nx">split</span> <span class="sr">/\s/</span>
         <span class="nv">cmd = </span><span class="s">&quot;aptitude changelog </span><span class="si">#{</span><span class="nx">pack</span><span class="si">}</span><span class="s"> 2&gt;/dev/null| sed &#39;1d;/(</span><span class="si">#{</span><span class="nx">old</span><span class="si">}</span><span class="s">)/,$d&#39;&quot;</span>
-        <span class="nx">exec</span> <span class="nx">cmd</span><span class="p">,</span> <span class="nf">(err, stdout, stderr) =&gt;</span>
+        <span class="nx">exec</span> <span class="nx">cmd</span><span class="p">,</span> <span class="nf">(err, stdout, stderr) -&gt;</span>
           <span class="k">return</span> <span class="nx">cb</span> <span class="nx">err</span> <span class="k">if</span> <span class="nx">err</span>
           <span class="nv">info = </span><span class="p">[]</span>
           <span class="nv">urgency = </span><span class="kc">null</span>
@@ -384,7 +370,7 @@ compatible:</p>
               <span class="k">continue</span>
             <span class="k">else</span> <span class="c1"># info</span>
               <span class="nx">info</span><span class="p">.</span><span class="nx">push</span> <span class="nx">line</span>
-          <span class="nx">cb</span> <span class="kc">null</span><span class="p">,</span> 
+          <span class="nx">cb</span> <span class="kc">null</span><span class="p">,</span>
             <span class="nv">pack: </span><span class="nx">pack</span>
             <span class="nv">old: </span><span class="nx">old</span>
             <span class="nv">current: </span><span class="nx">current</span>
@@ -395,23 +381,24 @@ compatible:</p>
             <span class="nv">release: </span><span class="nx">date</span>
             <span class="nv">info: </span><span class="nx">info</span>
       <span class="p">,</span> <span class="nf">(err, results) =&gt;</span>
-        <span class="nv">val = </span><span class="vi">@result.value =</span>
+        <span class="nv">val = </span><span class="vi">@result.values =</span>
+          <span class="nv">platform: </span><span class="nx">process</span><span class="p">.</span><span class="nx">platform</span>
           <span class="nv">numSecurity: </span><span class="mi">0</span>
           <span class="nv">numLow: </span><span class="mi">0</span>
           <span class="nv">numMedium: </span><span class="mi">0</span>
           <span class="nv">numHigh: </span><span class="mi">0</span>
-          <span class="nv">numTotal: </span><span class="mi">0</span>
+          <span class="nv">num: </span><span class="mi">0</span>
           <span class="nv">timeSecurity: </span><span class="kc">null</span>
           <span class="nv">timeLow: </span><span class="kc">null</span>
           <span class="nv">timeMedium: </span><span class="kc">null</span>
           <span class="nv">timeHigh: </span><span class="kc">null</span>
-          <span class="nv">timeTotal: </span><span class="kc">null</span>
+          <span class="nv">time: </span><span class="kc">null</span>
         <span class="nv">sort = </span><span class="p">{}</span>
         <span class="k">for</span> <span class="nx">entry</span> <span class="k">in</span> <span class="nx">results</span>
           <span class="k">continue</span> <span class="k">unless</span> <span class="nx">entry</span>
-          <span class="nx">sort</span><span class="p">[</span><span class="s">&quot;</span><span class="si">#{</span><span class="nx">entry</span><span class="p">.</span><span class="nx">security</span><span class="si">}#{</span><span class="p">{</span><span class="nv">low: </span><span class="mi">1</span><span class="p">,</span> <span class="nx">medium</span><span class="o">:</span><span class="mi">2</span><span class="p">,</span> <span class="nx">high</span><span class="o">:</span><span class="mi">3</span><span class="si">}</span><span class="s">[entry.urgency]}-</span><span class="si">#{</span><span class="nx">entry</span><span class="p">.</span><span class="nx">time</span><span class="si">}</span><span class="s">&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nx">entry</span>
-          <span class="nx">val</span><span class="p">.</span><span class="nx">numTotal</span><span class="o">++</span>
-          <span class="nv">val.timeTotal = </span><span class="nx">entry</span><span class="p">.</span><span class="nx">time</span> <span class="k">if</span> <span class="o">not</span> <span class="nx">val</span><span class="p">.</span><span class="nx">timeTotal</span> <span class="o">or</span> <span class="nx">entry</span><span class="p">.</span><span class="nx">time</span> <span class="o">&gt;</span> <span class="nx">val</span><span class="p">.</span><span class="nx">timeTotal</span>
+          <span class="nx">sort</span><span class="p">[</span><span class="s">&quot;</span><span class="si">#{</span><span class="nx">entry</span><span class="p">.</span><span class="nx">security</span><span class="si">}#{</span><span class="p">{</span><span class="nx">low</span><span class="o">:</span><span class="mi">1</span><span class="p">,</span><span class="nx">medium</span><span class="o">:</span><span class="mi">2</span><span class="p">,</span><span class="nx">high</span><span class="o">:</span><span class="mi">3</span><span class="si">}</span><span class="s">[entry.urgency]}-</span><span class="si">#{</span><span class="nx">entry</span><span class="p">.</span><span class="nx">time</span><span class="si">}</span><span class="s">&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nx">entry</span>
+          <span class="nx">val</span><span class="p">.</span><span class="nx">num</span><span class="o">++</span>
+          <span class="nv">val.time = </span><span class="nx">entry</span><span class="p">.</span><span class="nx">time</span> <span class="k">if</span> <span class="o">not</span> <span class="nx">val</span><span class="p">.</span><span class="nx">time</span> <span class="o">or</span> <span class="nx">entry</span><span class="p">.</span><span class="nx">time</span> <span class="o">&gt;</span> <span class="nx">val</span><span class="p">.</span><span class="nx">time</span>
           <span class="k">if</span> <span class="nx">entry</span><span class="p">.</span><span class="nx">security</span>
             <span class="nx">val</span><span class="p">.</span><span class="nx">numSecurity</span><span class="o">++</span>
             <span class="nv">val.timeSecurity = </span><span class="nx">entry</span><span class="p">.</span><span class="nx">time</span> <span class="k">if</span> <span class="o">not</span> <span class="nx">val</span><span class="p">.</span><span class="nx">timeSecurity</span> <span class="o">or</span> <span class="nx">entry</span><span class="p">.</span><span class="nx">time</span> <span class="o">&gt;</span> <span class="nx">val</span><span class="p">.</span><span class="nx">timeSecurity</span>
@@ -419,31 +406,12 @@ compatible:</p>
             <span class="nx">val</span><span class="p">.</span><span class="nx">numLow</span><span class="o">++</span>
             <span class="nv">val.timeLow = </span><span class="nx">entry</span><span class="p">.</span><span class="nx">time</span> <span class="k">if</span> <span class="o">not</span> <span class="nx">val</span><span class="p">.</span><span class="nx">timeLow</span> <span class="o">or</span> <span class="nx">entry</span><span class="p">.</span><span class="nx">time</span> <span class="o">&gt;</span> <span class="nx">val</span><span class="p">.</span><span class="nx">timeLow</span>
           <span class="k">else</span> <span class="k">if</span> <span class="nx">entry</span><span class="p">.</span><span class="nx">urgency</span> <span class="o">is</span> <span class="s">&#39;medium&#39;</span>
-            <span class="nx">val</span><span class="p">.</span><span class="nx">numMedium</span><span class="o">++</span> 
+            <span class="nx">val</span><span class="p">.</span><span class="nx">numMedium</span><span class="o">++</span>
             <span class="nv">val.timeMedium = </span><span class="nx">entry</span><span class="p">.</span><span class="nx">time</span> <span class="k">if</span> <span class="o">not</span> <span class="nx">val</span><span class="p">.</span><span class="nx">timeMedium</span> <span class="o">or</span> <span class="nx">entry</span><span class="p">.</span><span class="nx">time</span> <span class="o">&gt;</span> <span class="nx">val</span><span class="p">.</span><span class="nx">timeMedium</span>
           <span class="k">else</span> <span class="k">if</span> <span class="nx">entry</span><span class="p">.</span><span class="nx">urgency</span> <span class="o">is</span> <span class="s">&#39;high&#39;</span>
-            <span class="nx">val</span><span class="p">.</span><span class="nx">numHigh</span><span class="o">++</span> 
+            <span class="nx">val</span><span class="p">.</span><span class="nx">numHigh</span><span class="o">++</span>
             <span class="nv">val.timeHigh = </span><span class="nx">entry</span><span class="p">.</span><span class="nx">time</span> <span class="k">if</span> <span class="o">not</span> <span class="nx">val</span><span class="p">.</span><span class="nx">timeHigh</span> <span class="o">or</span> <span class="nx">entry</span><span class="p">.</span><span class="nx">time</span> <span class="o">&gt;</span> <span class="nx">val</span><span class="p">.</span><span class="nx">timeHigh</span>
 
-</pre></div>
-        </td>
-      </tr>
-      <tr>
-        <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-14" id="section-14">&#182;</a>
-</div>
-<p>evaluate to check status</p>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-        <span class="k">switch</span>
-          <span class="k">when</span> <span class="nx">val</span><span class="p">.</span><span class="nx">timeTotal</span><span class="o">?</span> <span class="o">and</span> <span class="nx">@config</span><span class="p">.</span><span class="nx">timeFail</span><span class="o">?</span> <span class="o">and</span> <span class="nx">val</span><span class="p">.</span><span class="nx">timeTotal</span> <span class="o">&gt;=</span> <span class="nx">@config</span><span class="p">.</span><span class="nx">timeFail</span>
-            <span class="nv">status = </span><span class="s">&#39;fail&#39;</span>
-            <span class="nv">message = </span><span class="s">&quot;</span><span class="si">#{</span><span class="nx">@constructor</span><span class="p">.</span><span class="nx">meta</span><span class="p">.</span><span class="nx">name</span><span class="si">}</span><span class="s"> has updates waiting longer than </span><span class="si">#{</span><span class="nx">@config</span><span class="p">.</span><span class="nx">timeFail</span><span class="si">}</span><span class="s"> days&quot;</span>
-          <span class="k">when</span> <span class="nx">val</span><span class="p">.</span><span class="nx">timeTotal</span><span class="o">?</span> <span class="o">and</span> <span class="nx">@config</span><span class="p">.</span><span class="nx">timeWarn</span><span class="o">?</span> <span class="o">and</span> <span class="nx">val</span><span class="p">.</span><span class="nx">timeTotal</span> <span class="o">&gt;=</span> <span class="nx">@config</span><span class="p">.</span><span class="nx">timeWarn</span>
-            <span class="nv">status = </span><span class="s">&#39;warn&#39;</span>
-          <span class="k">else</span>
-            <span class="nv">status = </span><span class="s">&#39;ok&#39;</span>
 
 </pre></div>
         </td>
@@ -453,11 +421,11 @@ compatible:</p>
 <div class="pilwrap">
   <a class="pilcrow" href="#section-15" id="section-15">&#182;</a>
 </div>
-<p>done if no problem found</p>
+<p>evaluate to check status</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-        <span class="k">if</span> <span class="nx">status</span> <span class="o">is</span> <span class="s">&#39;ok&#39;</span>
-          <span class="k">return</span> <span class="nx">@_end</span> <span class="nx">status</span><span class="p">,</span> <span class="nx">message</span><span class="p">,</span> <span class="nx">cb</span>
+        <span class="nv">status = </span><span class="nx">@rules</span><span class="p">()</span>
+        <span class="nv">message = </span><span class="nx">@config</span><span class="p">[</span><span class="nx">status</span><span class="p">]</span> <span class="k">unless</span> <span class="nx">status</span> <span class="o">is</span> <span class="s">&#39;ok&#39;</span>
 
 </pre></div>
         </td>
@@ -467,17 +435,44 @@ compatible:</p>
 <div class="pilwrap">
   <a class="pilcrow" href="#section-16" id="section-16">&#182;</a>
 </div>
+<p>done if no problem found</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+        <span class="k">if</span> <span class="nx">status</span> <span class="o">is</span> <span class="s">&#39;ok&#39;</span> <span class="o">and</span> <span class="o">not</span> <span class="nx">@config</span><span class="p">.</span><span class="nx">verbose</span>
+          <span class="k">return</span> <span class="nx">@_end</span> <span class="nx">status</span><span class="p">,</span> <span class="nx">message</span><span class="p">,</span> <span class="nx">cb</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-17" id="section-17">&#182;</a>
+</div>
 <p>get additional information</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
         <span class="vi">@result.analysis = </span><span class="s">&quot;The following packages may be updated:&quot;</span>
-        <span class="k">for</span> <span class="nx">name</span> <span class="k">in</span> <span class="nb">Object</span><span class="p">.</span><span class="nx">keys</span><span class="p">(</span><span class="nx">sort</span><span class="p">).</span><span class="nx">sort</span><span class="p">().</span><span class="nx">reverse</span><span class="p">()</span>          
+        <span class="k">for</span> <span class="nx">name</span> <span class="k">in</span> <span class="nb">Object</span><span class="p">.</span><span class="nx">keys</span><span class="p">(</span><span class="nx">sort</span><span class="p">).</span><span class="nx">sort</span><span class="p">().</span><span class="nx">reverse</span><span class="p">()</span>
           <span class="nv">entry = </span><span class="nx">sort</span><span class="p">[</span><span class="nx">name</span><span class="p">]</span>
           <span class="nv">security = </span><span class="k">if</span> <span class="nx">entry</span><span class="p">.</span><span class="nx">security</span> <span class="k">then</span> <span class="s">&#39;security &#39;</span> <span class="k">else</span> <span class="s">&#39;&#39;</span>
-          <span class="nx">@result</span><span class="p">.</span><span class="nx">analysis</span> <span class="o">+=</span> <span class="s">&quot;\n\n</span><span class="si">#{</span><span class="nx">entry</span><span class="p">.</span><span class="nx">pack</span><span class="si">}</span><span class="s"> </span><span class="si">#{</span><span class="nx">entry</span><span class="p">.</span><span class="nx">old</span><span class="si">}</span><span class="s"> -&gt; </span><span class="si">#{</span><span class="nx">entry</span><span class="p">.</span><span class="nx">current</span><span class="si">}</span><span class="s"> </span><span class="si">#{</span><span class="nx">security</span><span class="si">}#{</span><span class="nx">entry</span><span class="p">.</span><span class="nx">urgency</span><span class="si">}</span><span class="s"> priority </span><span class="si">#{</span><span class="nx">entry</span><span class="p">.</span><span class="nx">change</span><span class="si">}</span><span class="s">&quot;</span>
-          <span class="nx">@result</span><span class="p">.</span><span class="nx">analysis</span> <span class="o">+=</span> <span class="s">&quot;\n&quot;</span> <span class="o">+</span> <span class="nx">entry</span><span class="p">.</span><span class="nx">info</span><span class="p">.</span><span class="nx">join</span> <span class="s">&#39;\n&#39;</span> <span class="k">if</span> <span class="nx">entry</span><span class="p">.</span><span class="nx">info</span>
-        <span class="nx">debug</span> <span class="nx">@result</span><span class="p">.</span><span class="nx">analysis</span>
-        <span class="nx">@_end</span> <span class="nx">status</span><span class="p">,</span> <span class="nx">message</span><span class="p">,</span> <span class="nx">cb</span>
+          <span class="nx">@result</span><span class="p">.</span><span class="nx">analysis</span> <span class="o">+=</span> <span class="s">&quot;\n\n</span><span class="si">#{</span><span class="nx">entry</span><span class="p">.</span><span class="nx">pack</span><span class="si">}</span><span class="s"> </span><span class="si">#{</span><span class="nx">entry</span><span class="p">.</span><span class="nx">old</span><span class="si">}</span><span class="s"> -&gt; </span><span class="si">#{</span><span class="nx">entry</span><span class="p">.</span><span class="nx">current</span><span class="si">}</span><span class="s"></span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-18" id="section-18">&#182;</a>
+</div>
+<p>{security}#{entry.urgency} priority #{entry.change}"</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+<span class="s">          @result.analysis += &quot;</span><span class="err">\</span><span class="nx">n</span><span class="s">&quot; + entry.info.join &#39;\n&#39; if entry.info</span>
+<span class="s">        debug @result.analysis</span>
+<span class="s">        @result.analysis += &#39;\n&#39;</span>
+<span class="s">        @_end status, message, cb</span>
 
 
 </pre></div>
@@ -494,7 +489,7 @@ compatible:</p>
 
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-<span class="nv">module.exports = </span><span class="nx">UpgradeSensor</span>
+<span class="s">module.exports = UpgradeSensor</span>
 </pre></div>
         </td>
       </tr>

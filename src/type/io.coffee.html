@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>io.coffee</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <link rel="stylesheet" media="all" href="../../doc-style.css" />
+  <script src="../../doc-filelist.js"></script>
+  <script>
+    var relativeDir = "../../", thisFile = "home/alex/a3/node-monitor-sensor/src/type/iocoffee", defaultSidebar = true;
+  </script>
+  <script src="../../doc-script.js"></script>
+  <script src="../../fileSearch.js"></script>
+  <script src="../../goToLine.js"></script>
+  <link rel="stylesheet" href="../../fileSearch.css" />
+  <link rel="stylesheet" href="../../goToLine.css" />
+</head>
+<body>
+  <div id="sidebar_wrapper">
+    <div id="sidebar_switch">
+      <span class="tree">Files</span>
+      <span class="headings">Headings</span>
+    </div>
+    <div id="tree"></div>
+    <div id="headings">
+      <div class="heading h1">
+        <a href="#check%20io%20traffic%20to%20disks">Check io traffic to disks</a>
+      </div>
+      <div class="heading h2">
+        <a href="#node%20modules">Node Modules</a>
+      </div>
+      <div class="heading h2">
+        <a href="#sensor%20class">Sensor class</a>
+      </div>
+      <div class="heading h3">
+        <a href="#general%20information">General information</a>
+      </div>
+      <div class="heading h3">
+        <a href="#configuration">Configuration</a>
+      </div>
+      <div class="heading h3">
+        <a href="#result%20values">Result values</a>
+      </div>
+      <div class="heading h3">
+        <a href="#create%20instance">Create instance</a>
+      </div>
+      <div class="heading h3">
+        <a href="#run%20the%20check">Run the check</a>
+      </div>
+      <div class="heading h2">
+        <a href="#export%20class">Export class</a>
+      </div>
+    </div>
+  </div>
+  <div id="sidebar-toggle"></div>
+  <div id="container"><a id="fork" href="https://github.com/alinex/node-monitor-sensor" title="Fork me on GitHub"></a><div class="background highlight"></div>
+<table cellpadding="0" cellspacing="0">
+  <tbody>
+      <tr>
+        <td class="docs">
+<div class="pilwrap" id="check%20io%20traffic%20to%20disks">
+  <h1>
+    <a href="#check%20io%20traffic%20to%20disks" name="check%20io%20traffic%20to%20disks" class="pilcrow">&#182;</a>
+    Check io traffic to disks
+  </h1>
+</div>
+
+
+<p>Mostly this is used for local disks, but may be also used for network disks.
+This sensor only works on unix like systems using an additional package
+called <code>iostat</code>.</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre></pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-2" id="section-2">&#182;</a>
+</div>
+<p>Find the description of the possible configuration values and the returned
+values in the code below.</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap" id="node%20modules">
+  <h2>
+    <a href="#node%20modules" name="node%20modules" class="pilcrow">&#182;</a>
+    Node Modules
+  </h2>
+</div>
+
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-4" id="section-4">&#182;</a>
+</div>
+<p>include base modules</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+<span class="nv">debug = </span><span class="nx">require</span><span class="p">(</span><span class="s">&#39;debug&#39;</span><span class="p">)(</span><span class="s">&#39;monitor:sensor:io&#39;</span><span class="p">)</span>
+<span class="nv">fs = </span><span class="nx">require</span> <span class="s">&#39;fs&#39;</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-5" id="section-5">&#182;</a>
+</div>
+<p>include alinex packages</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+<span class="nv">object = </span><span class="nx">require</span><span class="p">(</span><span class="s">&#39;alinex-util&#39;</span><span class="p">).</span><span class="nx">object</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-6" id="section-6">&#182;</a>
+</div>
+<p>include classes and helper</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+<span class="nv">Sensor = </span><span class="nx">require</span> <span class="s">&#39;../base&#39;</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-7" id="section-7">&#182;</a>
+</div>
+<p>specific modules for this check</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+<span class="nv">os = </span><span class="nx">require</span> <span class="s">&#39;os&#39;</span>
+<span class="nv">math = </span><span class="nx">require</span> <span class="s">&#39;mathjs&#39;</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap" id="sensor%20class">
+  <h2>
+    <a href="#sensor%20class" name="sensor%20class" class="pilcrow">&#182;</a>
+    Sensor class
+  </h2>
+</div>
+
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+<span class="k">class</span> <span class="nx">IoSensor</span> <span class="k">extends</span> <span class="nx">Sensor</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap" id="general%20information">
+  <h3>
+    <a href="#general%20information" name="general%20information" class="pilcrow">&#182;</a>
+    General information
+  </h3>
+</div>
+
+
+<p>This information may be used later for display and explanation.</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+  <span class="vi">@meta =</span>
+    <span class="nv">name: </span><span class="s">&#39;Disk IO&#39;</span>
+    <span class="nv">description: </span><span class="s">&quot;Check the io traffic using the additional `iostat` program.&quot;</span>
+    <span class="nv">category: </span><span class="s">&#39;sys&#39;</span>
+    <span class="nv">level: </span><span class="mi">1</span>
+    <span class="nv">hint: </span><span class="s">&quot;If there are any problems here check the device for hardware or</span>
+<span class="s">    network problems.&quot;</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap" id="configuration">
+  <h3>
+    <a href="#configuration" name="configuration" class="pilcrow">&#182;</a>
+    Configuration
+  </h3>
+</div>
+
+
+<p>Definition of all possible configuration settings (defaults included).
+It's a n<a href="http://alinex.githhub.io/node-validator">alinex-validator</a>
+compatible schema definition:</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+    <span class="nv">config:</span>
+      <span class="nv">title: </span><span class="s">&quot;Disk IO Test&quot;</span>
+      <span class="nv">type: </span><span class="s">&#39;object&#39;</span>
+      <span class="nv">allowedKeys: </span><span class="kc">true</span>
+      <span class="nv">entries:</span>
+        <span class="nv">device:</span>
+          <span class="nv">title: </span><span class="s">&quot;Device name&quot;</span>
+          <span class="nv">description: </span><span class="s">&quot;the disk&#39;s device name like sda, ...&quot;</span>
+          <span class="nv">type: </span><span class="s">&#39;string&#39;</span>
+        <span class="nv">time:</span>
+          <span class="nv">title: </span><span class="s">&quot;Measurement Time&quot;</span>
+          <span class="nv">description: </span><span class="s">&quot;the time for the measurement&quot;</span>
+          <span class="nv">type: </span><span class="s">&#39;interval&#39;</span>
+          <span class="nv">unit: </span><span class="s">&#39;s&#39;</span>
+          <span class="nv">default: </span><span class="mi">1</span>
+          <span class="nv">min: </span><span class="mi">1</span>
+        <span class="nv">warn: </span><span class="nx">@check</span><span class="p">.</span><span class="nx">warn</span>
+        <span class="nv">fail: </span><span class="nx">object</span><span class="p">.</span><span class="nx">extend</span> <span class="p">{</span> <span class="nv">default: </span><span class="s">&#39;wait &gt;= 100%&#39;</span> <span class="p">},</span> <span class="nx">@check</span><span class="p">.</span><span class="nx">fail</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap" id="result%20values">
+  <h3>
+    <a href="#result%20values" name="result%20values" class="pilcrow">&#182;</a>
+    Result values
+  </h3>
+</div>
+
+
+<p>This are possible values which may be given if the check runs normally.
+You may use any of these in your warn/fail expressions.</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+    <span class="nv">values:</span>
+      <span class="nv">wait:</span>
+        <span class="nv">title: </span><span class="s">&quot;IO Wait&quot;</span>
+        <span class="nv">description: </span><span class="s">&quot;the time spent by the CPU waiting for IO operations to complete&quot;</span>
+        <span class="nv">type: </span><span class="s">&#39;percent&#39;</span>
+      <span class="nv">tps:</span>
+        <span class="nv">title: </span><span class="s">&quot;Transfers/s&quot;</span>
+        <span class="nv">description: </span><span class="s">&quot;the number of transfers (I/O requests) per second that</span>
+<span class="s">        were issued to the device&quot;</span>
+        <span class="nv">type: </span><span class="s">&#39;float&#39;</span>
+      <span class="nv">read:</span>
+        <span class="nv">title: </span><span class="s">&quot;Read/s&quot;</span>
+        <span class="nv">description: </span><span class="s">&quot;the amount of data read from the device per second&quot;</span>
+        <span class="nv">type: </span><span class="s">&#39;byte&#39;</span>
+        <span class="nv">unit: </span><span class="s">&#39;B&#39;</span>
+      <span class="nv">write:</span>
+        <span class="nv">title: </span><span class="s">&quot;Write/s&quot;</span>
+        <span class="nv">description: </span><span class="s">&quot;the amount of data written to the device per second&quot;</span>
+        <span class="nv">type: </span><span class="s">&#39;byte&#39;</span>
+        <span class="nv">unit: </span><span class="s">&#39;B&#39;</span>
+      <span class="nv">readTotal:</span>
+        <span class="nv">title: </span><span class="s">&quot;Total Read&quot;</span>
+        <span class="nv">description: </span><span class="s">&quot;the total amount of read data&quot;</span>
+        <span class="nv">type: </span><span class="s">&#39;byte&#39;</span>
+        <span class="nv">unit: </span><span class="s">&#39;B&#39;</span>
+      <span class="nv">writeTotal:</span>
+        <span class="nv">title: </span><span class="s">&quot;Total Write&quot;</span>
+        <span class="nv">description: </span><span class="s">&quot;the total amount of written data&quot;</span>
+        <span class="nv">type: </span><span class="s">&#39;byte&#39;</span>
+        <span class="nv">unit: </span><span class="s">&#39;B&#39;</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap" id="create%20instance">
+  <h3>
+    <a href="#create%20instance" name="create%20instance" class="pilcrow">&#182;</a>
+    Create instance
+  </h3>
+</div>
+
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+  <span class="nv">constructor: </span><span class="nf">(config) -&gt;</span> <span class="k">super</span> <span class="nx">config</span><span class="p">,</span> <span class="nx">debug</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap" id="run%20the%20check">
+  <h3>
+    <a href="#run%20the%20check" name="run%20the%20check" class="pilcrow">&#182;</a>
+    Run the check
+  </h3>
+</div>
+
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+  <span class="nv">run: </span><span class="nf">(cb = -&gt;) -&gt;</span>
+    <span class="nx">@_start</span><span class="p">()</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-14" id="section-14">&#182;</a>
+</div>
+<p>comand syntax, os dependent</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+    <span class="nv">p = </span><span class="nx">os</span><span class="p">.</span><span class="nx">platform</span><span class="p">()</span>
+    <span class="k">unless</span> <span class="nx">p</span> <span class="k">in</span> <span class="p">[</span><span class="s">&#39;linux&#39;</span><span class="p">,</span> <span class="s">&#39;darwin&#39;</span><span class="p">]</span>
+      <span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span> <span class="s">&quot;sensor can only work on linux systems&quot;</span>
+    <span class="nv">iostat = </span><span class="s">&#39;/usr/bin/iostat&#39;</span>
+    <span class="nx">fs</span><span class="p">.</span><span class="nx">exists</span> <span class="nx">iostat</span><span class="p">,</span> <span class="nf">(exists) =&gt;</span>
+      <span class="k">unless</span> <span class="nx">exists</span>
+        <span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span> <span class="s">&quot;missing the `iostat` command, install through</span>
+<span class="s">        `sudo apt-get install sysstat`&quot;</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-15" id="section-15">&#182;</a>
+</div>
+<p>run the iostat test</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+      <span class="vi">@result.range = </span><span class="p">[</span><span class="k">new</span> <span class="nb">Date</span><span class="p">]</span>
+      <span class="nx">@_spawn</span> <span class="nx">iostat</span><span class="p">,</span> <span class="p">[</span><span class="s">&#39;-k&#39;</span><span class="p">,</span> <span class="nx">@config</span><span class="p">.</span><span class="nx">time</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="kc">null</span><span class="p">,</span> <span class="nf">(err, stdout, stderr, code) =&gt;</span>
+        <span class="nx">@result</span><span class="p">.</span><span class="nx">range</span><span class="p">.</span><span class="nx">push</span> <span class="k">new</span> <span class="nb">Date</span>
+        <span class="k">return</span> <span class="nx">@_end</span> <span class="s">&#39;fail&#39;</span><span class="p">,</span> <span class="nx">err</span><span class="p">,</span> <span class="nx">cb</span> <span class="k">if</span> <span class="nx">err</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-16" id="section-16">&#182;</a>
+</div>
+<p>parse results</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+        <span class="nv">val = </span><span class="nx">@result</span><span class="p">.</span><span class="nx">values</span>
+        <span class="nv">lines = </span><span class="nx">stdout</span><span class="p">.</span><span class="nx">split</span> <span class="sr">/\n/</span>
+        <span class="nv">col = </span><span class="nx">lines</span><span class="p">[</span><span class="mi">3</span><span class="p">].</span><span class="nx">split</span> <span class="sr">/\s+/</span>
+        <span class="nv">val.wait = </span><span class="nb">parseFloat</span><span class="p">(</span><span class="nx">col</span><span class="p">[</span><span class="mi">4</span><span class="p">])</span> <span class="o">/</span> <span class="mi">100</span>
+        <span class="k">for</span> <span class="nx">i</span> <span class="k">in</span> <span class="p">[</span><span class="mi">6</span><span class="p">..</span><span class="nx">lines</span><span class="p">.</span><span class="nx">length</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+          <span class="nv">col = </span><span class="nx">lines</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">split</span> <span class="sr">/\s+/</span>
+          <span class="k">continue</span> <span class="k">unless</span> <span class="nx">@config</span><span class="p">.</span><span class="nx">device</span> <span class="o">is</span> <span class="nx">col</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+          <span class="nv">val.tps = </span><span class="nb">parseFloat</span> <span class="nx">col</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+          <span class="nv">val.read = </span><span class="nx">math</span><span class="p">.</span><span class="nx">unit</span><span class="p">(</span><span class="nb">parseFloat</span><span class="p">(</span><span class="nx">col</span><span class="p">[</span><span class="mi">2</span><span class="p">]),</span> <span class="s">&#39;kB&#39;</span><span class="p">).</span><span class="nx">toNumber</span> <span class="s">&#39;B&#39;</span>
+          <span class="nv">val.write = </span><span class="nx">math</span><span class="p">.</span><span class="nx">unit</span><span class="p">(</span><span class="nb">parseFloat</span><span class="p">(</span><span class="nx">col</span><span class="p">[</span><span class="mi">3</span><span class="p">]),</span> <span class="s">&#39;kB&#39;</span><span class="p">).</span><span class="nx">toNumber</span> <span class="s">&#39;B&#39;</span>
+          <span class="nv">val.readTotal = </span><span class="nx">math</span><span class="p">.</span><span class="nx">unit</span><span class="p">(</span><span class="nb">parseFloat</span><span class="p">(</span><span class="nx">col</span><span class="p">[</span><span class="mi">4</span><span class="p">]),</span> <span class="s">&#39;kB&#39;</span><span class="p">).</span><span class="nx">toNumber</span> <span class="s">&#39;B&#39;</span>
+          <span class="nv">val.writeTotal = </span><span class="nx">math</span><span class="p">.</span><span class="nx">unit</span><span class="p">(</span><span class="nb">parseFloat</span><span class="p">(</span><span class="nx">col</span><span class="p">[</span><span class="mi">5</span><span class="p">]),</span> <span class="s">&#39;kB&#39;</span><span class="p">).</span><span class="nx">toNumber</span> <span class="s">&#39;B&#39;</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-17" id="section-17">&#182;</a>
+</div>
+<p>evaluate to check status</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+        <span class="nv">status = </span><span class="nx">@rules</span><span class="p">()</span>
+        <span class="nv">message = </span><span class="nx">@config</span><span class="p">[</span><span class="nx">status</span><span class="p">]</span> <span class="k">unless</span> <span class="nx">status</span> <span class="o">is</span> <span class="s">&#39;ok&#39;</span>
+        <span class="k">return</span> <span class="nx">@_end</span> <span class="nx">status</span><span class="p">,</span> <span class="nx">message</span><span class="p">,</span> <span class="nx">cb</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap" id="export%20class">
+  <h2>
+    <a href="#export%20class" name="export%20class" class="pilcrow">&#182;</a>
+    Export class
+  </h2>
+</div>
+
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+<span class="nv">module.exports = </span><span class="nx">IoSensor</span>
+</pre></div>
+        </td>
+      </tr>
+  </tbody>
+</table>
+  </div>
+</body>
+</html>

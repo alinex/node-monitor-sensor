@@ -23,7 +23,7 @@
     <div id="tree"></div>
     <div id="headings">
       <div class="heading h1">
-        <a href="#socket%20test%20class">Socket test class</a>
+        <a href="#http%20access%20check">HTTP access check</a>
       </div>
       <div class="heading h2">
         <a href="#node%20modules">Node Modules</a>
@@ -33,6 +33,12 @@
       </div>
       <div class="heading h3">
         <a href="#general%20information">General information</a>
+      </div>
+      <div class="heading h3">
+        <a href="#configuration">Configuration</a>
+      </div>
+      <div class="heading h3">
+        <a href="#result%20values">Result values</a>
       </div>
       <div class="heading h3">
         <a href="#create%20instance">Create instance</a>
@@ -51,17 +57,31 @@
   <tbody>
       <tr>
         <td class="docs">
-<div class="pilwrap" id="socket%20test%20class">
+<div class="pilwrap" id="http%20access%20check">
   <h1>
-    <a href="#socket%20test%20class" name="socket%20test%20class" class="pilcrow">&#182;</a>
-    Socket test class
+    <a href="#http%20access%20check" name="http%20access%20check" class="pilcrow">&#182;</a>
+    HTTP access check
   </h1>
 </div>
 
 
-<p>This may be used to check the response of a web server.</p>
+<p>This may be used to check the response of a web server using HTTP or HTTPS.</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre></pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-2" id="section-2">&#182;</a>
+</div>
+<p>Find the description of the possible configuration values and the returned
+values in the code below.</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+
+
+</pre></div>
         </td>
       </tr>
       <tr>
@@ -83,7 +103,7 @@
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-3" id="section-3">&#182;</a>
+  <a class="pilcrow" href="#section-4" id="section-4">&#182;</a>
 </div>
 <p>include base modules</p>
         </td>
@@ -97,7 +117,7 @@
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-4" id="section-4">&#182;</a>
+  <a class="pilcrow" href="#section-5" id="section-5">&#182;</a>
 </div>
 <p>include alinex modules</p>
         </td>
@@ -110,7 +130,7 @@
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-5" id="section-5">&#182;</a>
+  <a class="pilcrow" href="#section-6" id="section-6">&#182;</a>
 </div>
 <p>include classes and helper</p>
         </td>
@@ -123,7 +143,7 @@
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-6" id="section-6">&#182;</a>
+  <a class="pilcrow" href="#section-7" id="section-7">&#182;</a>
 </div>
 <p>specific modules for this check</p>
         </td>
@@ -171,16 +191,23 @@
     <span class="nv">level: </span><span class="mi">2</span>
     <span class="nv">hint: </span><span class="s">&quot;If the server didn&#39;t respond it also may be a network problem. &quot;</span>
 
+
 </pre></div>
         </td>
       </tr>
       <tr>
         <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-9" id="section-9">&#182;</a>
+<div class="pilwrap" id="configuration">
+  <h3>
+    <a href="#configuration" name="configuration" class="pilcrow">&#182;</a>
+    Configuration
+  </h3>
 </div>
-<p>Check for configuration settings <a href="http://alinex.githhub.io/node-validator">alinex-validator</a>
-compatible:</p>
+
+
+<p>Definition of all possible configuration settings (defaults included).
+It's a n<a href="http://alinex.githhub.io/node-validator">alinex-validator</a>
+compatible schema definition:</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
     <span class="nv">config:</span>
@@ -200,14 +227,6 @@ compatible:</p>
           <span class="nv">unit: </span><span class="s">&#39;ms&#39;</span>
           <span class="nv">min: </span><span class="mi">500</span>
           <span class="nv">default: </span><span class="mi">10000</span>
-        <span class="nv">responsetime:</span>
-          <span class="nv">title: </span><span class="s">&quot;Response Time&quot;</span>
-          <span class="nv">description: </span><span class="s">&quot;the maximum time in milliseconds till the server</span>
-<span class="s">            responded after that the state is set to warning&quot;</span>
-          <span class="nv">type: </span><span class="s">&#39;interval&#39;</span>
-          <span class="nv">unit: </span><span class="s">&#39;ms&#39;</span>
-          <span class="nv">min: </span><span class="mi">0</span>
-          <span class="nv">default: </span><span class="mi">3000</span>
         <span class="nv">username:</span>
           <span class="nv">title: </span><span class="s">&quot;Username&quot;</span>
           <span class="nv">description: </span><span class="s">&quot;the name used for basic authentication&quot;</span>
@@ -218,9 +237,9 @@ compatible:</p>
           <span class="nv">description: </span><span class="s">&quot;the password used for basic authentication&quot;</span>
           <span class="nv">type: </span><span class="s">&#39;string&#39;</span>
           <span class="nv">optional: </span><span class="kc">true</span>
-        <span class="nv">bodycheck:</span>
-          <span class="nv">title: </span><span class="s">&quot;Body Check&quot;</span>
-          <span class="nv">description: </span><span class="s">&quot;substring or regular expression&quot;</span>
+        <span class="nv">match:</span>
+          <span class="nv">title: </span><span class="s">&quot;Match body&quot;</span>
+          <span class="nv">description: </span><span class="s">&quot;the substring or regular expression which have to match&quot;</span>
           <span class="nv">type: </span><span class="s">&#39;any&#39;</span>
           <span class="nv">optional: </span><span class="kc">true</span>
           <span class="nv">entries: </span><span class="p">[</span>
@@ -230,36 +249,63 @@ compatible:</p>
             <span class="nv">type: </span><span class="s">&#39;object&#39;</span>
             <span class="nv">instanceOf: </span><span class="nb">RegExp</span>
           <span class="p">]</span>
+        <span class="nv">analysis:</span>
+          <span class="nv">title: </span><span class="s">&quot;Analysis Length&quot;</span>
+          <span class="nv">description: </span><span class="s">&quot;the maximum body display length in analyzation report&quot;</span>
+          <span class="nv">type: </span><span class="s">&#39;integer&#39;</span>
+          <span class="nv">min: </span><span class="mi">1</span>
+          <span class="nv">default: </span><span class="mi">256</span>
+        <span class="nv">verbose: </span><span class="nx">@check</span><span class="p">.</span><span class="nx">verbose</span>
+        <span class="nv">warn: </span><span class="nx">@check</span><span class="p">.</span><span class="nx">warn</span>
+        <span class="nv">fail: </span><span class="nx">object</span><span class="p">.</span><span class="nx">extend</span> <span class="p">{</span> <span class="nv">default: </span><span class="s">&#39;statuscode &lt; 200 or statuscode &gt;= 400&#39;</span> <span class="p">},</span> <span class="nx">@check</span><span class="p">.</span><span class="nx">fail</span>
+
 
 </pre></div>
         </td>
       </tr>
       <tr>
         <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-10" id="section-10">&#182;</a>
+<div class="pilwrap" id="result%20values">
+  <h3>
+    <a href="#result%20values" name="result%20values" class="pilcrow">&#182;</a>
+    Result values
+  </h3>
 </div>
-<p>Definition of response values</p>
+
+
+<p>This are possible values which may be given if the check runs normally.
+You may use any of these in your warn/fail expressions.</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
     <span class="nv">values:</span>
-      <span class="nv">success:</span>
-        <span class="nv">title: </span><span class="s">&quot;Success&quot;</span>
-        <span class="nv">description: </span><span class="s">&quot;true if server responded with correct http code&quot;</span>
-        <span class="nv">type: </span><span class="s">&#39;boolean&#39;</span>
       <span class="nv">responsetime:</span>
         <span class="nv">title: </span><span class="s">&quot;Response Time&quot;</span>
         <span class="nv">description: </span><span class="s">&quot;time till connection could be established&quot;</span>
-        <span class="nv">type: </span><span class="s">&#39;integer&#39;</span>
+        <span class="nv">type: </span><span class="s">&#39;interval&#39;</span>
         <span class="nv">unit: </span><span class="s">&#39;ms&#39;</span>
       <span class="nv">statuscode:</span>
         <span class="nv">title: </span><span class="s">&quot;Status Code&quot;</span>
         <span class="nv">description: </span><span class="s">&quot;http status code&quot;</span>
-        <span class="nv">type: </span><span class="s">&#39;values&#39;</span>
-      <span class="nv">bodytype:</span>
-        <span class="nv">title: </span><span class="s">&quot;Body Check OK&quot;</span>
-        <span class="nv">description: </span><span class="s">&quot;success of check for content&quot;</span>
-        <span class="nv">type: </span><span class="s">&#39;boolean&#39;</span>
+        <span class="nv">type: </span><span class="s">&#39;integer&#39;</span>
+      <span class="nv">statusmessage:</span>
+        <span class="nv">title: </span><span class="s">&quot;Status Message&quot;</span>
+        <span class="nv">description: </span><span class="s">&quot;http status message from server&quot;</span>
+        <span class="nv">type: </span><span class="s">&#39;string&#39;</span>
+      <span class="nv">server:</span>
+        <span class="nv">title: </span><span class="s">&quot;Server&quot;</span>
+        <span class="nv">description: </span><span class="s">&quot;application name of the server (if given)&quot;</span>
+        <span class="nv">type: </span><span class="s">&#39;string&#39;</span>
+      <span class="nv">contenttype:</span>
+        <span class="nv">title: </span><span class="s">&quot;Content Type&quot;</span>
+        <span class="nv">description: </span><span class="s">&quot;the content mimetype&quot;</span>
+      <span class="nv">length:</span>
+        <span class="nv">title: </span><span class="s">&quot;Content Length&quot;</span>
+        <span class="nv">description: </span><span class="s">&quot;size of the content&quot;</span>
+        <span class="nv">type: </span><span class="s">&#39;byte&#39;</span>
+      <span class="nv">match:</span>
+        <span class="nv">title: </span><span class="s">&quot;Body Match&quot;</span>
+        <span class="nv">description: </span><span class="s">&quot;success of check for content with containing results&quot;</span>
+        <span class="nv">type: </span><span class="s">&#39;object&#39;</span>
 
 
 </pre></div>
@@ -302,7 +348,7 @@ compatible:</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-13" id="section-13">&#182;</a>
+  <a class="pilcrow" href="#section-14" id="section-14">&#182;</a>
 </div>
 <p>configure request</p>
         </td>
@@ -321,7 +367,7 @@ compatible:</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-14" id="section-14">&#182;</a>
+  <a class="pilcrow" href="#section-15" id="section-15">&#182;</a>
 </div>
 <p>start the request</p>
         </td>
@@ -336,29 +382,12 @@ compatible:</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-15" id="section-15">&#182;</a>
+  <a class="pilcrow" href="#section-16" id="section-16">&#182;</a>
 </div>
 <p>request finished</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
       <span class="nv">end = </span><span class="k">new</span> <span class="nb">Date</span><span class="p">().</span><span class="nx">getTime</span><span class="p">()</span>
-
-</pre></div>
-        </td>
-      </tr>
-      <tr>
-        <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-16" id="section-16">&#182;</a>
-</div>
-<p>collecting data</p>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-      <span class="k">if</span> <span class="nx">response</span><span class="o">?</span>
-        <span class="k">for</span> <span class="nx">key</span><span class="p">,</span> <span class="nx">value</span> <span class="k">of</span> <span class="nx">response</span><span class="p">.</span><span class="nx">headers</span>
-          <span class="nx">debug</span> <span class="nx">chalk</span><span class="p">.</span><span class="nx">grey</span> <span class="s">&quot;</span><span class="si">#{</span><span class="nx">key</span><span class="si">}</span><span class="s">: </span><span class="si">#{</span><span class="nx">value</span><span class="si">}</span><span class="s">&quot;</span>
-      <span class="k">if</span> <span class="nx">body</span><span class="o">?</span>
-        <span class="nx">debug</span> <span class="nx">chalk</span><span class="p">.</span><span class="nx">grey</span> <span class="nx">body</span>
 
 </pre></div>
         </td>
@@ -386,15 +415,14 @@ compatible:</p>
 <p>get the values</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-      <span class="nv">val = </span><span class="nx">@result</span><span class="p">.</span><span class="nx">value</span>
-      <span class="nv">val.success = </span><span class="mi">200</span> <span class="o">&lt;=</span> <span class="nx">response</span><span class="p">.</span><span class="nx">statusCode</span> <span class="o">&lt;</span> <span class="mi">300</span>
+      <span class="nv">val = </span><span class="nx">@result</span><span class="p">.</span><span class="nx">values</span>
       <span class="nv">val.responsetime = </span><span class="nx">end</span><span class="o">-</span><span class="nx">start</span>
       <span class="nv">val.statuscode = </span><span class="nx">response</span><span class="p">.</span><span class="nx">statusCode</span>
-      <span class="k">if</span> <span class="nx">@config</span><span class="p">.</span><span class="nx">bodycheck</span><span class="o">?</span>
-        <span class="k">if</span> <span class="nx">@config</span><span class="p">.</span><span class="nx">bodycheck</span> <span class="k">instanceof</span> <span class="nb">RegExp</span>
-          <span class="nv">val.bodycheck = </span><span class="p">(</span><span class="nx">body</span><span class="p">.</span><span class="nx">match</span> <span class="nx">@config</span><span class="p">.</span><span class="nx">bodycheck</span><span class="p">)</span><span class="o">?</span>
-        <span class="k">else</span>
-          <span class="nv">val.bodycheck = </span><span class="p">(</span><span class="o">~</span><span class="nx">body</span><span class="p">.</span><span class="nx">indexOf</span> <span class="nx">@config</span><span class="p">.</span><span class="nx">bodycheck</span><span class="p">)</span><span class="o">?</span>
+      <span class="nv">val.statusmessage = </span><span class="nx">response</span><span class="p">.</span><span class="nx">statusMessage</span>
+      <span class="nv">val.server = </span><span class="nx">response</span><span class="p">.</span><span class="nx">headers</span><span class="p">.</span><span class="nx">server</span>
+      <span class="nv">val.contenttype = </span><span class="nx">response</span><span class="p">.</span><span class="nx">headers</span><span class="p">[</span><span class="s">&#39;content-type&#39;</span><span class="p">]</span>
+      <span class="nv">val.length = </span><span class="nx">response</span><span class="p">.</span><span class="nx">connection</span><span class="p">.</span><span class="nx">bytesRead</span>
+      <span class="nv">val.match = </span><span class="nx">@match</span> <span class="nx">body</span><span class="p">,</span> <span class="nx">@config</span><span class="p">.</span><span class="nx">match</span>
 
 </pre></div>
         </td>
@@ -407,16 +435,49 @@ compatible:</p>
 <p>evaluate to check status</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-      <span class="nv">status = </span><span class="k">switch</span>
-        <span class="k">when</span> <span class="o">not</span> <span class="nx">val</span><span class="p">.</span><span class="nx">success</span>
-          <span class="s">&#39;fail&#39;</span>
-        <span class="k">when</span>  <span class="nx">@config</span><span class="p">.</span><span class="nx">responsetime</span><span class="o">?</span> <span class="o">and</span> <span class="nx">val</span><span class="p">.</span><span class="nx">responsetime</span> <span class="o">&gt;</span> <span class="nx">@config</span><span class="p">.</span><span class="nx">responsetime</span>
-          <span class="s">&#39;warn&#39;</span>
-        <span class="k">else</span>
-          <span class="s">&#39;ok&#39;</span>
-      <span class="nv">message = </span><span class="k">switch</span> <span class="nx">status</span>
-        <span class="k">when</span> <span class="s">&#39;fail&#39;</span>
-          <span class="s">&quot;</span><span class="si">#{</span><span class="nx">@constructor</span><span class="p">.</span><span class="nx">meta</span><span class="p">.</span><span class="nx">name</span><span class="si">}</span><span class="s"> exited with status code </span><span class="si">#{</span><span class="nx">response</span><span class="p">.</span><span class="nx">statusCode</span><span class="si">}</span><span class="s">&quot;</span>
+      <span class="nv">status = </span><span class="nx">@rules</span><span class="p">()</span>
+      <span class="nv">message = </span><span class="nx">@config</span><span class="p">[</span><span class="nx">status</span><span class="p">]</span> <span class="k">unless</span> <span class="nx">status</span> <span class="o">is</span> <span class="s">&#39;ok&#39;</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-20" id="section-20">&#182;</a>
+</div>
+<p>done if no problem found</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+      <span class="k">if</span> <span class="nx">status</span> <span class="o">is</span> <span class="s">&#39;ok&#39;</span> <span class="o">and</span> <span class="o">not</span> <span class="nx">@config</span><span class="p">.</span><span class="nx">verbose</span>
+        <span class="k">return</span> <span class="nx">@_end</span> <span class="nx">status</span><span class="p">,</span> <span class="nx">message</span><span class="p">,</span> <span class="nx">cb</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-21" id="section-21">&#182;</a>
+</div>
+<p>get additional information (top processes)</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+      <span class="vi">@result.analysis = </span><span class="s">&quot;&quot;&quot;</span>
+<span class="s">      See the following details of the check.</span>
+
+<span class="s">      __GET </span><span class="si">#{</span><span class="nx">@config</span><span class="p">.</span><span class="nx">url</span><span class="si">}</span><span class="s">__\n</span>
+<span class="s">      &quot;&quot;&quot;</span>
+      <span class="k">if</span> <span class="nx">response</span><span class="o">?</span>
+        <span class="nx">@result</span><span class="p">.</span><span class="nx">analysis</span> <span class="o">+=</span> <span class="s">&quot;\nResponse:\n\n&quot;</span>
+        <span class="k">for</span> <span class="nx">key</span><span class="p">,</span> <span class="nx">value</span> <span class="k">of</span> <span class="nx">response</span><span class="p">.</span><span class="nx">headers</span>
+          <span class="nx">@result</span><span class="p">.</span><span class="nx">analysis</span> <span class="o">+=</span> <span class="s">&quot;    </span><span class="si">#{</span><span class="nx">key</span><span class="si">}</span><span class="s">: </span><span class="si">#{</span><span class="nx">value</span><span class="si">}</span><span class="s">\n&quot;</span>
+      <span class="k">if</span> <span class="nx">body</span><span class="o">?</span>
+        <span class="nv">body = </span><span class="nx">body</span><span class="p">[</span><span class="mi">0</span><span class="p">..</span><span class="nx">@config</span><span class="p">.</span><span class="nx">analysis</span><span class="p">]</span> <span class="o">+</span> <span class="s">&#39;...&#39;</span> <span class="k">if</span> <span class="nx">body</span><span class="p">.</span><span class="nx">length</span> <span class="o">&gt;</span> <span class="nx">@config</span><span class="p">.</span><span class="nx">analysis</span>
+        <span class="nv">body = </span><span class="nx">body</span><span class="p">.</span><span class="nx">replace</span> <span class="sr">/\n/g</span><span class="p">,</span> <span class="s">&#39;\n    &#39;</span>
+        <span class="nx">@result</span><span class="p">.</span><span class="nx">analysis</span> <span class="o">+=</span> <span class="s">&quot;\nContent:\n\n&quot;</span>
+        <span class="nx">@result</span><span class="p">.</span><span class="nx">analysis</span> <span class="o">+=</span> <span class="s">&quot;    </span><span class="si">#{</span><span class="nx">body</span><span class="si">}</span><span class="s">\n&quot;</span>
+      <span class="nx">debug</span> <span class="nx">@result</span><span class="p">.</span><span class="nx">analysis</span>
       <span class="nx">@_end</span> <span class="nx">status</span><span class="p">,</span> <span class="nx">message</span><span class="p">,</span> <span class="nx">cb</span>
 
 

@@ -37,8 +37,11 @@
       <div class="heading h2">
         <a href="#status">Status</a>
       </div>
+      <div class="heading h3">
+        <a href="#warn%2Ffail%20rules">Warn/Fail rules</a>
+      </div>
       <div class="heading h2">
-        <a href="#api">API</a>
+        <a href="#public%20api">Public API</a>
       </div>
       <div class="heading h3">
         <a href="#sensor%20classes">Sensor classes</a>
@@ -81,10 +84,13 @@ too.</p>
 <ul>
 <li>it has multiple sensors</li>
 <li>runs completely asynchronous</li>
-<li>analyses the process</li>
 <li>collects all the data</li>
 <li>supports verbose mode and debugging</li>
+<li>calculates the status</li>
 </ul>
+
+<p>Some sensors and parts of it are specifically for Linux/Unix/OSX systems. If you
+have windows you may help to improve this.</p>
 
 <p>It is one of the modules of the <a href="http://alinex.github.io/node-alinex.html">Alinex Universe</a>
 following the code standards defined there.</p>
@@ -206,19 +212,64 @@ here.</p>
 
 <p>The sensors uses the following status:</p>
 
-<p><strong>running</strong> if the sensor is already analyzing, you have to wait</p>
+<ul>
+<li><strong>running</strong> if the sensor is already analyzing, you have to wait</li>
+<li><strong>ok</strong> if everything is perfect, there nothing have to be done</li>
+<li><strong>warn</strong> if the sensor reached the warning level, know you have to keep an eye on it</li>
+<li><strong>fail</strong> if the sensor failed and there is a problem</li>
+</ul>
 
-<p><strong>ok</strong> if everything is perfect, there nothing have to be done</p>
+<p>Each sensor will automatically fail if an timeout occurred. Else the defined
+checks will be used.</p>
 
-<p><strong>warn</strong> if the sensor reached the warning level, know you have to keep an eye on it</p>
+<p>Most checks will collect different values which may be used to specify the status.
+Therefore you may write a rule for <code>fail</code> or <code>warn</code> status in logical form, use
+a simple expression syntax:</p>
 
-<p><strong>fail</strong> if the sensor failed and there is a problem</p>
+
+<div class="highlight"><pre><code><span class="nx">fail</span><span class="o">:</span> <span class="s1">&#39;free &lt; 5%&#39;</span>
+<span class="nx">warn</span><span class="o">:</span> <span class="s1">&#39;free &lt; 20% and cpu &gt; 50%&#39;</span>
+</code></pre></div>
 
 
-<div class="pilwrap" id="api">
+
+
+<div class="pilwrap" id="warn%2Ffail%20rules">
+  <h3>
+    <a href="#warn%2Ffail%20rules" name="warn%2Ffail%20rules" class="pilcrow">&#182;</a>
+    Warn/Fail rules
+  </h3>
+</div>
+
+
+<p>You may use different mathematical and logical operators together with braces.
+Allowed are:</p>
+
+<ul>
+<li>comparison: &lt;, >, &lt;=, >=, ==, !=</li>
+<li>calculation: +, -, *, /</li>
+<li>logic: and, or, is, isnt, not</li>
+<li>braces: (, )</li>
+<li>all the data value names of the sensor</li>
+<li>array access on some data values: <code>match[1]</code></li>
+<li>object access on some data values: <code>match.title</code></li>
+</ul>
+
+<p>More complexer examples are:</p>
+
+
+<div class="highlight"><pre><code><span class="nx">fail</span><span class="o">:</span> <span class="s2">&quot;match.title isnt &#39;heise Developer&#39;&quot;</span>
+<span class="nx">warn</span><span class="o">:</span> <span class="s2">&quot;free &lt; 10% or swapFree &lt; 50%&quot;</span>
+<span class="nx">fail</span><span class="o">:</span> <span class="s2">&quot;statuscode &lt; 200 or statuscode &gt;= 400&quot;</span>
+</code></pre></div>
+
+
+
+
+<div class="pilwrap" id="public%20api">
   <h2>
-    <a href="#api" name="api" class="pilcrow">&#182;</a>
-    API
+    <a href="#public%20api" name="public%20api" class="pilcrow">&#182;</a>
+    Public API
   </h2>
 </div>
 
@@ -232,11 +283,18 @@ here.</p>
 </div>
 
 
+<p>The following list contains the possible sensors, look into each other to get
+all the specific information:</p>
+
 <ul>
 <li><a href="src/type/cpu.coffee.html">Cpu</a> - cpu activity check</li>
 <li><a href="src/type/load.coffee.html">Load</a> - cpu load check</li>
 <li><a href="src/type/memory.coffee.html">Memory</a> - check free memory</li>
+<li><a href="src/type/io.coffee.html">IO</a> - disk io check</li>
+<li><a href="src/type/net.coffee.html">Net</a> - network io check</li>
 <li><a href="src/type/diskfree.coffee.html">Diskfree</a> - free disk space</li>
+<li><a href="src/type/time.coffee.html">Time</a> - check local time</li>
+<li><a href="src/type/upgrade.coffee.html">Upgrade</a> - check for package upgrades</li>
 <li><a href="src/type/ping.coffee.html">Ping</a> - network ping test</li>
 <li><a href="src/type/socket.coffee.html">Socket</a> - test port connectivity</li>
 <li><a href="src/type/http.coffee.html">Http</a> - try requesting an url</li>
@@ -253,6 +311,7 @@ here.</p>
 
 <ul>
 <li><code>run(cb)</code> - start a new analyzation with optional callback</li>
+<li><code>format()</code> - give a human readable output in markdown syntax</li>
 </ul>
 
 
@@ -308,9 +367,11 @@ style)</li>
 <li><code>config</code> - configuration (given combined with defaults)</li>
 <li><code>result</code> - the results:
 <ul><li><code>date</code> - start date of last or current run</li>
+<li><code>range</code> - if set this will give the time range (start/end date in an array)
+this measurement includes</li>
 <li><code>status</code> - status of the last or current run (ok, warn, fail)</li>
 <li><code>message</code> - error message of the last or current run</li>
-<li><code>value</code> - map of measured values</li>
+<li><code>values</code> - map of measured values</li>
 <li><code>analysis</code> - additional analysis data</li></ul></li>
 </ul>
 

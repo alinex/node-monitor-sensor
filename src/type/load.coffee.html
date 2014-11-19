@@ -35,13 +35,16 @@
         <a href="#general%20information">General information</a>
       </div>
       <div class="heading h3">
+        <a href="#configuration">Configuration</a>
+      </div>
+      <div class="heading h3">
+        <a href="#result%20values">Result values</a>
+      </div>
+      <div class="heading h3">
         <a href="#create%20instance">Create instance</a>
       </div>
       <div class="heading h3">
         <a href="#run%20the%20check">Run the check</a>
-      </div>
-      <div class="heading h3">
-        <a href="#format%20last%20result">Format last result</a>
       </div>
       <div class="heading h2">
         <a href="#export%20class">Export class</a>
@@ -72,6 +75,20 @@ be calculated.</p>
       </tr>
       <tr>
         <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-2" id="section-2">&#182;</a>
+</div>
+<p>Find the description of the possible configuration values and the returned
+values in the code below.</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
 <div class="pilwrap" id="node%20modules">
   <h2>
     <a href="#node%20modules" name="node%20modules" class="pilcrow">&#182;</a>
@@ -89,7 +106,7 @@ be calculated.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-3" id="section-3">&#182;</a>
+  <a class="pilcrow" href="#section-4" id="section-4">&#182;</a>
 </div>
 <p>include base modules</p>
         </td>
@@ -102,13 +119,12 @@ be calculated.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-4" id="section-4">&#182;</a>
+  <a class="pilcrow" href="#section-5" id="section-5">&#182;</a>
 </div>
 <p>include alinex packages</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-<span class="nv">object = </span><span class="nx">require</span><span class="p">(</span><span class="s">&#39;alinex-util&#39;</span><span class="p">).</span><span class="nx">object</span>
-<span class="nv">string = </span><span class="nx">require</span><span class="p">(</span><span class="s">&#39;alinex-util&#39;</span><span class="p">).</span><span class="nx">string</span>
+<span class="p">{</span><span class="nx">object</span><span class="p">,</span><span class="nx">string</span><span class="p">}</span> <span class="o">=</span> <span class="nx">require</span> <span class="s">&#39;alinex-util&#39;</span>
 
 </pre></div>
         </td>
@@ -116,7 +132,7 @@ be calculated.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-5" id="section-5">&#182;</a>
+  <a class="pilcrow" href="#section-6" id="section-6">&#182;</a>
 </div>
 <p>include classes and helper modules</p>
         </td>
@@ -129,7 +145,7 @@ be calculated.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-6" id="section-6">&#182;</a>
+  <a class="pilcrow" href="#section-7" id="section-7">&#182;</a>
 </div>
 <p>specific modules for this check</p>
         </td>
@@ -186,11 +202,17 @@ be calculated.</p>
       </tr>
       <tr>
         <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-9" id="section-9">&#182;</a>
+<div class="pilwrap" id="configuration">
+  <h3>
+    <a href="#configuration" name="configuration" class="pilcrow">&#182;</a>
+    Configuration
+  </h3>
 </div>
-<p>Check for configuration settings <a href="http://alinex.githhub.io/node-validator">alinex-validator</a>
-compatible:</p>
+
+
+<p>Definition of all possible configuration settings (defaults included).
+It's a n<a href="http://alinex.githhub.io/node-validator">alinex-validator</a>
+compatible schema definition:</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
     <span class="nv">config:</span>
@@ -198,61 +220,26 @@ compatible:</p>
       <span class="nv">type: </span><span class="s">&#39;object&#39;</span>
       <span class="nv">allowedKeys: </span><span class="kc">true</span>
       <span class="nv">entries:</span>
-        <span class="nv">shortFail:</span>
-          <span class="nv">title: </span><span class="s">&quot;1min load fail&quot;</span>
-          <span class="nv">description: </span><span class="s">&quot;the minimum level for the one minute load average to fail&quot;</span>
-          <span class="nv">type: </span><span class="s">&#39;percent&#39;</span>
-          <span class="nv">optional: </span><span class="kc">true</span>
-          <span class="nv">min: </span><span class="mi">0</span>
-        <span class="nv">shortWarn:</span>
-          <span class="nv">title: </span><span class="s">&quot;1min load warn&quot;</span>
-          <span class="nv">description: </span><span class="s">&quot;the minimum level for the one minute load average to warn&quot;</span>
-          <span class="nv">type: </span><span class="s">&#39;percent&#39;</span>
-          <span class="nv">optional: </span><span class="kc">true</span>
-          <span class="nv">min: </span><span class="mi">0</span>
-          <span class="nv">max:</span>
-            <span class="nv">reference: </span><span class="s">&#39;relative&#39;</span>
-            <span class="nv">source: </span><span class="s">&#39;&lt;shortFail&#39;</span>
-        <span class="nv">mediumFail:</span>
-          <span class="nv">title: </span><span class="s">&quot;5min load fail&quot;</span>
-          <span class="nv">description: </span><span class="s">&quot;the minimum level for the 5 minute load average to fail&quot;</span>
-          <span class="nv">type: </span><span class="s">&#39;percent&#39;</span>
-          <span class="nv">optional: </span><span class="kc">true</span>
-          <span class="nv">min: </span><span class="mi">0</span>
-        <span class="nv">mediumWarn:</span>
-          <span class="nv">title: </span><span class="s">&quot;5min load warn&quot;</span>
-          <span class="nv">description: </span><span class="s">&quot;the minimum level for the 5 minute load average to warn&quot;</span>
-          <span class="nv">type: </span><span class="s">&#39;percent&#39;</span>
-          <span class="nv">optional: </span><span class="kc">true</span>
-          <span class="nv">min: </span><span class="mi">0</span>
-          <span class="nv">max:</span>
-            <span class="nv">reference: </span><span class="s">&#39;relative&#39;</span>
-            <span class="nv">source: </span><span class="s">&#39;&lt;mediumFail&#39;</span>
-        <span class="nv">longFail:</span>
-          <span class="nv">title: </span><span class="s">&quot;15min load fail&quot;</span>
-          <span class="nv">description: </span><span class="s">&quot;the minimum level for the 15 minute load average to fail&quot;</span>
-          <span class="nv">type: </span><span class="s">&#39;percent&#39;</span>
-          <span class="nv">optional: </span><span class="kc">true</span>
-          <span class="nv">min: </span><span class="mi">0</span>
-        <span class="nv">longWarn:</span>
-          <span class="nv">title: </span><span class="s">&quot;15min load warn&quot;</span>
-          <span class="nv">description: </span><span class="s">&quot;the minimum level for the 15 minute load average to warn&quot;</span>
-          <span class="nv">type: </span><span class="s">&#39;percent&#39;</span>
-          <span class="nv">optional: </span><span class="kc">true</span>
-          <span class="nv">min: </span><span class="mi">0</span>
-          <span class="nv">max:</span>
-            <span class="nv">reference: </span><span class="s">&#39;relative&#39;</span>
-            <span class="nv">source: </span><span class="s">&#39;&lt;longFail&#39;</span>
+        <span class="nv">verbose: </span><span class="nx">@check</span><span class="p">.</span><span class="nx">verbose</span>
+        <span class="nv">warn: </span><span class="nx">@check</span><span class="p">.</span><span class="nx">warn</span>
+        <span class="nv">fail: </span><span class="nx">@check</span><span class="p">.</span><span class="nx">fail</span>
+
 
 </pre></div>
         </td>
       </tr>
       <tr>
         <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-10" id="section-10">&#182;</a>
+<div class="pilwrap" id="result%20values">
+  <h3>
+    <a href="#result%20values" name="result%20values" class="pilcrow">&#182;</a>
+    Result values
+  </h3>
 </div>
-<p>Definition of response values</p>
+
+
+<p>This are possible values which may be given if the check runs normally.
+You may use any of these in your warn/fail expressions.</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
     <span class="nv">values:</span>
@@ -318,7 +305,7 @@ compatible:</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-13" id="section-13">&#182;</a>
+  <a class="pilcrow" href="#section-14" id="section-14">&#182;</a>
 </div>
 <p>get data</p>
         </td>
@@ -332,12 +319,12 @@ compatible:</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-14" id="section-14">&#182;</a>
+  <a class="pilcrow" href="#section-15" id="section-15">&#182;</a>
 </div>
 <p>calculate values</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-    <span class="nv">val = </span><span class="nx">@result</span><span class="p">.</span><span class="nx">value</span>
+    <span class="nv">val = </span><span class="nx">@result</span><span class="p">.</span><span class="nx">values</span>
     <span class="nv">val.cpus = </span><span class="nx">cpus</span><span class="p">.</span><span class="nx">length</span>
     <span class="nv">val.cpu = </span><span class="nx">cpus</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nx">model</span><span class="p">.</span><span class="nx">replace</span> <span class="sr">/\s+/g</span><span class="p">,</span> <span class="s">&#39; &#39;</span>
     <span class="nv">val.short = </span><span class="nx">load</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">/</span> <span class="nx">val</span><span class="p">.</span><span class="nx">cpus</span>
@@ -350,26 +337,14 @@ compatible:</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-15" id="section-15">&#182;</a>
+  <a class="pilcrow" href="#section-16" id="section-16">&#182;</a>
 </div>
 <p>evaluate to check status</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-    <span class="nv">status = </span><span class="k">switch</span>
-      <span class="k">when</span> <span class="nx">@config</span><span class="p">.</span><span class="nx">shortFail</span><span class="o">?</span> <span class="o">and</span> <span class="nx">val</span><span class="p">.</span><span class="nx">short</span> <span class="o">&gt;</span> <span class="nx">@config</span><span class="p">.</span><span class="nx">shortFail</span><span class="p">,</span> <span class="o">\</span>
-           <span class="nx">@config</span><span class="p">.</span><span class="nx">mediumFail</span><span class="o">?</span> <span class="o">and</span> <span class="nx">val</span><span class="p">.</span><span class="nx">medium</span> <span class="o">&gt;</span> <span class="nx">@config</span><span class="p">.</span><span class="nx">mediumFail</span><span class="p">,</span> <span class="o">\</span>
-           <span class="nx">@config</span><span class="p">.</span><span class="nx">longFail</span><span class="o">?</span> <span class="o">and</span> <span class="nx">val</span><span class="p">.</span><span class="nx">long</span> <span class="o">&gt;</span> <span class="nx">@config</span><span class="p">.</span><span class="nx">longFail</span>
-        <span class="s">&#39;fail&#39;</span>
-      <span class="k">when</span> <span class="nx">@config</span><span class="p">.</span><span class="nx">shortWarn</span><span class="o">?</span> <span class="o">and</span> <span class="nx">val</span><span class="p">.</span><span class="nx">short</span> <span class="o">&gt;</span> <span class="nx">@config</span><span class="p">.</span><span class="nx">shortWarn</span><span class="p">,</span> <span class="o">\</span>
-           <span class="nx">@config</span><span class="p">.</span><span class="nx">mediumWarn</span><span class="o">?</span> <span class="o">and</span> <span class="nx">val</span><span class="p">.</span><span class="nx">medium</span> <span class="o">&gt;</span> <span class="nx">@config</span><span class="p">.</span><span class="nx">mediumWarn</span><span class="p">,</span> <span class="o">\</span>
-           <span class="nx">@config</span><span class="p">.</span><span class="nx">longWarn</span><span class="o">?</span> <span class="o">and</span> <span class="nx">val</span><span class="p">.</span><span class="nx">long</span> <span class="o">&gt;</span> <span class="nx">@config</span><span class="p">.</span><span class="nx">longWarn</span>
-        <span class="s">&#39;warn&#39;</span>
-      <span class="k">else</span>
-        <span class="s">&#39;ok&#39;</span>
-    <span class="nv">message = </span><span class="k">switch</span> <span class="nx">status</span>
-      <span class="k">when</span> <span class="s">&#39;fail&#39;</span>
-        <span class="s">&quot;</span><span class="si">#{</span><span class="nx">@constructor</span><span class="p">.</span><span class="nx">meta</span><span class="p">.</span><span class="nx">name</span><span class="si">}</span><span class="s"> exited with status </span><span class="si">#{</span><span class="nx">status</span><span class="si">}</span><span class="s">&quot;</span>
-    <span class="k">if</span> <span class="nx">status</span> <span class="o">is</span> <span class="s">&#39;ok&#39;</span>
+    <span class="nv">status = </span><span class="nx">@rules</span><span class="p">()</span>
+    <span class="nv">message = </span><span class="nx">@config</span><span class="p">[</span><span class="nx">status</span><span class="p">]</span> <span class="k">unless</span> <span class="nx">status</span> <span class="o">is</span> <span class="s">&#39;ok&#39;</span>
+    <span class="k">if</span> <span class="nx">status</span> <span class="o">is</span> <span class="s">&#39;ok&#39;</span> <span class="o">and</span> <span class="o">not</span> <span class="nx">@config</span><span class="p">.</span><span class="nx">verbose</span>
       <span class="k">return</span> <span class="nx">@_end</span> <span class="nx">status</span><span class="p">,</span> <span class="nx">message</span><span class="p">,</span> <span class="nx">cb</span>
 
 </pre></div>
@@ -378,7 +353,7 @@ compatible:</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-16" id="section-16">&#182;</a>
+  <a class="pilcrow" href="#section-17" id="section-17">&#182;</a>
 </div>
 <p>get additional information</p>
         </td>
@@ -409,101 +384,6 @@ compatible:</p>
 <span class="s">          | </span><span class="si">#{</span><span class="nx">string</span><span class="p">.</span><span class="nx">lpad</span> <span class="nx">value</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="mi">5</span><span class="si">}</span><span class="s"> | </span><span class="si">#{</span><span class="nx">string</span><span class="p">.</span><span class="nx">rpad</span> <span class="nx">proc</span><span class="p">,</span> <span class="mi">50</span><span class="si">}</span><span class="s"> |\n&quot;</span>
         <span class="nx">debug</span> <span class="nx">@result</span><span class="p">.</span><span class="nx">analysis</span>
       <span class="nx">@_end</span> <span class="nx">status</span><span class="p">,</span> <span class="nx">message</span><span class="p">,</span> <span class="nx">cb</span>
-
-
-</pre></div>
-        </td>
-      </tr>
-      <tr>
-        <td class="docs">
-<div class="pilwrap" id="format%20last%20result">
-  <h3>
-    <a href="#format%20last%20result" name="format%20last%20result" class="pilcrow">&#182;</a>
-    Format last result
-  </h3>
-</div>
-
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-  <span class="nv">format: </span><span class="nf">-&gt;</span>
-    <span class="nv">meta = </span><span class="nx">@constructor</span><span class="p">.</span><span class="nx">meta</span>
-    <span class="nv">text = </span><span class="s">&quot;&quot;&quot;</span>
-
-</pre></div>
-        </td>
-      </tr>
-      <tr>
-        <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-18" id="section-18">&#182;</a>
-</div>
-<p>{meta.description}\n\nLast check results are:</p>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-
-<span class="s">      |       RESULT       |    VALUE     |     WARN     |    ERROR     |</span>
-<span class="s">      | ------------------ | -----------: | -----------: | -----------: |\n&quot;&quot;&quot;</span>
-
-</pre></div>
-        </td>
-      </tr>
-      <tr>
-        <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-19" id="section-19">&#182;</a>
-</div>
-<p>table of values</p>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-    <span class="k">for</span> <span class="nx">name</span><span class="p">,</span> <span class="nx">set</span> <span class="k">of</span> <span class="nx">meta</span><span class="p">.</span><span class="nx">values</span>
-      <span class="nv">val = </span><span class="s">&#39;&#39;</span>
-      <span class="k">if</span> <span class="nx">@result</span><span class="p">.</span><span class="nx">value</span><span class="p">[</span><span class="nx">name</span><span class="p">]</span><span class="o">?</span>
-        <span class="nv">val = </span><span class="k">switch</span> <span class="nx">set</span><span class="p">.</span><span class="nx">type</span>
-          <span class="k">when</span> <span class="s">&#39;percent&#39;</span>
-            <span class="p">(</span><span class="nb">Math</span><span class="p">.</span><span class="nx">round</span><span class="p">(</span><span class="nx">@result</span><span class="p">.</span><span class="nx">value</span><span class="p">[</span><span class="nx">name</span><span class="p">]</span> <span class="o">*</span> <span class="mi">100</span><span class="p">)</span> <span class="o">/</span> <span class="mi">100</span><span class="p">).</span><span class="nx">toString</span><span class="p">()</span> <span class="o">+</span> <span class="s">&#39; %&#39;</span>
-          <span class="k">else</span>
-            <span class="nv">val = </span><span class="nx">@result</span><span class="p">.</span><span class="nx">value</span><span class="p">[</span><span class="nx">name</span><span class="p">]</span>
-            <span class="nx">val</span> <span class="o">+=</span> <span class="s">&quot; </span><span class="si">#{</span><span class="nx">set</span><span class="p">.</span><span class="nx">unit</span><span class="si">}</span><span class="s">&quot;</span> <span class="k">if</span> <span class="nx">val</span> <span class="o">and</span> <span class="nx">set</span><span class="p">.</span><span class="nx">unit</span>
-            <span class="nx">val</span>
-      <span class="nx">text</span> <span class="o">+=</span> <span class="s">&quot;| </span><span class="si">#{</span><span class="nx">string</span><span class="p">.</span><span class="nx">rpad</span> <span class="nx">set</span><span class="p">.</span><span class="nx">title</span><span class="p">,</span> <span class="mi">18</span><span class="si">}</span><span class="s"> &quot;</span>
-      <span class="k">if</span> <span class="nx">name</span> <span class="o">is</span> <span class="s">&#39;cpu&#39;</span>
-        <span class="nx">text</span> <span class="o">+=</span> <span class="s">&quot;| </span><span class="si">#{</span><span class="nx">string</span><span class="p">.</span><span class="nx">rpad</span> <span class="nx">val</span><span class="p">.</span><span class="nx">toString</span><span class="p">(),</span> <span class="mi">42</span><span class="si">}</span><span class="s"> |\n&quot;</span>
-        <span class="k">continue</span>
-      <span class="nx">text</span> <span class="o">+=</span> <span class="s">&quot;| </span><span class="si">#{</span><span class="nx">string</span><span class="p">.</span><span class="nx">lpad</span> <span class="nx">val</span><span class="p">.</span><span class="nx">toString</span><span class="p">(),</span> <span class="mi">12</span><span class="si">}</span><span class="s"> &quot;</span>
-      <span class="k">if</span> <span class="nx">name</span> <span class="k">in</span> <span class="p">[</span><span class="s">&#39;ashort&#39;</span><span class="p">,</span><span class="s">&#39;medium&#39;</span><span class="p">,</span><span class="s">&#39;long&#39;</span><span class="p">]</span>
-        <span class="nv">warn = </span><span class="k">if</span> <span class="nx">@config</span><span class="p">[</span><span class="s">&quot;</span><span class="si">#{</span><span class="nx">name</span><span class="si">}</span><span class="s">Warn&quot;</span><span class="p">]</span><span class="o">?</span> <span class="k">then</span> <span class="nx">@config</span><span class="p">[</span><span class="s">&quot;</span><span class="si">#{</span><span class="nx">name</span><span class="si">}</span><span class="s">Warn&quot;</span><span class="p">].</span><span class="nx">toString</span><span class="p">()</span><span class="o">+</span><span class="s">&#39; %&#39;</span> <span class="k">else</span> <span class="s">&#39;&#39;</span>
-        <span class="nv">fail = </span><span class="k">if</span> <span class="nx">@config</span><span class="p">[</span><span class="s">&quot;</span><span class="si">#{</span><span class="nx">name</span><span class="si">}</span><span class="s">Fail&quot;</span><span class="p">]</span><span class="o">?</span> <span class="k">then</span> <span class="nx">@config</span><span class="p">[</span><span class="s">&quot;</span><span class="si">#{</span><span class="nx">name</span><span class="si">}</span><span class="s">Fail&quot;</span><span class="p">].</span><span class="nx">toString</span><span class="p">()</span><span class="o">+</span><span class="s">&#39; %&#39;</span> <span class="k">else</span> <span class="s">&#39;&#39;</span>
-        <span class="nx">text</span> <span class="o">+=</span> <span class="s">&quot;| </span><span class="si">#{</span><span class="nx">string</span><span class="p">.</span><span class="nx">lpad</span> <span class="nx">warn</span><span class="p">,</span> <span class="mi">12</span><span class="si">}</span><span class="s"></span>
-<span class="s">        | </span><span class="si">#{</span><span class="nx">string</span><span class="p">.</span><span class="nx">lpad</span> <span class="nx">fail</span><span class="p">,</span> <span class="mi">12</span><span class="si">}</span><span class="s"> |\n&quot;</span>
-      <span class="k">else</span>
-        <span class="nx">text</span> <span class="o">+=</span> <span class="s">&quot;|              |              |\n&quot;</span>
-
-</pre></div>
-        </td>
-      </tr>
-      <tr>
-        <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-20" id="section-20">&#182;</a>
-</div>
-<p>additional information</p>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-    <span class="nx">text</span> <span class="o">+=</span> <span class="s">&quot;\n</span><span class="si">#{</span><span class="nx">@result</span><span class="p">.</span><span class="nx">analysis</span><span class="si">}</span><span class="s">&quot;</span> <span class="k">if</span> <span class="nx">@result</span><span class="p">.</span><span class="nx">analysis</span><span class="o">?</span>
-
-</pre></div>
-        </td>
-      </tr>
-      <tr>
-        <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-21" id="section-21">&#182;</a>
-</div>
-<p>hint</p>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-    <span class="nx">text</span> <span class="o">+=</span> <span class="s">&quot;\nHINT: </span><span class="si">#{</span><span class="nx">meta</span><span class="p">.</span><span class="nx">hint</span><span class="si">}</span><span class="s"> &quot;</span> <span class="k">if</span> <span class="nx">meta</span><span class="p">.</span><span class="nx">hint</span>
-    <span class="nx">text</span>
 
 
 </pre></div>

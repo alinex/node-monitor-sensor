@@ -35,6 +35,12 @@
         <a href="#general%20information">General information</a>
       </div>
       <div class="heading h3">
+        <a href="#configuration">Configuration</a>
+      </div>
+      <div class="heading h3">
+        <a href="#result%20values">Result values</a>
+      </div>
+      <div class="heading h3">
         <a href="#create%20instance">Create instance</a>
       </div>
       <div class="heading h3">
@@ -85,6 +91,20 @@ typically:</p>
       </tr>
       <tr>
         <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-2" id="section-2">&#182;</a>
+</div>
+<p>Find the description of the possible configuration values and the returned
+values in the code below.</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
 <div class="pilwrap" id="node%20modules">
   <h2>
     <a href="#node%20modules" name="node%20modules" class="pilcrow">&#182;</a>
@@ -102,7 +122,7 @@ typically:</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-3" id="section-3">&#182;</a>
+  <a class="pilcrow" href="#section-4" id="section-4">&#182;</a>
 </div>
 <p>include base modules</p>
         </td>
@@ -115,7 +135,7 @@ typically:</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-4" id="section-4">&#182;</a>
+  <a class="pilcrow" href="#section-5" id="section-5">&#182;</a>
 </div>
 <p>include alinex packages</p>
         </td>
@@ -128,7 +148,7 @@ typically:</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-5" id="section-5">&#182;</a>
+  <a class="pilcrow" href="#section-6" id="section-6">&#182;</a>
 </div>
 <p>include classes and helper</p>
         </td>
@@ -141,7 +161,7 @@ typically:</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-6" id="section-6">&#182;</a>
+  <a class="pilcrow" href="#section-7" id="section-7">&#182;</a>
 </div>
 <p>specific modules for this check</p>
         </td>
@@ -191,16 +211,23 @@ typically:</p>
     <span class="nv">hint: </span><span class="s">&quot;Check the network card configuration if local ping won&#39;t work or the</span>
 <span class="s">    network connection for external pings. &quot;</span>
 
+
 </pre></div>
         </td>
       </tr>
       <tr>
         <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-9" id="section-9">&#182;</a>
+<div class="pilwrap" id="configuration">
+  <h3>
+    <a href="#configuration" name="configuration" class="pilcrow">&#182;</a>
+    Configuration
+  </h3>
 </div>
-<p>Check for configuration settings <a href="http://alinex.githhub.io/node-validator">alinex-validator</a>
-compatible:</p>
+
+
+<p>Definition of all possible configuration settings (defaults included).
+It's a n<a href="http://alinex.githhub.io/node-validator">alinex-validator</a>
+compatible schema definition:</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
     <span class="nv">config:</span>
@@ -218,6 +245,23 @@ compatible:</p>
           <span class="nv">type: </span><span class="s">&#39;integer&#39;</span>
           <span class="nv">default: </span><span class="mi">1</span>
           <span class="nv">min: </span><span class="mi">1</span>
+          <span class="nv">max: </span><span class="mi">10000</span>
+        <span class="nv">interval:</span>
+          <span class="nv">title: </span><span class="s">&quot;Wait Interval&quot;</span>
+          <span class="nv">description: </span><span class="s">&quot;the time to wait between sending each packet&quot;</span>
+          <span class="nv">type: </span><span class="s">&#39;interval&#39;</span>
+          <span class="nv">unit: </span><span class="s">&#39;ms&#39;</span>
+          <span class="nv">default: </span><span class="mi">1000</span>
+          <span class="nv">min: </span><span class="mi">200</span>
+        <span class="nv">size:</span>
+          <span class="nv">title: </span><span class="s">&quot;Packetsize&quot;</span>
+          <span class="nv">description: </span><span class="s">&quot;the number of bytes to be send, keep in mind that 8 bytes</span>
+<span class="s">          for the ICMP header are added&quot;</span>
+          <span class="nv">type: </span><span class="s">&#39;byte&#39;</span>
+          <span class="nv">unit: </span><span class="s">&#39;B&#39;</span>
+          <span class="nv">default: </span><span class="mi">56</span>
+          <span class="nv">min: </span><span class="mi">24</span>
+          <span class="nv">max: </span><span class="mi">65507</span>
         <span class="nv">timeout:</span>
           <span class="nv">title: </span><span class="s">&quot;Overall Timeout&quot;</span>
           <span class="nv">description: </span><span class="s">&quot;the time in milliseconds the whole test may take before</span>
@@ -226,24 +270,8 @@ compatible:</p>
           <span class="nv">unit: </span><span class="s">&#39;ms&#39;</span>
           <span class="nv">default: </span><span class="mi">1000</span>
           <span class="nv">min: </span><span class="mi">500</span>
-        <span class="nv">responsetime:</span>
-          <span class="nv">title: </span><span class="s">&quot;Average Ping Time&quot;</span>
-          <span class="nv">description: </span><span class="s">&quot;the average time in milliseconds the pings may take to</span>
-<span class="s">            not be marked as warning&quot;</span>
-          <span class="nv">type: </span><span class="s">&#39;interval&#39;</span>
-          <span class="nv">unit: </span><span class="s">&#39;ms&#39;</span>
-          <span class="nv">default: </span><span class="mi">500</span>
-          <span class="nv">min: </span><span class="mi">0</span>
-        <span class="nv">responsemax:</span>
-          <span class="nv">title: </span><span class="s">&quot;Maximum Ping Time&quot;</span>
-          <span class="nv">description: </span><span class="s">&quot;the maximum time in milliseconds any ping may take to</span>
-<span class="s">            not be marked as warning&quot;</span>
-          <span class="nv">type: </span><span class="s">&#39;interval&#39;</span>
-          <span class="nv">unit: </span><span class="s">&#39;ms&#39;</span>
-          <span class="nv">default: </span><span class="mi">1000</span>
-          <span class="nv">min:</span>
-            <span class="nv">reference: </span><span class="s">&#39;relative&#39;</span>
-            <span class="nv">source: </span><span class="s">&#39;&lt;responsetime&#39;</span>
+        <span class="nv">warn: </span><span class="nx">object</span><span class="p">.</span><span class="nx">extend</span> <span class="p">{</span> <span class="nv">default: </span><span class="s">&#39;quality &lt; 100%&#39;</span> <span class="p">},</span> <span class="nx">@check</span><span class="p">.</span><span class="nx">warn</span>
+        <span class="nv">fail: </span><span class="nx">object</span><span class="p">.</span><span class="nx">extend</span> <span class="p">{</span> <span class="nv">default: </span><span class="s">&#39;quality is 0&#39;</span> <span class="p">},</span> <span class="nx">@check</span><span class="p">.</span><span class="nx">fail</span>
 
 
 </pre></div>
@@ -251,17 +279,19 @@ compatible:</p>
       </tr>
       <tr>
         <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-10" id="section-10">&#182;</a>
+<div class="pilwrap" id="result%20values">
+  <h3>
+    <a href="#result%20values" name="result%20values" class="pilcrow">&#182;</a>
+    Result values
+  </h3>
 </div>
-<p>Definition of response values</p>
+
+
+<p>This are possible values which may be given if the check runs normally.
+You may use any of these in your warn/fail expressions.</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
     <span class="nv">values:</span>
-      <span class="nv">success:</span>
-        <span class="nv">title: </span><span class="s">&#39;Success&#39;</span>
-        <span class="nv">description: </span><span class="s">&quot;true if packets were echoed back&quot;</span>
-        <span class="nv">type: </span><span class="s">&#39;boolean&#39;</span>
       <span class="nv">responsetime:</span>
         <span class="nv">title: </span><span class="s">&#39;Avg. Response Time&#39;</span>
         <span class="nv">description: </span><span class="s">&quot;average round-trip time of packets&quot;</span>
@@ -323,7 +353,7 @@ compatible:</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-13" id="section-13">&#182;</a>
+  <a class="pilcrow" href="#section-14" id="section-14">&#182;</a>
 </div>
 <p>comand syntax, os dependent</p>
         </td>
@@ -332,13 +362,27 @@ compatible:</p>
     <span class="nv">ping = </span><span class="k">switch</span>
       <span class="k">when</span> <span class="nx">p</span> <span class="o">is</span> <span class="s">&#39;linux&#39;</span>
         <span class="nv">cmd: </span><span class="s">&#39;/bin/ping&#39;</span>
-        <span class="nv">args: </span><span class="p">[</span><span class="s">&#39;-c&#39;</span><span class="p">,</span> <span class="nx">@config</span><span class="p">.</span><span class="nx">count</span><span class="p">,</span> <span class="s">&#39;-W&#39;</span><span class="p">,</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">ceil</span> <span class="nx">@config</span><span class="p">.</span><span class="nx">timeout</span><span class="o">/</span><span class="mi">1000</span><span class="p">]</span>
+        <span class="nv">args: </span><span class="p">[</span>
+          <span class="s">&#39;-c&#39;</span><span class="p">,</span> <span class="nx">@config</span><span class="p">.</span><span class="nx">count</span>
+          <span class="s">&#39;-W&#39;</span><span class="p">,</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">ceil</span> <span class="nx">@config</span><span class="p">.</span><span class="nx">timeout</span><span class="o">/</span><span class="mi">1000</span>
+          <span class="s">&#39;-i&#39;</span><span class="p">,</span> <span class="nx">@config</span><span class="p">.</span><span class="nx">interval</span><span class="o">/</span><span class="mi">1000</span>
+          <span class="s">&#39;-s&#39;</span><span class="p">,</span> <span class="nx">@config</span><span class="p">.</span><span class="nx">size</span>
+        <span class="p">]</span>
       <span class="k">when</span> <span class="nx">p</span><span class="p">.</span><span class="nx">match</span> <span class="sr">/^win/</span>
         <span class="nv">cmd: </span><span class="s">&#39;C:/windows/system32/ping.exe&#39;</span>
-        <span class="nv">args: </span><span class="p">[</span><span class="s">&#39;-n&#39;</span><span class="p">,</span> <span class="nx">@config</span><span class="p">.</span><span class="nx">count</span><span class="p">,</span> <span class="s">&#39;-w&#39;</span><span class="p">,</span> <span class="nx">@config</span><span class="p">.</span><span class="nx">timeout</span><span class="p">]</span>
+        <span class="nv">args: </span><span class="p">[</span>
+          <span class="s">&#39;-n&#39;</span><span class="p">,</span> <span class="nx">@config</span><span class="p">.</span><span class="nx">count</span>
+          <span class="s">&#39;-w&#39;</span><span class="p">,</span> <span class="nx">@config</span><span class="p">.</span><span class="nx">timeout</span>
+          <span class="s">&#39;-l&#39;</span><span class="p">,</span> <span class="nx">@config</span><span class="p">.</span><span class="nx">size</span>
+        <span class="p">]</span>
       <span class="k">when</span> <span class="nx">p</span> <span class="o">is</span> <span class="s">&#39;darwin&#39;</span>
         <span class="nv">cmd: </span><span class="s">&#39;/sbin/ping&#39;</span>
-        <span class="nv">args: </span><span class="p">[</span><span class="s">&#39;-c&#39;</span><span class="p">,</span> <span class="nx">@config</span><span class="p">.</span><span class="nx">count</span><span class="p">,</span> <span class="s">&#39;-t&#39;</span><span class="p">,</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">ceil</span> <span class="nx">@config</span><span class="p">.</span><span class="nx">timeout</span><span class="o">/</span><span class="mi">1000</span><span class="p">]</span>
+        <span class="nv">args: </span><span class="p">[</span>
+          <span class="s">&#39;-c&#39;</span><span class="p">,</span> <span class="nx">@config</span><span class="p">.</span><span class="nx">count</span>
+          <span class="s">&#39;-t&#39;</span><span class="p">,</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">ceil</span> <span class="nx">@config</span><span class="p">.</span><span class="nx">timeout</span><span class="o">/</span><span class="mi">1000</span>
+          <span class="s">&#39;-i&#39;</span><span class="p">,</span> <span class="nx">@config</span><span class="p">.</span><span class="nx">interval</span><span class="o">/</span><span class="mi">1000</span>
+          <span class="s">&#39;-s&#39;</span><span class="p">,</span> <span class="nx">@config</span><span class="p">.</span><span class="nx">size</span>
+        <span class="p">]</span>
       <span class="k">else</span>
         <span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span> <span class="s">&quot;Operating system </span><span class="si">#{</span><span class="nx">p</span><span class="si">}</span><span class="s"> is not supported in ping.&quot;</span>
     <span class="nx">ping</span><span class="p">.</span><span class="nx">args</span><span class="p">.</span><span class="nx">push</span> <span class="nx">@config</span><span class="p">.</span><span class="nx">host</span>
@@ -349,12 +393,14 @@ compatible:</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-14" id="section-14">&#182;</a>
+  <a class="pilcrow" href="#section-15" id="section-15">&#182;</a>
 </div>
 <p>run the ping test</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
+    <span class="vi">@result.range = </span><span class="p">[</span> <span class="k">new</span> <span class="nb">Date</span> <span class="p">]</span>
     <span class="nx">@_spawn</span> <span class="nx">ping</span><span class="p">.</span><span class="nx">cmd</span><span class="p">,</span> <span class="nx">ping</span><span class="p">.</span><span class="nx">args</span><span class="p">,</span> <span class="kc">null</span><span class="p">,</span> <span class="nf">(err, stdout, stderr, code) =&gt;</span>
+      <span class="nx">@result</span><span class="p">.</span><span class="nx">range</span><span class="p">.</span><span class="nx">push</span> <span class="k">new</span> <span class="nb">Date</span>
       <span class="k">return</span> <span class="nx">@_end</span> <span class="s">&#39;fail&#39;</span><span class="p">,</span> <span class="nx">err</span><span class="p">,</span> <span class="nx">cb</span> <span class="k">if</span> <span class="nx">err</span>
 
 </pre></div>
@@ -363,12 +409,12 @@ compatible:</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-15" id="section-15">&#182;</a>
+  <a class="pilcrow" href="#section-16" id="section-16">&#182;</a>
 </div>
 <p>parse results</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-      <span class="nv">val = </span><span class="nx">@result</span><span class="p">.</span><span class="nx">value</span>
+      <span class="nv">val = </span><span class="nx">@result</span><span class="p">.</span><span class="nx">values</span>
       <span class="nv">num = </span><span class="mi">0</span>
       <span class="nv">sum = </span><span class="mi">0</span>
       <span class="nv">re = </span><span class="sr">/time=(\d+.?\d*) ms/g</span>
@@ -383,6 +429,7 @@ compatible:</p>
       <span class="nv">val.responsetime = </span><span class="nb">Math</span><span class="p">.</span><span class="nx">round</span><span class="p">(</span><span class="nx">sum</span><span class="o">/</span><span class="nx">num</span><span class="o">*</span><span class="mi">10</span><span class="p">)</span><span class="o">/</span><span class="mf">10.0</span>
       <span class="nv">match = </span><span class="sr">/\s(\d+)% packet loss/</span><span class="p">.</span><span class="nx">exec</span> <span class="nx">stdout</span>
       <span class="nv">val.quality = </span><span class="mi">100</span><span class="o">-</span><span class="nx">match</span><span class="o">?</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+      <span class="nv">val.quality = </span><span class="nx">val</span><span class="p">.</span><span class="nx">quality</span><span class="o">/</span><span class="mi">100</span> <span class="k">if</span> <span class="nx">val</span><span class="p">.</span><span class="nx">quality</span>
 
 </pre></div>
         </td>
@@ -390,22 +437,13 @@ compatible:</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-16" id="section-16">&#182;</a>
+  <a class="pilcrow" href="#section-17" id="section-17">&#182;</a>
 </div>
 <p>evaluate to check status</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-      <span class="nv">status = </span><span class="k">switch</span>
-        <span class="k">when</span> <span class="o">not</span> <span class="nx">val</span><span class="p">.</span><span class="nx">success</span> <span class="o">or</span> <span class="nx">val</span><span class="p">.</span><span class="nx">quality</span> <span class="o">&lt;</span> <span class="mi">100</span>
-          <span class="s">&#39;fail&#39;</span>
-        <span class="k">when</span> <span class="nx">@config</span><span class="p">.</span><span class="nx">responsetime</span><span class="o">?</span> <span class="o">and</span> <span class="nx">val</span><span class="p">.</span><span class="nx">responsetime</span> <span class="o">&gt;</span> <span class="nx">@config</span><span class="p">.</span><span class="nx">responsetime</span><span class="p">,</span> <span class="o">\</span>
-             <span class="nx">@config</span><span class="p">.</span><span class="nx">responsemax</span><span class="o">?</span> <span class="o">and</span> <span class="nx">val</span><span class="p">.</span><span class="nx">responsemax</span> <span class="o">&gt;</span> <span class="nx">@config</span><span class="p">.</span><span class="nx">responsemax</span>
-          <span class="s">&#39;warn&#39;</span>
-        <span class="k">else</span>
-          <span class="s">&#39;ok&#39;</span>
-      <span class="nv">message = </span><span class="k">switch</span> <span class="nx">status</span>
-        <span class="k">when</span> <span class="s">&#39;fail&#39;</span>
-          <span class="s">&quot;</span><span class="si">#{</span><span class="nx">@constructor</span><span class="p">.</span><span class="nx">meta</span><span class="p">.</span><span class="nx">name</span><span class="si">}</span><span class="s"> exited with status </span><span class="si">#{</span><span class="nx">status</span><span class="si">}</span><span class="s">&quot;</span>
+      <span class="nv">status = </span><span class="nx">@rules</span><span class="p">()</span>
+      <span class="nv">message = </span><span class="nx">@config</span><span class="p">[</span><span class="nx">status</span><span class="p">]</span> <span class="k">unless</span> <span class="nx">status</span> <span class="o">is</span> <span class="s">&#39;ok&#39;</span>
       <span class="nx">@_end</span> <span class="nx">status</span><span class="p">,</span> <span class="nx">message</span><span class="p">,</span> <span class="nx">cb</span>
 
 
