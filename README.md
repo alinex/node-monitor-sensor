@@ -1,9 +1,9 @@
 Package: alinex-monitor-sensor
 =================================================
 
-[![Build Status] (https://travis-ci.org/alinex/node-monitor-sensor.svg?branch=master)](https://travis-ci.org/alinex/node-monitor-sensor)
-[![Coverage Status] (https://coveralls.io/repos/alinex/node-monitor-sensor/badge.png?branch=master)](https://coveralls.io/r/alinex/node-monitor-sensor?branch=master)
-[![Dependency Status] (https://gemnasium.com/alinex/node-monitor-sensor.png)](https://gemnasium.com/alinex/node-monitor-sensor)
+[![Build Status](https://travis-ci.org/alinex/node-monitor-sensor.svg?branch=master)](https://travis-ci.org/alinex/node-monitor-sensor)
+[![Coverage Status](https://coveralls.io/repos/alinex/node-monitor-sensor/badge.png?branch=master)](https://coveralls.io/r/alinex/node-monitor-sensor?branch=master)
+[![Dependency Status](https://gemnasium.com/alinex/node-monitor-sensor.png)](https://gemnasium.com/alinex/node-monitor-sensor)
 
 This module is part of the [Monitoring](http://alinex.github.io/node-monitor)
 modules and applications but can be used as standalone module in other projects,
